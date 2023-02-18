@@ -1,0 +1,143 @@
+[
+    {
+        "id": 1001,
+        "title": "loose leg",
+        "category": "House",
+        "isFavorite": true,
+        "created_at": "2023-02-10",
+        "updated_at": "2023-02-10",
+        "stepData": [
+            {
+                "id":1,
+                "imagename":"1001_1",
+                "memo":"efewfwfbesresrwaea",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":80,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":50
+            },
+            {
+                "id":2,
+                "imagename":"1001_2",
+                "memo":"efewfbererbeswfwaea",
+                "R_x":200,
+                "R_y":90,
+                "R_angle":40,
+                "L_x":80,
+                "L_y":90,
+                "L_angle":10
+            }
+        ]
+    },
+    {
+        "id": 1002,
+        "title": "loose leg2",
+        "category": "House",
+        "isFavorite": true,
+        "created_at": "2023-02-11",
+        "updated_at": "2023-02-10",
+        "stepData": [
+            {
+                "id":1,
+                "imagename":"1002_1",
+                "memo":"efewfwfwabgea",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":10
+            },
+            {
+                "id":2,
+                "imagename":"1002_2",
+                "memo":"efewfwfbfdbdfbfdwaea",
+                "R_x":10,
+                "R_y":80,
+                "R_angle":0,
+                "L_x":130,
+                "L_y":260,
+                "L_angle":50
+            }
+        ]
+    },
+    {
+        "id": 1003,
+        "title": "cross step",
+        "category": "HipHop",
+        "isFavorite": true,
+        "created_at": "2023-02-11",
+        "updated_at": "2023-02-10",
+        "stepData": [
+            {
+                "id":1,
+                "imagename":"1003_1",
+                "memo":"efewfwfwaea",
+                "R_x":310,
+                "R_y":70,
+                "R_angle":10,
+                "L_x":50,
+                "L_y":50,
+                "L_angle":20
+            },
+            {
+                "id":2,
+                "imagename":"1003_2",
+                "memo":"efewfwdfbdsffwaea",
+                "R_x":320,
+                "R_y":20,
+                "R_angle":20,
+                "L_x":80,
+                "L_y":20,
+                "L_angle":10
+            },
+            {
+                "id":3,
+                "imagename":"1003_3",
+                "memo":"efewfwffdbsdfbfsdfwaea",
+                "R_x":130,
+                "R_y":30,
+                "R_angle":30,
+                "L_x":10,
+                "L_y":30,
+                "L_angle":30
+            },
+            {
+                "id":4,
+                "imagename":"1003_4",
+                "memo":"efewfwffdbsdbfdfbdsbwaea",
+                "R_x":140,
+                "R_y":40,
+                "R_angle":40,
+                "L_x":40,
+                "L_y":40,
+                "L_angle":40
+            },
+            {
+                "id":5,
+                "imagename":"1003_5",
+                "memo":"ekuyuyfewfwfwaea",
+                "R_x":150,
+                "R_y":50,
+                "R_angle":50,
+                "L_x":50,
+                "L_y":50,
+                "L_angle":50
+            },
+            {
+                "id":6,
+                "imagename":"1003_6",
+                "memo":"efewfwfjkjghkjgkjhgkwaea",
+                "R_x":160,
+                "R_y":60,
+                "R_angle":60,
+                "L_x":60,
+                "L_y":60,
+                "L_angle":30
+            }
+        ]
+    }
+]
+

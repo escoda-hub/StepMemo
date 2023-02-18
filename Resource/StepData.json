@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1001,
+        "stepData": [
+            {
+                "imagename":"1001_1",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":0
+            },
+            {
+                "imagename":"1001_2",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":0
+            },
+            {
+                "imagename":"1001_3",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":0
+            }
+        ]
+    },
+    {
+        "id": 1002,
+        "stepData": [
+            {
+                "imagename":"1002_1",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":0
+            },
+            {
+                "imagename":"1002_2",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":0
+            },
+            {
+                "imagename":"1002_3",
+                "R_x":100,
+                "R_y":60,
+                "R_angle":0,
+                "L_x":30,
+                "L_y":60,
+                "L_angle":0
+            }
+        ]
+    },
+]
