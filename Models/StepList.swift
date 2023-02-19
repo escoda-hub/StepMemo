@@ -5,7 +5,7 @@ struct StepList:Hashable,Codable,Identifiable{
     var title :String//ステップ名
     var created_at:String//作成日
     var updated_at:String//作成日
-    var category:Int//カテゴリ
+    var category:String//カテゴリ
     var stepData :[stepDetailData]
     
 //    enum Category :String,CaseIterable,Hashable,Codable{

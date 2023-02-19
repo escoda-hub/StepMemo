@@ -24,7 +24,6 @@ struct StepView: View {
     @State var ImageSize :imageSize
     let screenSizeWidth = UIScreen.main.bounds.width
     let footMode : [String]
-    let genre = ["House"]
     @State private var rightMode : String
     @State private var leftMode : String
 
@@ -39,13 +38,15 @@ struct StepView: View {
     @State private var mode_L : Int
     @State private var mode_R : Int
     @State private var memo : String
+    @State private var title : String
+    @State private var category : String
     
     @State var uiImage: UIImage? = nil
     var TestImage = UIImage(named: "flower.png")
     
-    var debug = ""
+    @State private var selectedGroup = ""
   
-    init(step: StepList, ImageSize: imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0), footMode: [String] = [], rightMode: String = "", leftMode: String = "", id: Int=1, location: CGPoint = CGPoint(x: 0, y: 0), location_L: CGPoint = CGPoint(x: 0, y: 0), location_R: CGPoint = CGPoint(x: 0, y: 0), angle: Angle = Angle(degrees: 0.0), angle_L: Angle = Angle(degrees: 0.0), angle_R: Angle = Angle(degrees: 0.0), mode: Int = 0, mode_L: Int = 0, mode_R: Int = 0, memo: String = "",uiImage: UIImage? = nil) {
+    init(step: StepList, ImageSize: imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0), footMode: [String] = [], rightMode: String = "", leftMode: String = "", id: Int=1, location: CGPoint = CGPoint(x: 0, y: 0), location_L: CGPoint = CGPoint(x: 0, y: 0), location_R: CGPoint = CGPoint(x: 0, y: 0), angle: Angle = Angle(degrees: 0.0), angle_L: Angle = Angle(degrees: 0.0), angle_R: Angle = Angle(degrees: 0.0), mode: Int = 0, mode_L: Int = 0, mode_R: Int = 0, memo: String = "",title:String = "",category:String = "",uiImage: UIImage? = nil) {
         self.step = step
         self.ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
         self.footMode = ["toes", "normal", "heals"]
@@ -65,29 +66,45 @@ struct StepView: View {
         self.leftMode = getPickerSelector(mode: getStepData(step:step,id:id).L_mode)
         self.memo = getStepData(step:step,id:id).memo
         self.uiImage = uiImage
+        self.title = step.title
+        self.category = step.category
     }
     
     var body: some View {
 
             VStack{
-                Text(step.title)
-                    .font(.title)
-                    .padding(.horizontal)
-                    .frame(height: 50)
+                HStack {
+                    TextField("タイトル", text: $title)
+                        .font(.title)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.horizontal)
+//                        .border(.red)
+//                    Spacer()
+                    Button(action: {
+                        print("saved")
+                    }, label: {
+                        Image(systemName: "tray.and.arrow.down")
+//                            .resizable()
+                            .frame(width: 40,height: 40)
+//                        Label("s", systemImage: "book.fill")
+                    })
+                    
+                    .frame(width: 30,height: 30)
+                    .foregroundColor(.black)
+                    .padding(.trailing)
+//                    .border(.red)
+                    Spacer()
+                }
                 GeometryReader { geometry in
                     ZStack {
                         Rectangle()
                             .ignoresSafeArea(.all)
                             .foregroundColor(Color(0xDCDCDD, alpha: 1.0))
-                            .onAppear{
-                                print("zstack")
-                                print("\(geometry.frame(in: .global))")
-                                print("\(geometry.size)")
+                            .task{
                                 self.ImageSize.minX = geometry.frame(in: .global).minX
                                 self.ImageSize.maxX = geometry.frame(in: .global).maxX
                                 self.ImageSize.minY = geometry.frame(in: .global).minY
                                 self.ImageSize.maxY = geometry.frame(in: .global).maxY
-                                print("\(self.ImageSize)")
                             }
                         DraggableImage(
                             location:
@@ -142,36 +159,75 @@ struct StepView: View {
                             isR: false
                         )
                     }
-
-
-                    VStack{
-                        Text("\(geometry.frame(in: .global).minX)")
-                        Text("\(geometry.frame(in: .global).maxX)")
-                        Text("\(geometry.frame(in: .global).minY)")
-                        Text("\(geometry.frame(in: .global).maxY)")
-                        Text("\(ImageSize.minX)")
-                        Text("\(ImageSize.maxX)")
-                        Text("\(ImageSize.minY)")
-                        Text("\(ImageSize.maxY)")
-                    }
                 }
                 .padding(.horizontal, 10)
                 .frame(height: 300)
-                
+                ScrollView(.horizontal){
+                    HStack {
+                        HStack(alignment: .top, spacing: 0) {
+                            ForEach(step.stepData, id: \.self) { stepDetail in
+                                ZStack {
+                                    Image("debugdata")
+                                        .resizable()
+                                        .frame(width:50,height: 50)
+                                        .padding(3)
+                                        .border(stepDetail.id == id ? Color.gray : Color.white, width: stepDetail.id == id ? 2.0 : 0)
+                                        .onTapGesture {
+                                            id = stepDetail.id
+                                            location = CGPoint(x: 0, y: 0)
+                                            location_L = CGPoint(
+                                                x: getStepData(step:step,id:id).L_x,
+                                                y: getStepData(step:step,id:id).L_y)
+                                            location_R = CGPoint(
+                                                x: getStepData(step:step,id:id).R_x,
+                                                y: getStepData(step:step,id:id).R_y)
+                                            angle = Angle(degrees: 0)
+                                            angle_L = Angle(degrees: getStepData(step:step,id:id).L_angle)
+                                            angle_R = Angle(degrees: getStepData(step:step,id:id).R_angle)
+                                            mode = 0
+                                            mode_L = getStepData(step:step,id:id).L_mode
+                                            mode_R = getStepData(step:step,id:id).R_mode
+                                            memo = getStepData(step:step,id:id).memo
+                                            rightMode = getPickerSelector(mode: mode_R)
+                                            leftMode = getPickerSelector(mode: mode_L)
+                                    }
+                                    Text("\(stepDetail.id)")
+                                        .foregroundColor(.black)
+                                }
+                            }
+                        }//H_stack:small view
+                        .border(.red)
+                        Spacer()
+                        Button(action: {
+                            print("add")
+                        }, label: {
+                            Image(systemName: "plus")
+//                                .resizable()
+//                                .frame(width: 15,height: 15)
+                                .foregroundColor(.black)
+                                .border(.red)
+                        })
+                        .padding(.leading)
+                    }//H_staqck
+                    .frame(width:screenSizeWidth - 50)
+//                    .padding(.horizontal)
+                    .border(.red)
+                }
+                .padding(.horizontal)
                 HStack{
                     Spacer()
                     ZStack{
                         RoundedRectangle(cornerRadius: 5)
                             .frame(height: 30)
                             .foregroundColor(Color(0xE5BD47, alpha: 1.0))
-                        VStack {
+                        VStack{
                             Picker("", selection: $leftMode) {
-                                ForEach(footMode, id: \.self) {
-                                    Text($0)
-                                }
+                                Label("toes", systemImage: "1.lane").tag("toes")
+                                Label("normal", systemImage: "2.lane").tag("normal")
+                                Label("heals", systemImage: "3.lane").tag("heals")
                             }
                             .pickerStyle(.wheel)
-                            .frame(height: 80)
+                            .frame(height: 100)
                             .onChange(of: leftMode) { newValue in
                                 switch newValue{
                                 case "toes":
@@ -193,12 +249,12 @@ struct StepView: View {
                             .foregroundColor(Color(0x69af86, alpha: 1.0))
                         VStack {
                             Picker("", selection: $rightMode) {
-                                ForEach(footMode, id: \.self) {
-                                    Text($0)
-                                }
+                                Label("toes", systemImage: "1.lane").tag("toes")
+                                Label("normal", systemImage: "2.lane").tag("normal")
+                                Label("heals", systemImage: "3.lane").tag("heals")
                             }
                             .pickerStyle(.wheel)
-                            .frame(height: 80)
+                            .frame(height: 100)
                             .onChange(of: rightMode) { newValue in
                                 switch newValue{
                                 case "toes":
@@ -215,53 +271,22 @@ struct StepView: View {
                     }
                     Spacer()
                 }
-                ScrollView(.horizontal){
-                    HStack(alignment: .top, spacing: 0) {
-                        ForEach(step.stepData, id: \.self) { stepDetail in
-                            ZStack {
-                                Image("debugdata")
-                                    .resizable()
-                                    .frame(width:50,height: 50)
-                                    .padding(3)
-                                    .border(stepDetail.id == id ? Color.gray : Color.white, width: stepDetail.id == id ? 2.0 : 0)
-                                    .onTapGesture {
-                                        id = stepDetail.id
-                                        location = CGPoint(x: 0, y: 0)
-                                        location_L = CGPoint(
-                                            x: getStepData(step:step,id:id).L_x,
-                                            y: getStepData(step:step,id:id).L_y)
-                                        location_R = CGPoint(
-                                            x: getStepData(step:step,id:id).R_x,
-                                            y: getStepData(step:step,id:id).R_y)
-                                        angle = Angle(degrees: 0)
-                                        angle_L = Angle(degrees: getStepData(step:step,id:id).L_angle)
-                                        angle_R = Angle(degrees: getStepData(step:step,id:id).R_angle)
-                                        mode = 0
-                                        mode_L = getStepData(step:step,id:id).L_mode
-                                        mode_R = getStepData(step:step,id:id).R_mode
-    //                                    memo = stepDetail.memo
-                                        rightMode = getPickerSelector(mode: mode_R)
-                                        leftMode = getPickerSelector(mode: mode_L)
-                                }
-                                Text("\(stepDetail.id)")
-                                    .foregroundColor(.black)
-                            }
-                        }
-                    }
-                }
-                .padding(.horizontal)
-                TextField("メモ", text: $memo)
+                TextField("メモ", text: $memo,axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
-                NavigationLink(destination: SeleclGroupView()) {
+                    .lineLimit(3...5)
+                NavigationLink(destination: SeleclGroupView(selectedGroup: category)) {
                     HStack {
-                        Text("Group")
-                            .padding()
+                        HStack {
+                            Image(systemName: "rectangle.3.group")
+                            Text("Group")
+                        }
+                        .padding()
                         Spacer()
                         HStack {
-                            Text("hiphop")
+                            Text(category)
                             .foregroundColor(.blue)
-                            Text(">")
+                            Image(systemName: "chevron.forward")
                                 .padding(.trailing)
                         }
                     }
@@ -287,15 +312,11 @@ struct StepView: View {
                         .rootViewController?
                         .view!
                         .getImage(rect: CGRect(
-                            x: 10,//padding
-                            y: 150,
-                            width: ImageSize.maxX + 10,
-                            height: 300))
+                            x: ImageSize.minX,//padding
+                            y: ImageSize.minY,
+                            width: ImageSize.maxX-ImageSize.minX,
+                            height: ImageSize.maxY-ImageSize.minY))
                     if uiImage != nil {
-                        print(ImageSize.minX)
-                        print(ImageSize.maxX)
-                        print(ImageSize.minY)
-                        print(ImageSize.maxY)
                         saveImage(image: uiImage!, path: ImageInDocumentsDirectory(filename: "hihi.png"))
                     }
                 } label: {
@@ -304,20 +325,14 @@ struct StepView: View {
                     }
                     .foregroundColor(.purple)
                 }
-                if uiImage != nil {
-                    VStack {
-//                          Image(uiImage: uiImage!)
-                    }
-                }
                 Spacer()
             }
-            .border(.red)
         }
 }
 
 struct StepView_Previews: PreviewProvider {
     static var previews: some View {
-        StepView(step:stepListData[2])
+        StepView(step:stepListData[1])
     }
 }
 

@@ -2,7 +2,7 @@
     {
         "id": 1001,
         "title": "loose leg",
-        "category": 1,
+        "category": "hiphop",
         "isFavorite": true,
         "created_at": "2023-02-10",
         "updated_at": "2023-02-10",
@@ -38,7 +38,7 @@
     {
         "id": 1002,
         "title": "loose leg2",
-        "category": 1,
+        "category": "practice_A",
         "isFavorite": true,
         "created_at": "2023-02-11",
         "updated_at": "2023-02-10",
@@ -74,7 +74,7 @@
     {
         "id": 1003,
         "title": "cross step",
-        "category": 2,
+        "category": "house",
         "isFavorite": true,
         "created_at": "2023-02-11",
         "updated_at": "2023-02-10",
@@ -154,6 +154,32 @@
                 "R_mode":2,
                 "L_x":60,
                 "L_y":60,
+                "L_angle":30,
+                "L_mode":2
+            },
+            {
+                "id":7,
+                "imagename":"1003_7",
+                "memo":"efewfwfjkjghkwaea",
+                "R_x":260,
+                "R_y":60,
+                "R_angle":60,
+                "R_mode":2,
+                "L_x":60,
+                "L_y":60,
+                "L_angle":30,
+                "L_mode":2
+            },
+            {
+                "id":8,
+                "imagename":"1003_8",
+                "memo":"efejgkjhgkwaea",
+                "R_x":290,
+                "R_y":160,
+                "R_angle":60,
+                "R_mode":2,
+                "L_x":60,
+                "L_y":100,
                 "L_angle":30,
                 "L_mode":2
             }
