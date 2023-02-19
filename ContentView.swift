@@ -1,18 +1,19 @@
 import SwiftUI
+import RealmSwift
 
 struct ContentView: View {
 
     @State private var showingModal = false
     @State var searchText = ""
+    @State var nickName = ""
 
     var body: some View {
         let genre = ["House", "Hiphop"]
         let screenSizeWidth = UIScreen.main.bounds.width
         
-        VStack{
-                NavigationView {
-                    VStack(spacing:10){
-                        VStack(){
+        NavigationStack {
+                    VStack(spacing:1){
+                        VStack(){ // VStack for 3 btn
                             Spacer()
                             NavigationLink(destination: StepListView(ViewTitle:"All")) {
                                 HStack {
@@ -49,7 +50,6 @@ struct ContentView: View {
                             )
                             .background(Color(0xcccccc, alpha: 1.0))
                             .cornerRadius(CGFloat(15))
-                            
                             Spacer()
                             NavigationLink(destination: StepListView(ViewTitle:"Favorite")) {
                                 HStack {
@@ -69,10 +69,9 @@ struct ContentView: View {
                             .background(Color(0xcccccc, alpha: 1.0))
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
-                            
                             Spacer()
-                        }
-                        
+                        }// VStack for 3 btn
+                        .padding()
                         List {
                             Section {
                                 ForEach(genre, id: \.self) { genre in
@@ -85,54 +84,47 @@ struct ContentView: View {
                                     .font(.title)
                             }
                         }
-//                        .navigationBarTitle("home")
-//                        .navigationBarHidden(true)
-                        .toolbar {
-                            /// ナビゲーションバー左
-                            ToolbarItem(placement: .navigationBarLeading){
-                                HStack {
-                                    Image(systemName: "magnifyingglass") //検索アイコン
-                                    TextField("Search ...", text: $searchText)
-                                }
-                                .frame(width: screenSizeWidth - 100)
-                                .background(Color(.systemGray6))
-                                .cornerRadius(CGFloat(10))
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading){
+                            HStack {
+                                Image(systemName: "magnifyingglass") //検索アイコン
+                                TextField("Search ...", text: $searchText)
                             }
-                            
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                NavigationLink(destination: InformationView()){
-                                    Image(systemName: "info.circle")
-                                }
+                            .frame(width: screenSizeWidth - 100)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(CGFloat(10))
+                        }
+                        
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            NavigationLink(destination: InformationView()){
+                                Image(systemName: "info.circle")
                             }
-                            
-                            /// ボトムバー
-                            ToolbarItem(placement: .bottomBar) {
-                                NavigationLink(destination: InformationView()){
-                                    HStack{
-                                        Image(systemName: "plus")
-                                        Text("add step")
-                                    }
-                                }
-                            }
-                            
-                            ToolbarItem(placement: .bottomBar) {
-                                Button(action: {
-                                    self.showingModal.toggle()
-                                }) {
-                                    HStack{
-                                        Image(systemName: "folder.badge.plus")
-                                        Text("add group")
-                                    }
-                                }.sheet(isPresented: $showingModal) {
-                                    EditGroupView()
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            NavigationLink(destination: InformationView()){
+                                HStack{
+                                    Image(systemName: "plus")
+                                    Text("add step")
                                 }
                             }
                         }
-                    }
-            }
-        }
-    }
-}
+                        ToolbarItem(placement: .bottomBar) {
+                            Button(action: {
+                                self.showingModal.toggle()
+                            }) {
+                                HStack{
+                                    Image(systemName: "folder.badge.plus")
+                                    Text("add group")
+                                }
+                            }.sheet(isPresented: $showingModal) {
+                                EditGroupView()
+                            }
+                        }
+                    }//toolbar
+        }//navigation view
+    }//body
+}//content view
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

@@ -9,30 +9,31 @@ struct limit {
 
 struct DraggableImage: View {
 
-    @Binding private var location : CGPoint
+    @Binding var location : CGPoint
     @Binding var location_L: CGPoint
     @Binding var location_R: CGPoint
-    @Binding private var angle : Angle
+    @Binding var angle : Angle
     @Binding var angle_L: Angle
     @Binding var angle_R: Angle
+    @Binding var mode: Int
+    @Binding var mode_L: Int
+    @Binding var mode_R: Int
     
     @State private var limit: limit
-    @State private var isDragging :Bool
-    @State private var flag :Bool
+    @State private var isDragging = false
     @State private var isR :Bool
 
-    private let systemName: String
     
-    init(location: Binding<CGPoint>, location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>, angle_L: Binding<Angle>, angle_R: Binding<Angle>, isDragging: Bool = false, systemName: String, limit: limit, flag: Bool = true, isR: Bool) {
+    init(location: Binding<CGPoint>, location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>, angle_L: Binding<Angle>, angle_R: Binding<Angle>, mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit,isR: Bool) {
         self._location_L = location_L
         self._location_R = location_R
         self._angle_L = angle_L
         self._angle_R = angle_R
-        self.isDragging = isDragging
-        self.systemName = systemName
+        self._mode_L = mode_L
+        self._mode_R = mode_R
         self.limit = limit
-        self.flag = flag
         self.isR = isR
+        self._mode = isR ? mode_R : mode_L
         self._angle = isR ? angle_R : angle_L
         self._location = isR ? location_R : location_L
     }
@@ -69,7 +70,7 @@ struct DraggableImage: View {
 
     var body: some View {
         VStack{
-            Image(systemName)
+            Image(getImageName(isR: isR, mode_R: mode_R, mode_L: mode_L))
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(isDragging ? Color(0x2E94B9, alpha: 1.0) : (isR ? Color(0x69af86, alpha: 1.0): Color(0xE5BD47, alpha: 1.0)))
@@ -82,3 +83,36 @@ struct DraggableImage: View {
     }
 }
 
+func getImageName(isR: Bool,mode_R: Int,mode_L: Int) -> String {
+    var imageName = ""
+    
+    if isR {
+        switch mode_R {
+            case 0:
+                break
+            case 1:
+                imageName = "R_toes"
+            case 2:
+                imageName = "R_normal"
+            case 3:
+                imageName = "R_heals"
+            default:
+                break
+        }
+    }else{
+        switch mode_L {
+            case 0:
+                break
+            case 1:
+                imageName = "L_toes"
+            case 2:
+                imageName = "L_normal"
+            case 3:
+                imageName = "L_heals"
+            default:
+                break
+        }
+    }
+
+    return imageName
+}

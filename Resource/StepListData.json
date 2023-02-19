@@ -2,7 +2,7 @@
     {
         "id": 1001,
         "title": "loose leg",
-        "category": "House",
+        "category": 1,
         "isFavorite": true,
         "created_at": "2023-02-10",
         "updated_at": "2023-02-10",
@@ -14,9 +14,11 @@
                 "R_x":100,
                 "R_y":60,
                 "R_angle":80,
+                "R_mode":2,
                 "L_x":30,
                 "L_y":60,
-                "L_angle":50
+                "L_angle":50,
+                "L_mode":2
             },
             {
                 "id":2,
@@ -25,16 +27,18 @@
                 "R_x":200,
                 "R_y":90,
                 "R_angle":40,
+                "R_mode":1,
                 "L_x":80,
                 "L_y":90,
-                "L_angle":10
+                "L_angle":10,
+                "L_mode":3
             }
         ]
     },
     {
         "id": 1002,
         "title": "loose leg2",
-        "category": "House",
+        "category": 1,
         "isFavorite": true,
         "created_at": "2023-02-11",
         "updated_at": "2023-02-10",
@@ -46,9 +50,11 @@
                 "R_x":100,
                 "R_y":60,
                 "R_angle":0,
+                "R_mode":2,
                 "L_x":30,
                 "L_y":60,
-                "L_angle":10
+                "L_angle":10,
+                "L_mode":1
             },
             {
                 "id":2,
@@ -57,16 +63,18 @@
                 "R_x":10,
                 "R_y":80,
                 "R_angle":0,
+                "R_mode":1,
                 "L_x":130,
                 "L_y":260,
-                "L_angle":50
+                "L_angle":50,
+                "L_mode":1
             }
         ]
     },
     {
         "id": 1003,
         "title": "cross step",
-        "category": "HipHop",
+        "category": 2,
         "isFavorite": true,
         "created_at": "2023-02-11",
         "updated_at": "2023-02-10",
@@ -78,9 +86,11 @@
                 "R_x":310,
                 "R_y":70,
                 "R_angle":10,
+                "R_mode":1,
                 "L_x":50,
                 "L_y":50,
-                "L_angle":20
+                "L_angle":20,
+                "L_mode":2
             },
             {
                 "id":2,
@@ -89,9 +99,11 @@
                 "R_x":320,
                 "R_y":20,
                 "R_angle":20,
+                "R_mode":1,
                 "L_x":80,
                 "L_y":20,
-                "L_angle":10
+                "L_angle":10,
+                "L_mode":1
             },
             {
                 "id":3,
@@ -100,9 +112,11 @@
                 "R_x":130,
                 "R_y":30,
                 "R_angle":30,
+                "R_mode":1,
                 "L_x":10,
                 "L_y":30,
-                "L_angle":30
+                "L_angle":30,
+                "L_mode":1
             },
             {
                 "id":4,
@@ -111,9 +125,11 @@
                 "R_x":140,
                 "R_y":40,
                 "R_angle":40,
+                "R_mode":1,
                 "L_x":40,
                 "L_y":40,
-                "L_angle":40
+                "L_angle":40,
+                "L_mode":1
             },
             {
                 "id":5,
@@ -122,9 +138,11 @@
                 "R_x":150,
                 "R_y":50,
                 "R_angle":50,
+                "R_mode":1,
                 "L_x":50,
                 "L_y":50,
-                "L_angle":50
+                "L_angle":50,
+                "L_mode":1
             },
             {
                 "id":6,
@@ -133,9 +151,11 @@
                 "R_x":160,
                 "R_y":60,
                 "R_angle":60,
+                "R_mode":2,
                 "L_x":60,
                 "L_y":60,
-                "L_angle":30
+                "L_angle":30,
+                "L_mode":2
             }
         ]
     }
