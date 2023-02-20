@@ -6,9 +6,9 @@ struct ContentView: View {
     @State private var showingModal = false
     @State var searchText = ""
     @State var nickName = ""
-    
+
     var body: some View {
-        let genre = ["House", "Hiphop"]
+        let genre = ["House", "Hiphop","d","e","f","g","h","i"]
         let screenSizeWidth = UIScreen.main.bounds.width
         
         NavigationStack {
@@ -30,7 +30,7 @@ struct ContentView: View {
                                     .foregroundColor(.black)
                                 }
                                 .frame(width: screenSizeWidth-200,
-                                       height:70,
+                                       height:60,
                                        alignment:.center
                                 )
                                 .background(Color(0x4ABDAC, alpha: 1.0))
@@ -49,7 +49,7 @@ struct ContentView: View {
                                     .foregroundColor(.black)
                                 }
                                 .frame(width: screenSizeWidth-200,
-                                       height:70,
+                                       height:60,
                                        alignment:.center
                                 )
                                 .background(Color(0xFC4A1A, alpha: 1.0))
@@ -67,7 +67,7 @@ struct ContentView: View {
                                     }
                                 }
                                 .frame(width: screenSizeWidth-200,
-                                       height:70,
+                                       height:60,
                                        alignment:.center
                                 )
                                 .background(Color(0xF7B733, alpha: 1.0))
@@ -75,25 +75,57 @@ struct ContentView: View {
                                 .cornerRadius(CGFloat(15))
                                 Spacer()
                             }// VStack for 3 btn
-                            .padding()
-                            List {
-                                Section {
-                                    ForEach(genre, id: \.self) { genre in
-                                        NavigationLink(destination: StepListView(ViewTitle:genre)) {
-                                            Text(genre)
+//                            .border(.red)
+                            .frame(height: 270)
+//                            .padding(.top)
+                            ZStack {
+                                List {
+                                    Section (
+                                        header: HStack{
+                                            Image(systemName: "rectangle.3.group")
+                                                .resizable()
+                                                .frame(width:25,height:18)
+                                            Text("Group")
+                                                .font(.title)
+                                        }.frame(
+                                            width: screenSizeWidth,
+                                            height: 44.0
+                                        )
+                                        .background(Color(0x354B5E, alpha: 1.0))
+                                        .foregroundColor(.white)
+                                    ){
+                                        ForEach(genre, id: \.self) { genre in
+                                            NavigationLink(destination: StepListView(ViewTitle:genre)) {
+                                                Text(genre)
+                                            }
                                         }
                                     }
-                                } header: {
-                                    HStack {
-                                        Image(systemName: "rectangle.3.group")
-                                            .resizable()
-                                            .frame(width:25,height:18)
-                                        Text("Group")
-                                            .font(.title)
+                                }
+//                                .border(.red)
+                                .scrollContentBackground(.hidden)
+                                .background(Color(0xDFDCE3, alpha: 1.0))
+                                .padding(.horizontal)
+                                .padding(.bottom)
+                                .listStyle(.plain)
+                                VStack {
+                                    Spacer()
+                                    HStack { // --- 2
+                                        Spacer()
+                                        Button(action: {
+                                            print("Tapped!!") // --- 3
+                                        }, label: {
+                                            Image(systemName: "pencil")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 24)) // --- 4
+                                        })
+                                            .frame(width: 60, height: 60)
+                                            .background(Color.orange)
+                                            .cornerRadius(30.0)
+                                            .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0)) // --- 5
                                     }
                                 }
                             }
-                            
                         }
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading){
@@ -105,23 +137,13 @@ struct ContentView: View {
                                 .background(Color(.systemGray6))
                                 .cornerRadius(CGFloat(10))
                             }
-                            
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 NavigationLink(destination: InformationView()){
                                     Image(systemName: "info.circle")
                                         .foregroundColor(.black)
                                 }
                             }
-                            ToolbarItem(placement: .bottomBar) {
-                                NavigationLink(destination: InformationView()){
-                                    HStack{
-                                        Image(systemName: "figure.socialdance")
-                                        Text("add step")
-                                    }
-                                    .foregroundColor(.black)
-                                }
-                            }
-                            ToolbarItem(placement: .bottomBar) {
+                            ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
                                 Button(action: {
                                     self.showingModal.toggle()
                                 }) {
@@ -134,9 +156,14 @@ struct ContentView: View {
                                     EditGroupView()
                                 }
                             }
-                    }
-            }//toolbar
-        }//navigation view
+                            ToolbarItem(placement: .bottomBar) {
+                                Spacer()
+                            }
+                    }//Vstack
+            }//ZStack
+//            .border(.red)
+        }//navigation stack
+//        .border(.red)
     }//body
 }//content view
 
@@ -145,3 +172,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+

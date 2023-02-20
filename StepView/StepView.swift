@@ -45,6 +45,8 @@ struct StepView: View {
     var TestImage = UIImage(named: "flower.png")
     
     @State private var selectedGroup = ""
+    
+    @State var showingAlert: Bool = false
   
     init(step: StepList, ImageSize: imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0), footMode: [String] = [], rightMode: String = "", leftMode: String = "", id: Int=1, location: CGPoint = CGPoint(x: 0, y: 0), location_L: CGPoint = CGPoint(x: 0, y: 0), location_R: CGPoint = CGPoint(x: 0, y: 0), angle: Angle = Angle(degrees: 0.0), angle_L: Angle = Angle(degrees: 0.0), angle_R: Angle = Angle(degrees: 0.0), mode: Int = 0, mode_L: Int = 0, mode_R: Int = 0, memo: String = "",title:String = "",category:String = "",uiImage: UIImage? = nil) {
         self.step = step
@@ -162,58 +164,74 @@ struct StepView: View {
                 }
                 .padding(.horizontal, 10)
                 .frame(height: 300)
-                ScrollView(.horizontal){
-                    HStack {
-                        HStack(alignment: .top, spacing: 0) {
-                            ForEach(step.stepData, id: \.self) { stepDetail in
-                                ZStack {
-                                    Image("debugdata")
-                                        .resizable()
-                                        .frame(width:50,height: 50)
-                                        .padding(3)
-                                        .border(stepDetail.id == id ? Color.gray : Color.white, width: stepDetail.id == id ? 2.0 : 0)
-                                        .onTapGesture {
+                
+                //Small Window reagin
+                HStack {
+                    ScrollView(.horizontal){
+                        HStack {
+                            HStack(alignment: .top, spacing: 0) {
+                                ForEach(step.stepData, id: \.self) { stepDetail in
+                                    ZStack {
+                                        Image("debugdata")
+                                            .resizable()
+                                            .frame(width:50,height: 50)
+                                            .padding(3)
+                                            .border(stepDetail.id == id ? Color.gray : Color.white, width: stepDetail.id == id ? 2.0 : 0)
+                                            .onTapGesture {
+                                                id = stepDetail.id
+                                                location = CGPoint(x: 0, y: 0)
+                                                location_L = CGPoint(
+                                                    x: getStepData(step:step,id:id).L_x,
+                                                    y: getStepData(step:step,id:id).L_y)
+                                                location_R = CGPoint(
+                                                    x: getStepData(step:step,id:id).R_x,
+                                                    y: getStepData(step:step,id:id).R_y)
+                                                angle = Angle(degrees: 0)
+                                                angle_L = Angle(degrees: getStepData(step:step,id:id).L_angle)
+                                                angle_R = Angle(degrees: getStepData(step:step,id:id).R_angle)
+                                                mode = 0
+                                                mode_L = getStepData(step:step,id:id).L_mode
+                                                mode_R = getStepData(step:step,id:id).R_mode
+                                                memo = getStepData(step:step,id:id).memo
+                                                rightMode = getPickerSelector(mode: mode_R)
+                                                leftMode = getPickerSelector(mode: mode_L)
+                                        }
+                                        .onLongPressGesture {
                                             id = stepDetail.id
-                                            location = CGPoint(x: 0, y: 0)
-                                            location_L = CGPoint(
-                                                x: getStepData(step:step,id:id).L_x,
-                                                y: getStepData(step:step,id:id).L_y)
-                                            location_R = CGPoint(
-                                                x: getStepData(step:step,id:id).R_x,
-                                                y: getStepData(step:step,id:id).R_y)
-                                            angle = Angle(degrees: 0)
-                                            angle_L = Angle(degrees: getStepData(step:step,id:id).L_angle)
-                                            angle_R = Angle(degrees: getStepData(step:step,id:id).R_angle)
-                                            mode = 0
-                                            mode_L = getStepData(step:step,id:id).L_mode
-                                            mode_R = getStepData(step:step,id:id).R_mode
-                                            memo = getStepData(step:step,id:id).memo
-                                            rightMode = getPickerSelector(mode: mode_R)
-                                            leftMode = getPickerSelector(mode: mode_L)
+                                            showingAlert = true
+                                        }
+                                        Text("\(stepDetail.id)")
+                                            .foregroundColor(.black)
                                     }
-                                    Text("\(stepDetail.id)")
-                                        .foregroundColor(.black)
                                 }
-                            }
-                        }//H_stack:small view
-                        .border(.red)
-                        Spacer()
-                        Button(action: {
-                            print("add")
-                        }, label: {
-                            Image(systemName: "plus")
-//                                .resizable()
-//                                .frame(width: 15,height: 15)
-                                .foregroundColor(.black)
-                                .border(.red)
-                        })
-                        .padding(.leading)
-                    }//H_staqck
-                    .frame(width:screenSizeWidth - 50)
-//                    .padding(.horizontal)
-                    .border(.red)
+                            }//H_stack:small image view
+                        }//H_staqck
+                    }
+                    .padding(.horizontal)
+                    .alert(isPresented: $showingAlert) { () -> Alert in
+                                    Alert(
+                                        title: Text("確認"),
+                                        message: Text("\(id)番目のデータを削除してもよろしいですか？"),
+                                        primaryButton: .default(Text("Ok"),
+                                                        action: {
+                                                            actionAfterAlert()
+                                                            }
+                                                        ),
+                                        secondaryButton: .default(Text("キャンセル")                      )
+                                    )
+                    }
+                    Button(action: {
+                        print("add")
+                    }, label: {
+                        Image(systemName: "plus.circle")
+                            .resizable()
+                            .foregroundColor(.black)
+                            .frame(width:30,height:30)
+                    })
+                    .padding(.trailing)
                 }
-                .padding(.horizontal)
+                
+                //Picker Region
                 HStack{
                     Spacer()
                     ZStack{
@@ -332,7 +350,7 @@ struct StepView: View {
 
 struct StepView_Previews: PreviewProvider {
     static var previews: some View {
-        StepView(step:stepListData[1])
+        StepView(step:stepListData[2])
     }
 }
 
@@ -427,3 +445,6 @@ func getPickerSelector(mode: Int) -> String {
 }
 
 
+func actionAfterAlert() {
+    print("Action after press Ok")
+}
