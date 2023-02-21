@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 class StepDetail: Object {
-    @Persisted  var id = UUID()
+    @Persisted  var id : Int = 0
     @Persisted  var step_id = 0
     @Persisted  var imagename:String = ""
     @Persisted  var memo:String = ""

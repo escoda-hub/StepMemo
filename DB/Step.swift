@@ -12,7 +12,7 @@ import Foundation
 import RealmSwift
 
 class Step: Object {
-    @Persisted  var id = UUID()
+    @Persisted  var id : Int = 0
     @Persisted  var title:String = ""
     @Persisted  var created_at = Date()
     @Persisted  var deleted_at = Date()

@@ -10,8 +10,9 @@ import Foundation
 import RealmSwift
 
 class Gropu: Object {
-    @Persisted  var id = UUID()
+    @Persisted  var id : Int = 0
     @Persisted  var name:String = "" //Gropu名
+//    @Persisted  var memo:String = "" 
     
     override static func primaryKey() -> String? {
             return "id"
