@@ -12,14 +12,12 @@ import Foundation
 import RealmSwift
 
 class Step: Object {
-    @Persisted  var id : Int = 0
-    @Persisted  var title:String = ""
+    @Persisted(primaryKey: true) var id : String = UUID().uuidString
+    @Persisted  var title:String
     @Persisted  var created_at = Date()
     @Persisted  var deleted_at = Date()
-    @Persisted  var gropu : Gropu? //Gropuモデルと1対1の関係
+    @Persisted  var favorite:Bool
+    @Persisted  var gropu : Group? //Gropuモデルと1対1の関係
     let stepdetail_id = List<StepDetail> ()  // StepDetailモデルと1対Nの関係
     
-    override static func primaryKey() -> String? {
-            return "id"
-    }
 }

@@ -80,21 +80,15 @@ struct StepView: View {
                         .font(.title)
                         .textFieldStyle(.roundedBorder)
                         .padding(.horizontal)
-//                        .border(.red)
-//                    Spacer()
                     Button(action: {
                         print("saved")
                     }, label: {
                         Image(systemName: "tray.and.arrow.down")
-//                            .resizable()
                             .frame(width: 40,height: 40)
-//                        Label("s", systemImage: "book.fill")
                     })
-                    
                     .frame(width: 30,height: 30)
                     .foregroundColor(.black)
                     .padding(.trailing)
-//                    .border(.red)
                     Spacer()
                 }
                 GeometryReader { geometry in
@@ -293,7 +287,7 @@ struct StepView: View {
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
                     .lineLimit(3...5)
-                NavigationLink(destination: SeleclGroupView(selectedGroup: category)) {
+                NavigationLink(destination: SeleclGroupView(selectedGroup: $selectedGroup)) {
                     HStack {
                         HStack {
                             Image(systemName: "rectangle.3.group")
@@ -302,21 +296,18 @@ struct StepView: View {
                         .padding()
                         Spacer()
                         HStack {
-                            Text(category)
+                            Text(selectedGroup)
                             .foregroundColor(.blue)
                             Image(systemName: "chevron.forward")
                                 .padding(.trailing)
                         }
                     }
                 }
-                .frame(height:35,
-                       alignment:.center
-                )
+                .frame(height:35,alignment:.center)
                 .background(Color(0xcccccc, alpha: 1.0))
                 .foregroundColor(.black)
                 .cornerRadius(CGFloat(5))
                 .padding(.horizontal)
-
                 Button {
                     self.uiImage =
                         UIApplication

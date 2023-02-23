@@ -3,12 +3,12 @@ import RealmSwift
 
 struct ContentView: View {
 
+    @ObservedResults(Group.self) var groups
+    
     @State private var showingModal = false
     @State var searchText = ""
-    @State var nickName = ""
 
     var body: some View {
-        let genre = ["House", "Hiphop","d","e","f","g","h","i","i"]
         let screenSizeWidth = UIScreen.main.bounds.width
         
         NavigationStack {
@@ -79,6 +79,7 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(15))
                         }
                         .padding(.vertical)
+                        .padding(.top)
                         ZStack {
                             List {
                                 Section (
@@ -91,11 +92,12 @@ struct ContentView: View {
                                     }
                                 )
                                 {
-                                    ForEach(genre, id: \.self) { genre in
-                                        NavigationLink(destination: StepListView(ViewTitle:genre)) {
-                                            Text(genre)
+                                    ForEach(groups, id: \.self) { groups in
+                                        NavigationLink(destination: StepListView(ViewTitle:groups.name)) {
+                                            Text(groups.name)
                                         }
                                     }
+                                    .onDelete(perform: $groups.remove)
                                     Spacer(minLength: 10)
                                 }
                             }
@@ -106,21 +108,20 @@ struct ContentView: View {
                             .padding(.bottom)
                             VStack {
                                 Spacer()
-                                HStack { // --- 2
+                                HStack {
                                     Spacer()
                                     Button(action: {
                                         print(Realm.Configuration.defaultConfiguration.fileURL!)
-                                        addGroup(groupname: "testGroup")
                                     }, label: {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.white)
-                                            .font(.system(size: 24)) // --- 4
+                                            .font(.system(size: 24))
                                     })
                                     .frame(width: 60, height: 60)
                                     .background(Color.orange)
                                     .cornerRadius(30.0)
                                     .shadow(color: .gray, radius: 3, x: 3, y: 3)
-                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0)) // --- 5
+                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
                                 }
                             }
                         }//List + button
@@ -150,7 +151,9 @@ struct ContentView: View {
                                     Text("add group")
                                 }
                                 .foregroundColor(.black)
-                            }.sheet(isPresented: $showingModal) {
+                            }.sheet(isPresented: $showingModal,onDismiss: {
+//                                genre = getGroup()
+                            }) {
                                 EditGroupView()
                             }
                         }
@@ -161,6 +164,7 @@ struct ContentView: View {
                 }//ZStack
         }//navigation stack
     }//body
+    
 }//content view
 
 struct ContentView_Previews: PreviewProvider {
@@ -169,27 +173,18 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+//グループ名の取得
+func getGroup()->[String] {
 
-/// データを登録
-func addGroup(groupname:String) {
-
-    // インスタンス生成
-    let group = Gropu()
-
-    // 値をセット
-//    group.id = id
-    group.name = groupname
-
-//    group.id = 1
-
-    // データを登録
+    var groupList: [String] = []
+    let group = Group()
     let realm = try! Realm()
+    let groupData = realm.objects(Group.self)//.value(forKey: "name")
     
-    let deleteObj = realm.objects(Gropu.self)
-    
-    try! realm.write {
-//        realm.add(group)
-        realm.delete(deleteObj)
+    for i in 0 ..< groupData.count {
+        groupList.append(groupData[i].name)
     }
+
+    return groupList
 
 }

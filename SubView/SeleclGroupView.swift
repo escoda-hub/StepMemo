@@ -1,28 +1,31 @@
 import SwiftUI
+import RealmSwift
 
 struct SeleclGroupView: View {
 
-    @State var selectedGroup :String
-
+    @Binding var selectedGroup :String
+    
     @Environment(\.presentationMode) var presentation
+    @ObservedResults(Group.self) var groups
 
-    private let group = ["hiphop", "house", "ballet"]//load from DB
+//    private let group = ["hiphop", "house", "ballet"]//load from DB
     
     var body: some View {
         VStack {
             Text(selectedGroup)
             List {
-                ForEach(0..<group.count) { index in
+                ForEach(0..<groups.count) { index in
                     HStack {
-                        Text("\(group[index])")
+                        Text("\(groups[index].name)")
                             .padding(.horizontal)
                         Spacer()
-                        Image(systemName: group[index] == selectedGroup ? "checkmark" : "")
+                        Image(systemName: groups[index].name == selectedGroup ? "checkmark" : "")
                             .padding(.horizontal)
                             .foregroundColor(.blue)
                     }
                     .contentShape(RoundedRectangle(cornerRadius: 5)) 
                     .onTapGesture {
+                        selectedGroup = groups[index].name
                         self.presentation.wrappedValue.dismiss()
                     }
                 }
@@ -38,7 +41,9 @@ struct SeleclGroupView: View {
 }
 
 struct SeleclGroupView_Previews: PreviewProvider {
+    
+    @State static var selectedGroup =  "hipho"
     static var previews: some View {
-        SeleclGroupView(selectedGroup: "hiphop")
+        SeleclGroupView(selectedGroup: $selectedGroup)
     }
 }

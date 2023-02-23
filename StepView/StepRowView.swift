@@ -15,11 +15,11 @@ struct StepRowView: View {
     }
 }
 
-struct StepRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group{
-            StepRowView(step: stepListData[0])
-                .previewLayout(.sizeThatFits)
-        }
-    }
-}
+//struct StepRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group{
+//            StepRowView(step: stepListData[0])
+//                .previewLayout(.sizeThatFits)
+//        }
+//    }
+//}
