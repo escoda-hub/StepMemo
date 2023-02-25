@@ -112,6 +112,7 @@ struct ContentView: View {
                                     Spacer()
                                     Button(action: {
                                         print(Realm.Configuration.defaultConfiguration.fileURL!)
+                                        print(getGroup())
                                     }, label: {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.white)
@@ -125,6 +126,10 @@ struct ContentView: View {
                                 }
                             }
                         }//List + button
+                        Button("delete Button") {
+                            print(Realm.Configuration.defaultConfiguration.fileURL!)
+                            deleteGroup()
+                        }
                     }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
@@ -186,5 +191,23 @@ func getGroup()->[String] {
     }
 
     return groupList
+
+}
+
+//グループ名の取得
+func deleteGroup() {
+    let group = Group()
+    let realm = try! Realm()
+    let groupData = realm.objects(Group.self)//.value(forKey: "name")
+    
+
+    // ③ 部署を更新する
+    do{
+      try realm.write{
+        realm.delete(groupData)
+      }
+    }catch {
+      print("Error \(error)")
+    }
 
 }
