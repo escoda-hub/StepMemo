@@ -15,9 +15,10 @@ class Step: Object {
     @Persisted(primaryKey: true) var id : String = UUID().uuidString
     @Persisted  var title:String
     @Persisted  var created_at = Date()
-    @Persisted  var deleted_at = Date()
+    @Persisted  var updated_at = Date()
     @Persisted  var favorite:Bool
-    @Persisted  var gropu : Group? //Gropuモデルと1対1の関係
-    let stepdetail_id = List<StepDetail> ()  // StepDetailモデルと1対Nの関係
+    @Persisted  var group : Group? //Gropuモデルと1対1の関係
+//    let StepDetail = List<StepDetail> ()  // StepDetailモデルと1対Nの関係
+    @Persisted var StepDetail: List<StepDetail>
     
 }

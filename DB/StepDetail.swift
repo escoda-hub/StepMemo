@@ -21,4 +21,5 @@ class StepDetail: Object {
     @Persisted  var L_y:Double
     @Persisted  var L_angle:Double
     @Persisted  var L_mode:Int
+    @Persisted  var Order:Int
 }
