@@ -3,23 +3,25 @@
 import SwiftUI
 
 struct StepRowView: View {
-    var step:StepList//JSONから読み込んで生成した，stepモデル使うためのプロパティを定義
+//    var step:StepList//JSONから読み込んで生成した，stepモデル使うためのプロパティを定義
+    var title:String
+    var update_at:String
     
     var body: some View {
         VStack(alignment: .leading){
-            Text(step.title).font(.title)
+            Text(title).font(.title)
             HStack{
-                Text(step.created_at)
+                Text(update_at)
             }
         }.padding()
     }
 }
 
-//struct StepRowView_Previews: PreviewProvider {
-//    static var previews: some View {
+struct StepRowView_Previews: PreviewProvider {
+    static var previews: some View {
 //        Group{
-//            StepRowView(step: stepListData[0])
-//                .previewLayout(.sizeThatFits)
+            StepRowView(title: "titiledata", update_at: "2023-11-11")
+                .previewLayout(.sizeThatFits)
 //        }
-//    }
-//}
+    }
+}

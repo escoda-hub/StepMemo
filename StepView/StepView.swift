@@ -1,4 +1,5 @@
 import SwiftUI
+import RealmSwift
 
 struct stepProperty {
     var R_x: Double
@@ -19,7 +20,11 @@ struct imageSize {
     var maxY: Double
 }
 
+
 struct StepView: View {
+//    @ObservedResults(StepDetail.self) var stepDetails
+    
+    
     @State var step: StepList
     @State var ImageSize :imageSize
     let screenSizeWidth = UIScreen.main.bounds.width

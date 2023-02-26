@@ -11,7 +11,7 @@
 import Foundation
 import RealmSwift
 
-class Step: Object {
+class Step: Object,Identifiable {
     @Persisted(primaryKey: true) var id : String = UUID().uuidString
     @Persisted  var title:String
     @Persisted  var created_at = Date()

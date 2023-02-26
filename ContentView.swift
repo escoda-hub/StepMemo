@@ -4,6 +4,7 @@ import RealmSwift
 struct ContentView: View {
 
     @ObservedResults(Group.self) var groups
+    @ObservedResults(Step.self) var steps
     
     @State private var showingModal = false
     @State var searchText = ""
@@ -113,6 +114,7 @@ struct ContentView: View {
                                     Button(action: {
                                         print(Realm.Configuration.defaultConfiguration.fileURL!)
                                         print(getGroup())
+                                        print(steps)
                                     }, label: {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.white)
@@ -135,7 +137,7 @@ struct ContentView: View {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
                             setStepData()
                         }
-                        .disabled(true)
+                        .disabled(false)
                     }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
@@ -229,29 +231,29 @@ func deleteGroup(deletedata:String) {
 
 func setStepData() {
     let group = Group()
-    group.name = "step3"
+    group.name = "step1"
 
     let step = Step()
-    step.title = "stepname3"
+    step.title = "stepname5"
     step.created_at = Date()
     step.updated_at = Date()
     step.favorite = true
     step.group = group
 
-//    let stepDetail_1 = StepDetail()
-//    stepDetail_1.step_id = step.id
-//    stepDetail_1.imagename = "stepname2_image_1"
-//    stepDetail_1.memo = "memomemomemo_1"
-//    stepDetail_1.L_x = 100
-//    stepDetail_1.L_y = 100
-//    stepDetail_1.L_angle = 100
-//    stepDetail_1.L_mode = 2
-//    stepDetail_1.R_x = 300
-//    stepDetail_1.R_y = 200
-//    stepDetail_1.R_angle = 50
-//    stepDetail_1.R_mode = 1
-//    stepDetail_1.Order = 1
-//    step.StepDetail.append(stepDetail_1)
+    let stepDetail_1 = StepDetail()
+    stepDetail_1.step_id = step.id
+    stepDetail_1.imagename = "stepname5_image_1"
+    stepDetail_1.memo = "memomemomemo_1"
+    stepDetail_1.L_x = 100
+    stepDetail_1.L_y = 100
+    stepDetail_1.L_angle = 100
+    stepDetail_1.L_mode = 2
+    stepDetail_1.R_x = 300
+    stepDetail_1.R_y = 200
+    stepDetail_1.R_angle = 50
+    stepDetail_1.R_mode = 1
+    stepDetail_1.Order = 1
+    step.StepDetail.append(stepDetail_1)
 
 //    let stepDetail_2 = StepDetail()
 //    stepDetail_2.step_id = step.id
