@@ -2,19 +2,10 @@
 import SwiftUI
 import RealmSwift
 
-struct StepSummary {
-    let title : String
-    let update : String
-}
-
-
-
 struct StepListView: View {
 
     @State var ViewTitle :String
-    @ObservedResults(Step.self) var steps
-    @ObservedResults(Group.self) var groups
-    
+
     var body: some View {
 
         NavigationView{
@@ -33,9 +24,8 @@ struct StepListView: View {
                         )
                         {
                             ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in
-                                NavigationLink(destination: StepView(step: stepListData[0])) {
+                                NavigationLink(destination: StepView(stepData: getStep(groupName: ViewTitle)[index])) {
                                     Text(getStep(groupName: ViewTitle)[index].title)
-//                                    Text(steps[index].updated_at)
                                 }
                              }
                             Spacer(minLength: 10)
@@ -74,12 +64,25 @@ struct StepListView_Previews: PreviewProvider {
     }
 }
 
-//グループ名の取得
-func getStep(groupName:String)->Results<Step> {
+//ステップリストの取得
+func getStep(groupName:String)->Array<Step> {
     
     let realm = try! Realm()
-    let groupData = realm.objects(Step.self).filter("group.name == %@", groupName)
+    let groupData = realm.objects(Group.self).filter("name == %@",groupName).first!//type is List
+  
+//    if let groupData = realm.objects(Group.self).filter("name == %@",groupName).first {
+//        var groupData = realm.objects(Group.self).filter("name == %@",groupName).first
+//    }
+//    else {
+//        print("値が代入されていません")
+//    }
     
-    return groupData
+//    print(groupData.steps)
+//    print(type(of: groupData.steps))
+//    print("------------------------------")
+//    print(Array(groupData.steps))
+//    print(type(of: Array(groupData.steps)))
+    
+    return Array(groupData.steps)//type is Array<Step>
 
 }

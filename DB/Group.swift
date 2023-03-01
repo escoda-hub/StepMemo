@@ -5,15 +5,12 @@
 //  Created by rei asahina on 2023/02/20.
 //SwiftではUUIDが128bit(=16byte)の数値として表されデータ型はUUID型
 
-
 import Foundation
 import RealmSwift
 
 class Group: Object,Identifiable {
-//    @Persisted (primaryKey: true) var id : String = UUID().uuidString
-//    @Persisted (primaryKey: true) var name:String
-    @Persisted var name:String
+    
+    @Persisted (primaryKey: true) var name:String
+    @Persisted var steps: List<Step>
 
 }
-
-

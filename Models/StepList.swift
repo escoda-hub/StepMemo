@@ -1,21 +1,16 @@
 import SwiftUI
 
-struct StepList:Hashable,Codable,Identifiable{
-    var id :Int//固有識別子
-    var title :String//ステップ名
-    var created_at:String//作成日
-    var updated_at:String//作成日
-    var category:String//カテゴリ
-    var stepData :[stepDetailData]
-    
-//    enum Category :String,CaseIterable,Hashable,Codable{
-//        case hiphop="HipHop"
-//        case house="House"
-//        case lock="Lock"
-//    }
+struct StepModel:Hashable,Codable,Identifiable{
+    var id :Int
+    var title :String
+    var created_at:String
+    var updated_at:String
+    var favorite:Bool
+    var stepDetails :[stepDetailData]
     
     struct stepDetailData:Hashable,Codable,Identifiable {
-        var id :Int//固有識別子
+        var id :Int
+        var step_id :Int
         var imagename: String
         var memo :String
         var R_x: Double
@@ -26,6 +21,7 @@ struct StepList:Hashable,Codable,Identifiable{
         var L_y: Double
         var L_angle: Double
         var L_mode : Int
+        var Order:Int
     }
 
 }

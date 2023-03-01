@@ -8,12 +8,20 @@
 import SwiftUI
 
 struct InformationView: View {
+    
+    @State var stepData:Step
+    
     var body: some View {
         NavigationView {
             VStack {
                 Text("要素1")
                 Text("要素2")
-            } .navigationTitle("タイトル")
+            }
+            .onAppear(){
+                print("hi")
+                print(stepData)
+            }
+            .navigationTitle("タイトル")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
@@ -36,8 +44,9 @@ struct InformationView: View {
     }
 }
 
-struct InformationView_Previews: PreviewProvider {
-    static var previews: some View {
-        InformationView()
-    }
-}
+//struct InformationView_Previews: PreviewProvider {
+//    @State var stepdata = S
+//    static var previews: some View {
+//        InformationView(stepData: <#T##Step#>)
+//    }
+//}

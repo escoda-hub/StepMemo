@@ -133,9 +133,19 @@ struct ContentView: View {
                             deleteGroup(deletedata: "group")
                         }
                         .disabled(true)
+                        Button("deleteALL Button") {
+                            print(Realm.Configuration.defaultConfiguration.fileURL!)
+                            deleteAll()
+                        }
+                        .disabled(false)
                         Button("add stepdata Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
                             setStepData()
+                        }
+                        .disabled(false)
+                        Button("update stepdata Button") {
+                            print(Realm.Configuration.defaultConfiguration.fileURL!)
+                            updateStepData()
                         }
                         .disabled(false)
                     }
@@ -150,10 +160,10 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(10))
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: InformationView()){
-                                Image(systemName: "info.circle")
-                                    .foregroundColor(.black)
-                            }
+//                            NavigationLink(destination: InformationView()){
+//                                Image(systemName: "info.circle")
+//                                    .foregroundColor(.black)
+//                            }
                         }
                         ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
                             Button(action: {
@@ -203,6 +213,17 @@ func getGroup()->[String] {
 }
 
 //グループ名の取得
+func deleteAll() {
+
+    let realm = try! Realm()
+
+    try! realm.write {
+      realm.deleteAll()
+    }
+
+}
+
+//グループ名の取得
 func deleteGroup(deletedata:String) {
     let realm = try! Realm()
     
@@ -231,18 +252,17 @@ func deleteGroup(deletedata:String) {
 
 func setStepData() {
     let group = Group()
-    group.name = "step1"
+    group.name = "group_1"
 
     let step = Step()
-    step.title = "stepname5"
+    step.title = "step_1"
     step.created_at = Date()
     step.updated_at = Date()
     step.favorite = true
-    step.group = group
 
     let stepDetail_1 = StepDetail()
     stepDetail_1.step_id = step.id
-    stepDetail_1.imagename = "stepname5_image_1"
+    stepDetail_1.imagename = "g1_s1_1"
     stepDetail_1.memo = "memomemomemo_1"
     stepDetail_1.L_x = 100
     stepDetail_1.L_y = 100
@@ -253,58 +273,75 @@ func setStepData() {
     stepDetail_1.R_angle = 50
     stepDetail_1.R_mode = 1
     stepDetail_1.Order = 1
-    step.StepDetail.append(stepDetail_1)
+    
+    let stepDetail_2 = StepDetail()
+    stepDetail_2.step_id = step.id
+    stepDetail_2.imagename = "g1_s1_2"
+    stepDetail_2.memo = "memomemomemo_2"
+    stepDetail_2.L_x = 120
+    stepDetail_2.L_y = 120
+    stepDetail_2.L_angle = 10
+    stepDetail_2.L_mode = 1
+    stepDetail_2.R_x = 320
+    stepDetail_2.R_y = 220
+    stepDetail_2.R_angle = 20
+    stepDetail_2.R_mode = 2
+    stepDetail_2.Order = 2
+    
+    step.stepDetails.append(stepDetail_1)
+    step.stepDetails.append(stepDetail_2)
+    group.steps.append(step)
 
-//    let stepDetail_2 = StepDetail()
-//    stepDetail_2.step_id = step.id
-//    stepDetail_2.imagename = "stepname2_image_2"
-//    stepDetail_2.memo = "memomemomemo_2"
-//    stepDetail_2.L_x = 150
-//    stepDetail_2.L_y = 150
-//    stepDetail_2.L_angle = 70
-//    stepDetail_2.L_mode = 3
-//    stepDetail_2.R_x = 250
-//    stepDetail_2.R_y = 300
-//    stepDetail_2.R_angle = 150
-//    stepDetail_2.R_mode = 2
-//    stepDetail_2.Order = 2
-//    step.StepDetail.append(stepDetail_2)
-    
-//    let stepDetail_3 = StepDetail()
-//    stepDetail_3.step_id = step.id
-//    stepDetail_3.imagename = "stepname2_image_3"
-//    stepDetail_3.memo = "memomemomemo_3"
-//    stepDetail_3.L_x = 150
-//    stepDetail_3.L_y = 100
-//    stepDetail_3.L_angle = 130
-//    stepDetail_3.L_mode = 2
-//    stepDetail_3.R_x = 200
-//    stepDetail_3.R_y = 250
-//    stepDetail_3.R_angle = 80
-//    stepDetail_3.R_mode = 1
-//    stepDetail_3.Order = 3
-//    step.StepDetail.append(stepDetail_3)
-    
-//    let stepDetail_4 = StepDetail()
-//    stepDetail_4.step_id = step.id
-//    stepDetail_4.imagename = "stepname2_image_3"
-//    stepDetail_4.memo = "memomemomemo_3"
-//    stepDetail_4.L_x = 100
-//    stepDetail_4.L_y = 110
-//    stepDetail_4.L_angle = 100
-//    stepDetail_4.L_mode = 1
-//    stepDetail_4.R_x = 300
-//    stepDetail_4.R_y = 220
-//    stepDetail_4.R_angle = 20
-//    stepDetail_4.R_mode = 2
-//    stepDetail_4.Order = 4
-//    step.StepDetail.append(stepDetail_4)
-    
+
     let realm = try! Realm()
 
     do{
       try realm.write{
-          realm.add(step)
+          realm.add(group)
+      }
+    }catch {
+      print("Error \(error)")
+    }
+}
+
+func updateStepData() {
+    let group = Group()
+    group.name = "group_1"
+
+    let step = Step()
+    step.title = "step_2"
+    step.created_at = Date()
+    step.updated_at = Date()
+    step.favorite = true
+
+    let stepDetail_1 = StepDetail()
+    stepDetail_1.step_id = step.id
+    stepDetail_1.imagename = "g1_s2_2"
+    stepDetail_1.memo = "memomemomemo_2"
+    stepDetail_1.L_x = 120
+    stepDetail_1.L_y = 120
+    stepDetail_1.L_angle = 100
+    stepDetail_1.L_mode = 1
+    stepDetail_1.R_x = 220
+    stepDetail_1.R_y = 220
+    stepDetail_1.R_angle = 20
+    stepDetail_1.R_mode = 3
+    stepDetail_1.Order = 2
+    
+//    step.stepDetails.append(stepDetail_1)
+//    group.steps.append(step)
+
+    let realm = try! Realm()
+
+    do{
+      try realm.write{
+          //グループを特定してステップ追加
+//          let stepData = realm.objects(Group.self).filter("name == 'group_1'").first!
+//          stepData.steps.append(step)
+          
+          //ステップを特定してステップ詳細を追加
+          let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
+          stepDetailsData.stepDetails.append(stepDetail_1)//ステップ詳細追加
       }
     }catch {
       print("Error \(error)")
