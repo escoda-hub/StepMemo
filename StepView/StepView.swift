@@ -21,6 +21,10 @@ struct imageSize {
 }
 
 struct StepView: View{
+    
+//    @ObservedResults(Step.self) var steps
+    
+    
     @State var stepData:Step
     
     @State var ImageSize :imageSize
@@ -59,6 +63,9 @@ struct StepView: View{
     
     
     var body: some View {
+        
+        let deviceWidth = UIScreen.main.bounds.width
+        
         VStack {
             HStack {
                 TextField("タイトル", text: $stepData.title)
@@ -148,45 +155,40 @@ struct StepView: View{
             HStack {
                 ScrollView(.horizontal){
                     HStack {
-                        HStack(alignment: .top, spacing: 0) {
-                            ForEach(Array(stepData.stepDetails.enumerated()), id: \.element) { index,element in
+                        ForEach(0..<stepData.stepDetails.count) {(row: Int) in
                                 ZStack {
-                                    Image("debugdata")
-                                        .resizable()
-                                        .frame(width:50,height: 50)
-                                        .padding(3)
-                                        .border(element.Order == indexSmallView ? Color.gray : Color.white, width: element.Order == indexSmallView ? 2.0 : 0)
-                                        .onTapGesture {
-                                            indexSmallView = element.Order
-                                            location = CGPoint(x: 0, y: 0)
-                                            location_L = CGPoint(
-                                                x: element.L_x,
-                                                y: element.L_y)
-                                            location_R = CGPoint(
-                                                x: element.R_x,
-                                                y: element.R_y)
-                                            angle = Angle(degrees: 0)
-                                            angle_L = Angle(degrees: element.L_angle)
-                                            angle_R = Angle(degrees: element.R_angle)
-                                            mode = 0
-                                            mode_L = element.L_mode
-                                            mode_R = element.R_mode
-                                            memo = element.memo
-                                             rightMode = getPickerSelector(mode: mode_R)
-                                             leftMode = getPickerSelector(mode: mode_L)
-                                        }
-                                    
-                                        .onLongPressGesture {
-                                            indexSmallView = element.Order
-                                            showingAlert = true
-                                        }
-                                    
-                                    Text("\(element.Order)")
-                                        .foregroundColor(.black)
+                                    OverView(
+                                        location_L: CGPoint(x: stepData.stepDetails[row].L_x/5-(deviceWidth/10),
+                                                            y: stepData.stepDetails[row].L_y/5-30),
+                                        location_R: CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10),
+                                                            y: stepData.stepDetails[row].R_y/5-30),
+                                        angle_L: Angle(degrees: stepData.stepDetails[row].L_angle),
+                                        angle_R: Angle(degrees: stepData.stepDetails[row].R_angle),
+                                        mode_L:stepData.stepDetails[row].L_mode,
+                                        mode_R:stepData.stepDetails[row].R_mode
+                                    )
+                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0)
+                                    .onTapGesture {
+                                        indexSmallView = stepData.stepDetails[row].Order
+                                        location_L = CGPoint(
+                                            x: stepData.stepDetails[row].L_x,
+                                            y: stepData.stepDetails[row].L_y)
+                                        location_R = CGPoint(
+                                            x: stepData.stepDetails[row].R_x,
+                                            y: stepData.stepDetails[row].R_y)
+                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
+                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
+                                        mode_L = stepData.stepDetails[row].L_mode
+                                        mode_R = stepData.stepDetails[row].R_mode
+                                    }
+                                    .onLongPressGesture {
+                                        indexSmallView = stepData.stepDetails[row].Order
+                                        showingAlert = true
+                                }
+                                    Text("\(stepData.stepDetails[row].Order)")
                                 }
                             }
-                        }//H_stack:small image view
-                    }//H_staqck
+                    }
                 }
                 .padding(.horizontal)
                 .alert(isPresented: $showingAlert) { () -> Alert in
@@ -201,32 +203,46 @@ struct StepView: View{
                         secondaryButton: .default(Text("キャンセル")                      )
                     )
                 }
+                Button(action: {
+                    print("add")
+                    let stepDetail_default = StepDetail()
+                    stepDetail_default.step_id = stepData.id
+                    stepDetail_default.imagename = "g1_s2_2"
+                    stepDetail_default.memo = "memomemomemo_add"
+                    stepDetail_default.L_x = 220
+                    stepDetail_default.L_y = 220
+                    stepDetail_default.L_angle = 60
+                    stepDetail_default.L_mode = 2
+                    stepDetail_default.R_x = 300
+                    stepDetail_default.R_y = 300
+                    stepDetail_default.R_angle = 50
+                    stepDetail_default.R_mode = 3
+                    stepDetail_default.Order = 4
+                    
+                    let realm = try! Realm()
+
+                    do{
+                      try realm.write{
+                          //ステップを特定してステップ詳細を追加
+                          let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
+                          stepDetailsData.stepDetails.append(stepDetail_default)//ステップ詳細追加
+                      }
+                    }catch {
+                      print("Error \(error)")
+                    }
+                    
+                }, label: {
+                    Image(systemName: "plus.circle")
+                        .resizable()
+                        .foregroundColor(.black)
+                        .frame(width:30,height:30)
+                })
+                .padding(.trailing)
             }//Small Window reagin
         }//VStack
     }//body
 }//VIEW
     
-    //struct StepView: View {
-    //
-    //    @State var stepData:Step
-    //
-    //    @State var ImageSize :imageSize
-    //    @State private var rightMode : String
-    //    @State private var leftMode : String
-    //    @State private var location : CGPoint
-    //    @State private var location_L : CGPoint
-    //    @State private var location_R : CGPoint
-    //    @State private var angle : Angle
-    //    @State private var angle_L : Angle
-    //    @State private var angle_R : Angle
-    //    @State private var mode : Int
-    //    @State private var mode_L : Int
-    //    @State private var mode_R : Int
-    //    @State private var memo : String
-    //    @State private var title : String
-    //    @State var uiImage: UIImage? = nil
-    //    @State private var selectedGroup = ""
-    //    @State var showingAlert: Bool = false
     //
     //    init(stepData: Step, ImageSize: imageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0), rightMode: String = "toes", leftMode: String = "toes", location: CGPoint = CGPoint(x: 0, y: 0), location_L: CGPoint = CGPoint(x: 0, y: 0), location_R: CGPoint = CGPoint(x: 0, y: 0), angle: Angle = Angle(degrees: 0), angle_L: Angle = Angle(degrees: 0), angle_R: Angle = Angle(degrees: 0), mode: Int = 0, mode_L: Int = 0, mode_R: Int = 0, memo: String = "", title: String = "", uiImage: UIImage? = nil, selectedGroup: String = "", showingAlert: Bool = false) {
     //        self.stepData = stepData

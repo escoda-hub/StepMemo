@@ -14,13 +14,13 @@ struct StepListView: View {
                     Text(ViewTitle)
                     List {
                         Section (
-                            header: HStack{
-                                Image(systemName: "rectangle.3.group")
-                                    .resizable()
-                                    .frame(width:25,height:18)
-                                Text("Group")
-                                    .font(.title)
-                            }
+//                            header: HStack{
+//                                Image(systemName: "rectangle.3.group")
+//                                    .resizable()
+//                                    .frame(width:25,height:18)
+//                                Text("Group")
+//                                    .font(.title)
+//                            }
                         )
                         {
                             ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in

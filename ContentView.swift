@@ -288,8 +288,23 @@ func setStepData() {
     stepDetail_2.R_mode = 2
     stepDetail_2.Order = 2
     
+    let stepDetail_3 = StepDetail()
+    stepDetail_3.step_id = step.id
+    stepDetail_3.imagename = "g1_s1_3"
+    stepDetail_3.memo = "memomemomemo_2"
+    stepDetail_3.L_x = 80
+    stepDetail_3.L_y = 90
+    stepDetail_3.L_angle = 80
+    stepDetail_3.L_mode = 2
+    stepDetail_3.R_x = 300
+    stepDetail_3.R_y = 290
+    stepDetail_3.R_angle = 50
+    stepDetail_3.R_mode = 3
+    stepDetail_3.Order = 3
+    
     step.stepDetails.append(stepDetail_1)
     step.stepDetails.append(stepDetail_2)
+    step.stepDetails.append(stepDetail_3)
     group.steps.append(step)
 
 
@@ -314,19 +329,19 @@ func updateStepData() {
     step.updated_at = Date()
     step.favorite = true
 
-    let stepDetail_1 = StepDetail()
-    stepDetail_1.step_id = step.id
-    stepDetail_1.imagename = "g1_s2_2"
-    stepDetail_1.memo = "memomemomemo_2"
-    stepDetail_1.L_x = 120
-    stepDetail_1.L_y = 120
-    stepDetail_1.L_angle = 100
-    stepDetail_1.L_mode = 1
-    stepDetail_1.R_x = 220
-    stepDetail_1.R_y = 220
-    stepDetail_1.R_angle = 20
-    stepDetail_1.R_mode = 3
-    stepDetail_1.Order = 2
+    let stepDetail_add = StepDetail()
+    stepDetail_add.step_id = step.id
+    stepDetail_add.imagename = "g1_s2_2"
+    stepDetail_add.memo = "memomemomemo_add"
+    stepDetail_add.L_x = 220
+    stepDetail_add.L_y = 220
+    stepDetail_add.L_angle = 60
+    stepDetail_add.L_mode = 2
+    stepDetail_add.R_x = 300
+    stepDetail_add.R_y = 300
+    stepDetail_add.R_angle = 50
+    stepDetail_add.R_mode = 3
+    stepDetail_add.Order = 4
     
 //    step.stepDetails.append(stepDetail_1)
 //    group.steps.append(step)
@@ -341,7 +356,7 @@ func updateStepData() {
           
           //ステップを特定してステップ詳細を追加
           let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
-          stepDetailsData.stepDetails.append(stepDetail_1)//ステップ詳細追加
+          stepDetailsData.stepDetails.append(stepDetail_add)//ステップ詳細追加
       }
     }catch {
       print("Error \(error)")
