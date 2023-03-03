@@ -24,7 +24,8 @@ struct StepListView: View {
                         )
                         {
                             ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in
-                                NavigationLink(destination: StepView(stepData: getStep(groupName: ViewTitle)[index])) {
+                              NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
+//                                NavigationLink(destination: InformationView(groupName: "group_1", stepTitle: "step_1")) {
                                     Text(getStep(groupName: ViewTitle)[index].title)
                                 }
                              }

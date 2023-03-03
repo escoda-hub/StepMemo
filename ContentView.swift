@@ -148,6 +148,11 @@ struct ContentView: View {
                             updateStepData()
                         }
                         .disabled(false)
+                        Button("get Gruopdata Button") {
+                            print(Realm.Configuration.defaultConfiguration.fileURL!)
+//                            print(getStep(groupName: "group_1", stepName: "step_1"))
+                        }
+                        .disabled(false)
                     }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
@@ -187,7 +192,6 @@ struct ContentView: View {
                 }//ZStack
         }//navigation stack
     }//body
-    
 }//content view
 
 struct ContentView_Previews: PreviewProvider {
@@ -247,7 +251,6 @@ func deleteGroup(deletedata:String) {
     }catch {
       print("Error \(error)")
     }
-
 }
 
 func setStepData() {
@@ -351,14 +354,16 @@ func updateStepData() {
     do{
       try realm.write{
           //グループを特定してステップ追加
-//          let stepData = realm.objects(Group.self).filter("name == 'group_1'").first!
-//          stepData.steps.append(step)
+          let stepData = realm.objects(Group.self).filter("name == 'group_1'").first!
+          stepData.steps.append(step)
           
           //ステップを特定してステップ詳細を追加
-          let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
-          stepDetailsData.stepDetails.append(stepDetail_add)//ステップ詳細追加
+//          let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
+//          stepDetailsData.stepDetails.append(stepDetail_add)//ステップ詳細追加
       }
     }catch {
       print("Error \(error)")
     }
 }
+
+

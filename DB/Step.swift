@@ -20,13 +20,4 @@ class Step: Object,Identifiable {
     @Persisted  var favorite:Bool
     @Persisted var stepDetails: List<StepDetail>
     
-//    init(id: String, title: String, created_at: Date = Date(), updated_at: Date = Date(), favorite: Bool, stepDetails: List<StepDetail>) {
-//        self.id = id
-//        self.title = title
-//        self.created_at = created_at
-//        self.updated_at = updated_at
-//        self.favorite = favorite
-//        self.stepDetails = stepDetails
-//    }
-    
 }
