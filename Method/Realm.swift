@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-//グループ名の取得
+//ステップデータの取得
 func getStepData(groupName:String,stepName:String)->(Step) {
     
     let realm = try! Realm()
@@ -29,6 +29,33 @@ func getStepData(groupName:String,stepName:String)->(Step) {
         }
         
         return step
+    }catch {
+      print("Error \(error)")
+    }
+
+}
+
+//ステップ詳細データの取得
+func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail){
+    
+    let realm = try! Realm()
+    do{
+        let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
+        
+        var stepDetailElement : StepDetail = StepDetail()
+        
+        if (Array(StepData).count == 1){
+            let step = Array(StepData)[0].steps
+            if(step.count == 1){
+                let stepDetail = Array(Array(StepData)[0].steps)[0].stepDetails
+                if(stepDetail.count > 0){
+                    stepDetailElement = Array(Array(Array(StepData)[0].steps)[0].stepDetails)[index]
+                }
+            }
+        }
+        
+        return stepDetailElement
+
     }catch {
       print("Error \(error)")
     }

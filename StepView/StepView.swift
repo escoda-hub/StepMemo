@@ -24,54 +24,38 @@ struct StepView: View{
     
     @State var groupName:String
     @State var stepTitle:String
-    
+    @State var index:Int
     @State var stepData:Step
     @State var ImageSize :imageSize
+    @State var location   :CGPoint
+    @State var location_L :CGPoint
+    @State var location_R :CGPoint
+    @State var angle   :Angle
+    @State var angle_L :Angle
+    @State var angle_R :Angle
+    @State var mode   :Int
+    @State var mode_L :Int
+    @State var mode_R :Int
+    @State var indexSmallView:Int
     
-    init(groupName: String , stepTitle: String, stepData: Step = Step(),ImageSize:imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)) {
+    init(groupName: String, stepTitle: String, index: Int = 0, stepData: Step = Step(), ImageSize: imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0),location_L:CGPoint=CGPoint(x: 0, y: 0),location_R:CGPoint=CGPoint(x: 0, y: 0),indexSmallView:Int=0) {
         self.groupName = groupName
         self.stepTitle = stepTitle
+        self.index = 0
         self.stepData = getStepData(groupName: groupName, stepName: stepTitle)
         self.ImageSize = ImageSize
+        self.location_L = CGPoint(x: 0, y: 0)
+        self.location_R = CGPoint(x: 0, y: 0)
+        self.location = CGPoint(x: 0, y: 0)
+        self.angle_L = Angle(degrees: 0)
+        self.angle_R = Angle(degrees: 0)
+        self.angle = Angle(degrees: 0)
+        self.mode_L = 0
+        self.mode_R = 0
+        self.mode = 0
+        self.indexSmallView = 0
     }
-//
 
-//    @State var indexSmallView : Int
-//    @State var location : CGPoint
-//    @State var location_L: CGPoint
-//    @State var location_R: CGPoint
-//    @State var angle : Angle
-//    @State var angle_L: Angle
-//    @State var angle_R: Angle
-//    @State var mode: Int
-//    @State var mode_L: Int
-//    @State var mode_R: Int
-//    @State var showingAlert: Bool = false
-//    @State private var memo : String
-//    @State private var rightMode : String
-//    @State private var leftMode : String
-    
-//    init(groupName:String = "",stepTitle:String = "",stepData: Step,ImageSize:imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0),indexSmallView:Int=0,location: CGPoint=CGPoint(x: 0, y: 0), location_L: CGPoint=CGPoint(x: 0, y: 0), location_R: CGPoint=CGPoint(x: 0, y: 0), angle: Angle=Angle(degrees: 0), angle_L: Angle=Angle(degrees: 0), angle_R: Angle=Angle(degrees: 0), mode: Int=0, mode_L: Int=0, mode_R: Int=0,memo : String = "",rightMode:String = "",leftMode:String = "") {
-//        self.groupName = groupName
-//        self.stepTitle = stepTitle
-////        self.stepData = getStep(groupName: groupName, stepName: stepTitle)
-//        self.stepData = stepData
-//        self.ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
-//        self.indexSmallView = 0
-//        self.location = CGPoint(x: 0, y: 0)
-//        self.location_L =  CGPoint(x: 111, y: 66)
-//        self.location_R =  CGPoint(x: 54, y: 64)
-//        self.angle = Angle(degrees: 0)
-//        self.angle_L = Angle(degrees: 33)
-//        self.angle_R = Angle(degrees: 55)
-//        self.mode = 0
-//        self.mode_L = 2
-//        self.mode_R = 2
-//        self.memo = "memo"
-//        self.rightMode = ""
-//        self.leftMode = ""
-//    }
-//
     var body: some View {
         
         let deviceWidth = UIScreen.main.bounds.width
@@ -93,12 +77,6 @@ struct StepView: View{
                 .padding(.trailing)
                 Spacer()
             }
-            .onAppear(){
-                print(stepTitle)
-                print(groupName)
-                print(stepData)
-                
-            }
             GeometryReader { geometry in
                 ZStack {
                     Rectangle()
@@ -110,103 +88,93 @@ struct StepView: View{
                             self.ImageSize.minY = geometry.frame(in: .global).minY
                             self.ImageSize.maxY = geometry.frame(in: .global).maxY
                         }
-//                    DraggableImage(
-//                        location:
-//                            $location,
-//                        location_L:
-//                            $location_L,
-//                        location_R:
-//                            $location_R,
-//                        angle:
-//                            $angle,
-//                        angle_L:
-//                            $angle_L,
-//                        angle_R:
-//                            $angle_R,
-//                        mode:
-//                            $mode,
-//                        mode_L:
-//                            $mode_L,
-//                        mode_R:
-//                            $mode_R,
-//                        limit:
-//                            limit(xMax: geometry.size.width-30,//-30
-//                                  xMin: 20,//20
-//                                  yMax: geometry.size.height-40,//-40
-//                                  yMin: 40),//40
-//                        isR: true
-//                    )
-//                    DraggableImage(
-//                        location:
-//                            $location,
-//                        location_L:
-//                            $location_L,
-//                        location_R:
-//                            $location_R,
-//                        angle:
-//                            $angle,
-//                        angle_L:
-//                            $angle_L,
-//                        angle_R:
-//                            $angle_R,
-//                        mode:
-//                            $mode,
-//                        mode_L:
-//                            $mode_L,
-//                        mode_R:
-//                            $mode_R,
-//                        limit:
-//                            limit(xMax: geometry.size.width-30,
-//                                  xMin: 20,
-//                                  yMax: geometry.size.height-40,
-//                                  yMin: 40),
-//                        isR: false
-//                    )
+                    DraggableImage(
+                        GroupName: $groupName,
+                        StepTitle: $stepTitle,
+                        Index: $index,
+                        isR: true,
+                        location: $location,
+                        location_L: $location_L,
+                        location_R: $location_R,
+                        angle: $angle,
+                        angle_L: $angle_L,
+                        angle_R: $angle_R,
+                        mode: $mode,
+                        mode_L: $mode_L,
+                        mode_R: $mode_R,
+                        limit:
+                            limit(xMax: geometry.size.width-30,
+                                  xMin: 20,
+                                  yMax: geometry.size.height-40,
+                                  yMin: 40)
+                    )
+                    DraggableImage(
+                        GroupName: $groupName,
+                        StepTitle: $stepTitle,
+                        Index: $index,
+                        isR: false,
+                        location: $location,
+                        location_L: $location_L,
+                        location_R: $location_R,
+                        angle: $angle,
+                        angle_L: $angle_L,
+                        angle_R: $angle_R,
+                        mode: $mode,
+                        mode_L: $mode_L,
+                        mode_R: $mode_R,
+                        limit:
+                            limit(xMax: geometry.size.width-30,
+                                  xMin: 20,
+                                  yMax: geometry.size.height-40,
+                                  yMin: 40)
+                    )
                 }
             }
             .padding(.horizontal, 10)
             .frame(height: 300)
-//
-//            //Small Window reagin
-//            HStack {
-//                ScrollView(.horizontal){
-//                    HStack {
-//                        ForEach(0..<stepData.stepDetails.count) {(row: Int) in
-//                                ZStack {
-//                                    OverView(
-//                                        location_L: CGPoint(x: stepData.stepDetails[row].L_x/5-(deviceWidth/10),
-//                                                            y: stepData.stepDetails[row].L_y/5-30),
-//                                        location_R: CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10),
-//                                                            y: stepData.stepDetails[row].R_y/5-30),
-//                                        angle_L: Angle(degrees: stepData.stepDetails[row].L_angle),
-//                                        angle_R: Angle(degrees: stepData.stepDetails[row].R_angle),
-//                                        mode_L:stepData.stepDetails[row].L_mode,
-//                                        mode_R:stepData.stepDetails[row].R_mode
-//                                    )
-//                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0)
-//                                    .onTapGesture {
-//                                        indexSmallView = stepData.stepDetails[row].Order
-//                                        location_L = CGPoint(
-//                                            x: stepData.stepDetails[row].L_x,
-//                                            y: stepData.stepDetails[row].L_y)
-//                                        location_R = CGPoint(
-//                                            x: stepData.stepDetails[row].R_x,
-//                                            y: stepData.stepDetails[row].R_y)
-//                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
-//                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
-//                                        mode_L = stepData.stepDetails[row].L_mode
-//                                        mode_R = stepData.stepDetails[row].R_mode
-//                                    }
-//                                    .onLongPressGesture {
+            
+            //Small Window reagin
+            HStack {
+                ScrollView(.horizontal){
+                    HStack {
+                        ForEach(0..<stepData.stepDetails.count) {(row: Int) in
+                                ZStack {
+                                    OverView(
+                                        location_L: CGPoint(x: stepData.stepDetails[row].L_x/5-(deviceWidth/10),
+                                                            y: stepData.stepDetails[row].L_y/5-30),
+                                        location_R: CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10),
+                                                            y: stepData.stepDetails[row].R_y/5-30),
+                                        angle_L: Angle(degrees: stepData.stepDetails[row].L_angle),
+                                        angle_R: Angle(degrees: stepData.stepDetails[row].R_angle),
+                                        mode_L:stepData.stepDetails[row].L_mode,
+                                        mode_R:stepData.stepDetails[row].R_mode
+                                    )
+                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0)
+                                    .onTapGesture {
+                                        indexSmallView = stepData.stepDetails[row].Order
+                                        location_L = CGPoint(
+                                            x: stepData.stepDetails[row].L_x,
+                                            y: stepData.stepDetails[row].L_y)
+                                        location_R = CGPoint(
+                                            x: stepData.stepDetails[row].R_x,
+                                            y: stepData.stepDetails[row].R_y)
+                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
+                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
+                                        mode_L = stepData.stepDetails[row].L_mode
+                                        mode_R = stepData.stepDetails[row].R_mode
+                                        index = row
+                                        print(index)
+                                    }
+                                    .onLongPressGesture {
 //                                        indexSmallView = stepData.stepDetails[row].Order
 //                                        showingAlert = true
-//                                }
-//                                    Text("\(stepData.stepDetails[row].Order)")
-//                                }
-//                            }
-//                    }
-//                }
-//                .padding(.horizontal)
+                                }
+                                    Text("\(stepData.stepDetails[row].Order)")
+                                }
+                            }
+                    }
+                }
+                .padding(.horizontal)
 //                .alert(isPresented: $showingAlert) { () -> Alert in
 //                    Alert(
 //                        title: Text("確認"),
@@ -256,7 +224,7 @@ struct StepView: View{
 //                        .frame(width:30,height:30)
 //                })
 //                .padding(.trailing)
-//            }//Small Window reagin
+            }//Small Window reagin
         }//VStack
     }//body
 }//VIEW

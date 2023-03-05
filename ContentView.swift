@@ -148,9 +148,9 @@ struct ContentView: View {
                             updateStepData()
                         }
                         .disabled(false)
-                        Button("get Gruopdata Button") {
+                        Button("get StepDetaildata Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
-//                            print(getStep(groupName: "group_1", stepName: "step_1"))
+                            print(getStepDetailData(groupName: "group_1", stepName: "step_1",index: 0))
                         }
                         .disabled(false)
                     }

@@ -70,19 +70,6 @@ func getStep(groupName:String)->Array<Step> {
     
     let realm = try! Realm()
     let groupData = realm.objects(Group.self).filter("name == %@",groupName).first!//type is List
-  
-//    if let groupData = realm.objects(Group.self).filter("name == %@",groupName).first {
-//        var groupData = realm.objects(Group.self).filter("name == %@",groupName).first
-//    }
-//    else {
-//        print("値が代入されていません")
-//    }
-    
-//    print(groupData.steps)
-//    print(type(of: groupData.steps))
-//    print("------------------------------")
-//    print(Array(groupData.steps))
-//    print(type(of: Array(groupData.steps)))
     
     return Array(groupData.steps)//type is Array<Step>
 
