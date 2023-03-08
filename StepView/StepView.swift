@@ -37,8 +37,9 @@ struct StepView: View{
     @State var mode_L :Int
     @State var mode_R :Int
     @State var indexSmallView:Int
+    @State var showingAlert:Bool
     
-    init(groupName: String, stepTitle: String, index: Int = 0, stepData: Step = Step(), ImageSize: imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0),location_L:CGPoint=CGPoint(x: 0, y: 0),location_R:CGPoint=CGPoint(x: 0, y: 0),indexSmallView:Int=0) {
+    init(groupName: String, stepTitle: String, index: Int = 0, stepData: Step = Step(), ImageSize: imageSize=imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0),location_L:CGPoint=CGPoint(x: 0, y: 0),location_R:CGPoint=CGPoint(x: 0, y: 0),indexSmallView:Int=0,showingAlert:Bool=false) {
         self.groupName = groupName
         self.stepTitle = stepTitle
         self.index = 0
@@ -53,7 +54,8 @@ struct StepView: View{
         self.mode_L = 0
         self.mode_R = 0
         self.mode = 0
-        self.indexSmallView = 0
+        self.indexSmallView = 1
+        self.showingAlert = false
     }
 
     var body: some View {
@@ -106,7 +108,8 @@ struct StepView: View{
                             limit(xMax: geometry.size.width-30,
                                   xMin: 20,
                                   yMax: geometry.size.height-40,
-                                  yMin: 40)
+                                  yMin: 40),
+                        stepData: $stepData
                     )
                     DraggableImage(
                         GroupName: $groupName,
@@ -126,31 +129,24 @@ struct StepView: View{
                             limit(xMax: geometry.size.width-30,
                                   xMin: 20,
                                   yMax: geometry.size.height-40,
-                                  yMin: 40)
+                                  yMin: 40),
+                        stepData: $stepData
                     )
                 }
             }
             .padding(.horizontal, 10)
             .frame(height: 300)
-            
+
             //Small Window reagin
             HStack {
                 ScrollView(.horizontal){
                     HStack {
                         ForEach(0..<stepData.stepDetails.count) {(row: Int) in
                                 ZStack {
-                                    OverView(
-                                        location_L: CGPoint(x: stepData.stepDetails[row].L_x/5-(deviceWidth/10),
-                                                            y: stepData.stepDetails[row].L_y/5-30),
-                                        location_R: CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10),
-                                                            y: stepData.stepDetails[row].R_y/5-30),
-                                        angle_L: Angle(degrees: stepData.stepDetails[row].L_angle),
-                                        angle_R: Angle(degrees: stepData.stepDetails[row].R_angle),
-                                        mode_L:stepData.stepDetails[row].L_mode,
-                                        mode_R:stepData.stepDetails[row].R_mode
-                                    )
-                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0)
+                                    OverView(index: row, stepData: $stepData)
+                                        .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
                                     .onTapGesture {
+                                        index = row
                                         indexSmallView = stepData.stepDetails[row].Order
                                         location_L = CGPoint(
                                             x: stepData.stepDetails[row].L_x,
@@ -162,161 +158,48 @@ struct StepView: View{
                                         angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
                                         mode_L = stepData.stepDetails[row].L_mode
                                         mode_R = stepData.stepDetails[row].R_mode
-                                        index = row
-                                        print(index)
                                     }
                                     .onLongPressGesture {
-//                                        indexSmallView = stepData.stepDetails[row].Order
-//                                        showingAlert = true
-                                }
+                                        indexSmallView = stepData.stepDetails[row].Order
+                                        showingAlert = true
+                                    }
                                     Text("\(stepData.stepDetails[row].Order)")
                                 }
                             }
                     }
                 }
                 .padding(.horizontal)
-//                .alert(isPresented: $showingAlert) { () -> Alert in
-//                    Alert(
-//                        title: Text("確認"),
-//                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
-//                        primaryButton: .default(Text("Ok"),
-//                                                action: {
-//                                                    actionAfterAlert()
-//                                                }
-//                                               ),
-//                        secondaryButton: .default(Text("キャンセル")                      )
-//                    )
-//                }
-//                Button(action: {
-//                    print("add")
-//                    let stepDetail_default = StepDetail()
-//                    stepDetail_default.step_id = stepData.id
-//                    stepDetail_default.imagename = "g1_s2_2"
-//                    stepDetail_default.memo = "memomemomemo_add"
-//                    stepDetail_default.L_x = 220
-//                    stepDetail_default.L_y = 220
-//                    stepDetail_default.L_angle = 60
-//                    stepDetail_default.L_mode = 2
-//                    stepDetail_default.R_x = 300
-//                    stepDetail_default.R_y = 300
-//                    stepDetail_default.R_angle = 50
-//                    stepDetail_default.R_mode = 3
-//                    stepDetail_default.Order = 4
-//
-//                    let realm = try! Realm()
-//
-//                    do{
-//                      try realm.write{
-//                          //ステップを特定してステップ詳細を追加
-//                          let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
-//                          stepDetailsData.stepDetails.append(stepDetail_default)//ステップ詳細追加
-//
-////                          stepData
-//                      }
-//                    }catch {
-//                      print("Error \(error)")
-//                    }
-//
-//                }, label: {
-//                    Image(systemName: "plus.circle")
-//                        .resizable()
-//                        .foregroundColor(.black)
-//                        .frame(width:30,height:30)
-//                })
-//                .padding(.trailing)
+                .alert(isPresented: $showingAlert) { () -> Alert in
+                    Alert(
+                        title: Text("確認"),
+                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
+                        primaryButton: .default(Text("Ok"),
+                                                action: {
+                                                    actionAfterAlert()
+                                                }
+                                               ),
+                        secondaryButton: .default(Text("キャンセル")                      )
+                    )
+                }
+                Button(action: {
+                    print("add")
+                    addStepDetail(groupName: groupName, stepName: stepTitle)
+                    stepData = getStepData(groupName: groupName, stepName: stepTitle)
+                }, label: {
+                    Image(systemName: "plus.circle")
+                        .resizable()
+                        .foregroundColor(.black)
+                        .frame(width:30,height:30)
+                })
+                .padding(.trailing)
+            
             }//Small Window reagin
         }//VStack
     }//body
 }//VIEW
-    
-    //
-    //    init(stepData: Step, ImageSize: imageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0), rightMode: String = "toes", leftMode: String = "toes", location: CGPoint = CGPoint(x: 0, y: 0), location_L: CGPoint = CGPoint(x: 0, y: 0), location_R: CGPoint = CGPoint(x: 0, y: 0), angle: Angle = Angle(degrees: 0), angle_L: Angle = Angle(degrees: 0), angle_R: Angle = Angle(degrees: 0), mode: Int = 0, mode_L: Int = 0, mode_R: Int = 0, memo: String = "", title: String = "", uiImage: UIImage? = nil, selectedGroup: String = "", showingAlert: Bool = false) {
-    //        self.stepData = stepData
-    //        self.ImageSize = ImageSize
-    //        self.rightMode = getPickerSelector(mode: stepData.stepDetails[0].R_mode)
-    //        self.leftMode = getPickerSelector(mode: stepData.stepDetails[0].L_mode)
-    //        self.location = CGPoint(x: 0, y: 0)
-    //        self.location_L = CGPoint(x: stepData.stepDetails[0].L_x, y: stepData.stepDetails[0].L_y)
-    //        self.location_R = CGPoint(x: stepData.stepDetails[0].R_x, y: stepData.stepDetails[0].R_y)
-    //        self.angle = Angle(degrees: stepData.stepDetails[0].L_angle)
-    //        self.angle_L = Angle(degrees: stepData.stepDetails[0].L_angle)
-    //        self.angle_R = Angle(degrees: stepData.stepDetails[0].R_angle)
-    //        self.mode = stepData.stepDetails[0].L_mode
-    //        self.mode_L = stepData.stepDetails[0].L_mode
-    //        self.mode_R = stepData.stepDetails[0].R_mode
-    //        self.memo = stepData.stepDetails[0].memo
-    //        self.title = stepData.title
-    //        self.uiImage = uiImage
-    //        self.selectedGroup = selectedGroup
-    //        self.showingAlert = showingAlert
-    //    }
-    //
-    //    var body: some View {
-    //                //Small Window reagin
-    //                HStack {
-    //                    ScrollView(.horizontal){
-    //                        HStack {
-    //                            HStack(alignment: .top, spacing: 0) {
-    //                                ForEach(stepData.stepDetails, id: \.self) { stepDetail in
-    //                                    ZStack {
-    //                                        Image("debugdata")
-    //                                            .resizable()
-    //                                            .frame(width:50,height: 50)
-    //                                            .padding(3)
-    //                                            .border(stepDetail.id == id ? Color.gray : Color.white, width: stepDetail.id == id ? 2.0 : 0)
-    //                                            .onTapGesture {
-    //                                                id = stepDetail.id
-    //                                                location = CGPoint(x: 0, y: 0)
-    //                                                location_L = CGPoint(
-    //                                                    x: stepDetail.L_x,
-    //                                                    y: stepDetail.L_y)
-    //                                                location_R = CGPoint(
-    //                                                    x: stepDetail.R_x,
-    //                                                    y: stepDetail.R_y)
-    //                                                angle = Angle(degrees: 0)
-    //                                                angle_L = Angle(degrees: stepDetail.L_angle)
-    //                                                angle_R = Angle(degrees: stepDetail.R_angle)
-    //                                                mode = 0
-    //                                                mode_L = stepDetail.L_mode
-    //                                                mode_R = stepDetail.R_mode
-    //                                                memo = stepDetail.memo
-    //                                                rightMode = getPickerSelector(mode: mode_R)
-    //                                                leftMode = getPickerSelector(mode: mode_L)
-    //                                        }
-    //                                        .onLongPressGesture {
-    //                                            id = stepDetail.id
-    //                                            showingAlert = true
-    //                                        }
-    //                                        Text("\(stepDetail.id)")
-    //                                            .foregroundColor(.black)
-    //                                    }
-    //                                }
-    //                            }//H_stack:small image view
-    //                        }//H_staqck
-    //                    }
-    //                    .padding(.horizontal)
-    //                    .alert(isPresented: $showingAlert) { () -> Alert in
-    //                                    Alert(
-    //                                        title: Text("確認"),
-    //                                        message: Text("\(id)番目のデータを削除してもよろしいですか？"),
-    //                                        primaryButton: .default(Text("Ok"),
-    //                                                        action: {
-    //                                                            actionAfterAlert()
-    //                                                            }
-    //                                                        ),
-    //                                        secondaryButton: .default(Text("キャンセル")                      )
-    //                                    )
-    //                    }
-    //                    Button(action: {
-    //                        print("add")
-    //                    }, label: {
-    //                        Image(systemName: "plus.circle")
-    //                            .resizable()
-    //                            .foregroundColor(.black)
-    //                            .frame(width:30,height:30)
-    //                    })
-    //                    .padding(.trailing)
-    //                }
+
+
+
     //
     //                //Picker Region
     //                HStack{

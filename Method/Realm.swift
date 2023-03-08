@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import SwiftUI
 
 //ステップデータの取得
 func getStepData(groupName:String,stepName:String)->(Step) {
@@ -60,4 +61,68 @@ func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail)
       print("Error \(error)")
     }
 
+}
+
+func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,location:CGPoint) {
+
+    let realm = try! Realm()
+    let group = realm.objects(Group.self)
+    let stepDetail = realm.objects(StepDetail.self)
+
+    do{
+      try realm.write{
+          
+          let subquery_getStepID = group.where {
+              ($0.name == groupName && $0.steps.title == stepName)
+          }
+          let step_id = Array(subquery_getStepID)[0].steps[0].id
+          let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index)
+          if isR {
+              results[0].R_x = location.x
+              results[0].R_y = location.y
+//              results[0].R_angle = angle
+          }else{
+              results[0].L_x = location.x
+              results[0].L_y = location.y
+//              results[0].L_angle = angle
+          }
+      }
+    }catch {
+      print("Error \(error)")
+    }
+}
+
+func addStepDetail(groupName:String,stepName:String){
+
+    let realm = try! Realm()
+    let group = realm.objects(Group.self)
+
+    let subquery_getStepID = group.where {
+        ($0.name == groupName && $0.steps.title == stepName)
+    }
+    let step_id = Array(subquery_getStepID)[0].steps[0].id
+    let step = realm.objects(Step.self).filter("id == %@",step_id).first!
+
+    let stepDetail_default = StepDetail()
+    stepDetail_default.step_id = step_id
+    stepDetail_default.imagename = "g1_s1_1"
+    stepDetail_default.memo = "memomemomemo_adddata"
+    stepDetail_default.L_x = 80
+    stepDetail_default.L_y = 250
+    stepDetail_default.L_angle = 315
+    stepDetail_default.L_mode = 2
+    stepDetail_default.R_x = 320
+    stepDetail_default.R_y = 250
+    stepDetail_default.R_angle = 45
+    stepDetail_default.R_mode = 2
+    stepDetail_default.Order = 4
+
+    do{
+      try realm.write{
+          step.stepDetails.append(stepDetail_default)
+      }
+    }catch {
+      print("Error \(error)")
+    }
+    
 }

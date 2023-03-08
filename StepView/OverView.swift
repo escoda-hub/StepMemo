@@ -9,12 +9,13 @@ import SwiftUI
 
 struct OverView: View {
     
-    @State var location_L: CGPoint
-    @State var location_R: CGPoint
-    @State var angle_L: Angle
-    @State var angle_R: Angle
-    @State var mode_L: Int
-    @State var mode_R: Int
+    @State var index:Int
+    @Binding var stepData:Step
+  
+    init(index: Int, stepData: Binding<Step>) {
+        self.index = index
+        self._stepData = stepData
+    }
     
     var body: some View {
         
@@ -24,20 +25,20 @@ struct OverView: View {
             Rectangle()
                 .ignoresSafeArea(.all)
                 .foregroundColor(Color(0xDCDCDD, alpha: 1.0))
-            Image(getImageName(isR: true, mode_R: mode_R, mode_L: mode_L))
+            Image(getImageName(isR: true, mode_R: stepData.stepDetails[index].R_mode, mode_L: stepData.stepDetails[index].L_mode))
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(Color(0x69af86, alpha: 1.0))
-                .rotationEffect(angle_R,anchor: .center)
-                .position(location_R)
-                .frame(width: 10,height: 10)
-            Image(getImageName(isR: false, mode_R: mode_R, mode_L: mode_L))
+                .rotationEffect(Angle(degrees: stepData.stepDetails[index].R_angle),anchor: .center)
+                .position(CGPoint(x: stepData.stepDetails[index].R_x/5-(deviceWidth/10),y: stepData.stepDetails[index].R_y/5-30))
+                .frame(width: 15,height: 15)
+            Image(getImageName(isR: false, mode_R: stepData.stepDetails[index].R_mode, mode_L: stepData.stepDetails[index].L_mode))
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(Color(0xE5BD47, alpha: 1.0))
-                .rotationEffect(angle_L,anchor: .center)
-                .position(location_L)
-                .frame(width: 10,height: 10)
+                .rotationEffect(Angle(degrees: stepData.stepDetails[index].L_angle),anchor: .center)
+                .position(CGPoint(x: stepData.stepDetails[index].L_x/5-(deviceWidth/10),y: stepData.stepDetails[index].L_y/5-30))
+                .frame(width: 15,height: 15)
         }
         .frame(width:deviceWidth/5,height:60)
     }
@@ -48,3 +49,7 @@ struct OverView: View {
 //        OverView()
 //    }
 //}
+
+
+//location_R: CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10),
+//                    y: stepData.stepDetails[row].R_y/5-30),

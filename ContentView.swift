@@ -143,14 +143,14 @@ struct ContentView: View {
                             setStepData()
                         }
                         .disabled(false)
-                        Button("update stepdata Button") {
+                        Button("update stepDetail Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            updateStepData()
+//                            updateStepDetail(groupName: "group_1", stepName: "step_1", index: 1)
                         }
                         .disabled(false)
                         Button("get StepDetaildata Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            print(getStepDetailData(groupName: "group_1", stepName: "step_1",index: 0))
+                            getStepDetailData(groupName: "group_1", stepName: "step_1",index: 1)
                         }
                         .disabled(false)
                     }
@@ -322,48 +322,6 @@ func setStepData() {
     }
 }
 
-func updateStepData() {
-    let group = Group()
-    group.name = "group_1"
 
-    let step = Step()
-    step.title = "step_2"
-    step.created_at = Date()
-    step.updated_at = Date()
-    step.favorite = true
-
-    let stepDetail_add = StepDetail()
-    stepDetail_add.step_id = step.id
-    stepDetail_add.imagename = "g1_s2_2"
-    stepDetail_add.memo = "memomemomemo_add"
-    stepDetail_add.L_x = 220
-    stepDetail_add.L_y = 220
-    stepDetail_add.L_angle = 60
-    stepDetail_add.L_mode = 2
-    stepDetail_add.R_x = 300
-    stepDetail_add.R_y = 300
-    stepDetail_add.R_angle = 50
-    stepDetail_add.R_mode = 3
-    stepDetail_add.Order = 4
-    
-//    step.stepDetails.append(stepDetail_1)
-//    group.steps.append(step)
-
-    let realm = try! Realm()
-
-    do{
-      try realm.write{
-          //グループを特定してステップ追加
-          let stepData = realm.objects(Group.self).filter("name == 'group_1'").first!
-          stepData.steps.append(step)
-          
-          //ステップを特定してステップ詳細を追加
-//          let stepDetailsData = realm.objects(Step.self).filter("title == 'step_1'").first!
-//          stepDetailsData.stepDetails.append(stepDetail_add)//ステップ詳細追加
-      }
-    }catch {
-      print("Error \(error)")
-    }
-}
 
 
