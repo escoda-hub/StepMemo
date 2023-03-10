@@ -9,8 +9,8 @@ struct limit {
 
 struct DraggableImage: View {
     
-    @Binding private var GroupName:String
-    @Binding private var StepTitle:String
+    @State private var GroupName:String
+    @State private var StepTitle:String
     @Binding private var Index:Int
     @State private var isR:Bool
     @State private var stepDetail:StepDetail
@@ -27,9 +27,9 @@ struct DraggableImage: View {
     @State private var isDragging = false
     @Binding var stepData:Step
     
-    init(GroupName: Binding<String>, StepTitle: Binding<String>, Index: Binding<Int>, isR: Bool, stepDetail: StepDetail = StepDetail(), location:Binding<CGPoint>,location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>,angle_L: Binding<Angle>, angle_R: Binding<Angle>,mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit, isDragging: Bool = false,stepData:Binding<Step>) {
-        self._GroupName = GroupName
-        self._StepTitle = StepTitle
+    init(GroupName: String, StepTitle: String, Index: Binding<Int>, isR: Bool, stepDetail: StepDetail = StepDetail(), location:Binding<CGPoint>,location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>,angle_L: Binding<Angle>, angle_R: Binding<Angle>,mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit, isDragging: Bool = false,stepData:Binding<Step>) {
+        self.GroupName = GroupName
+        self.StepTitle = StepTitle
         self._Index = Index
         self.isR = isR
         self.stepDetail = stepDetail
@@ -64,6 +64,7 @@ struct DraggableImage: View {
                 isDragging = false
 //                updateStepDetail(groupName: GroupName, stepName: StepTitle, index: Index+1, isR: isR, location: location)
 //                stepData = getStepData(groupName: GroupName, stepName: StepTitle)
+                stepData = updateStepDetail(groupName: GroupName, stepName: StepTitle, index: Index+1, isR: isR, location: location)
             }
     }
 

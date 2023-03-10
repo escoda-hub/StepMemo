@@ -17,7 +17,6 @@ func getStepData(groupName:String,stepName:String)->(Step) {
     var step :Step = Step()
     do{
         let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
-//        print(StepData)
 //        print(type(of: StepData))
 //        print(Array(Array(StepData)[0].steps)[0])
 //        print(Array(StepData).count)
@@ -63,36 +62,37 @@ func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail)
 
 }
 
-func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,location:CGPoint) {
+func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,location:CGPoint)->(Step) {
 
     let realm = try! Realm()
     let group = realm.objects(Group.self)
-    let stepDetail = realm.objects(StepDetail.self)
     let subquery_getStepID = group.where {
         ($0.name == groupName && $0.steps.title == stepName)
     }
     let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index)
+    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
     
     do{
       try realm.write{
           if isR {
-              results[0].R_x = location.x
-              results[0].R_y = location.y
+              results.R_x = location.x
+              results.R_y = location.y
 //              results[0].R_angle = angle
           }else{
-              results[0].L_x = location.x
-              results[0].L_y = location.y
+              results.L_x = location.x
+              results.L_y = location.y
 //              results[0].L_angle = angle
           }
       }
     }catch {
       print("Error \(error)")
     }
+    
+    return getStepData(groupName: groupName, stepName: stepName)
 }
 
-func addStepDetail(groupName:String,stepName:String){
-
+func addStepDetail(groupName:String,stepName:String)->(Step){
+    
     let realm = try! Realm()
     let group = realm.objects(Group.self)
 
@@ -123,5 +123,5 @@ func addStepDetail(groupName:String,stepName:String){
     }catch {
       print("Error \(error)")
     }
-    
+    return getStepData(groupName: groupName, stepName: stepName)
 }

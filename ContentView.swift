@@ -213,14 +213,12 @@ func getGroup()->[String] {
     }
 
     return groupList
-
 }
 
 //グループ名の取得
 func deleteAll() {
 
     let realm = try! Realm()
-
     try! realm.write {
       realm.deleteAll()
     }
@@ -321,7 +319,3 @@ func setStepData() {
       print("Error \(error)")
     }
 }
-
-
-
-

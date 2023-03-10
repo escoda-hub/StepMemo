@@ -91,8 +91,8 @@ struct StepView: View{
                             self.ImageSize.maxY = geometry.frame(in: .global).maxY
                         }
                     DraggableImage(
-                        GroupName: $groupName,
-                        StepTitle: $stepTitle,
+                        GroupName: groupName,
+                        StepTitle: stepTitle,
                         Index: $index,
                         isR: true,
                         location: $location,
@@ -136,199 +136,98 @@ struct StepView: View{
             }
             .frame(width: deviceWidth, height: 300)
 
-//            //Small Window reagin
-//            HStack {
-//                ScrollView(.horizontal){
-//                    HStack {
-//                        ForEach(0..<stepData.stepDetails.count) {(row: Int) in
-//                                ZStack {
-//                                    OverView(index: row, stepData: $stepData)
-//                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
-//                                    .onTapGesture {
-//                                        index = row
-//                                        indexSmallView = stepData.stepDetails[row].Order
-//                                        location_L = CGPoint(
-//                                            x: stepData.stepDetails[row].L_x,
-//                                            y: stepData.stepDetails[row].L_y)
-//                                        location_R = CGPoint(
-//                                            x: stepData.stepDetails[row].R_x,
-//                                            y: stepData.stepDetails[row].R_y)
-//                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
-//                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
-//                                        mode_L = stepData.stepDetails[row].L_mode
-//                                        mode_R = stepData.stepDetails[row].R_mode
-//                                    }
-//                                    .onLongPressGesture {
-//                                        indexSmallView = stepData.stepDetails[row].Order
-//                                        showingAlert = true
-//                                    }
-//                                    Text("\(stepData.stepDetails[row].Order)")
-//                                }
-//                            }
-//                    }
-//                }
-//                .padding(.horizontal)
-//                .alert(isPresented: $showingAlert) { () -> Alert in
-//                    Alert(
-//                        title: Text("確認"),
-//                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
-//                        primaryButton: .default(Text("Ok"),
-//                                                action: {
-//                                                    actionAfterAlert()
-//                                                }
-//                                               ),
-//                        secondaryButton: .default(Text("キャンセル")                      )
-//                    )
-//                }
-//                Button(action: {
-//                    print("add")
-//                    addStepDetail(groupName: groupName, stepName: stepTitle)
-//                    stepData = getStepData(groupName: groupName, stepName: stepTitle)
-//                }, label: {
-//                    Image(systemName: "plus.circle")
-//                        .resizable()
-//                        .foregroundColor(.black)
-//                        .frame(width:30,height:30)
-//                })
-//                .padding(.trailing)
-//            }//Small Window reagin
-//            HStack{
-//                Spacer()
-//                PickerView(mode: "normal", isR: true, mode_L: 2, mode_R: 2)
-//                Spacer()
-//                PickerView(mode: "normal", isR: false, mode_L: 2, mode_R: 2)
-//                Spacer()
-//            }
-//            TextField("メモ", text: $stepData.stepDetails[index].memo,axis: .vertical)
-//                .textFieldStyle(.roundedBorder)
-//                .padding(.horizontal)
-//                .lineLimit(3...5)
+            //Small Window reagin
+            HStack {
+                ScrollView(.horizontal){
+                    HStack {
+                        ForEach(stepData.stepDetails.indices, id: \.self) { row in
+                                ZStack {
+                                    OverView(index: row, stepData: $stepData)
+                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
+                                    .onTapGesture {
+                                        index = row
+                                        indexSmallView = stepData.stepDetails[row].Order
+                                        location_L = CGPoint(
+                                            x: stepData.stepDetails[row].L_x,
+                                            y: stepData.stepDetails[row].L_y)
+                                        location_R = CGPoint(
+                                            x: stepData.stepDetails[row].R_x,
+                                            y: stepData.stepDetails[row].R_y)
+                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
+                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
+                                        mode_L = stepData.stepDetails[row].L_mode
+                                        mode_R = stepData.stepDetails[row].R_mode
+                                    }
+                                    .onLongPressGesture {
+                                        indexSmallView = stepData.stepDetails[row].Order
+                                        showingAlert = true
+                                    }
+                                    Text("\(stepData.stepDetails[row].Order)")
+                                }
+                            }
+                    }
+                }
+                .padding(.horizontal)
+                .alert(isPresented: $showingAlert) { () -> Alert in
+                    Alert(
+                        title: Text("確認"),
+                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
+                        primaryButton: .default(Text("Ok"),
+                                                action: {
+                                                    actionAfterAlert()
+                                                }
+                                               ),
+                        secondaryButton: .default(Text("キャンセル"))
+                    )
+                }
+                Button(action: {
+                    print("add")
+                    stepData = addStepDetail(groupName: groupName, stepName: stepTitle)
+                }, label: {
+                    Image(systemName: "plus.circle")
+                        .resizable()
+                        .foregroundColor(.black)
+                        .frame(width:30,height:30)
+                })
+                .padding(.trailing)
+            }//Small Window reagin
+            HStack{
+                Spacer()
+                PickerView(mode: "normal", isR: true, mode_L: 2, mode_R: 2)
+                Spacer()
+                PickerView(mode: "normal", isR: false, mode_L: 2, mode_R: 2)
+                Spacer()
+            }
+            TextField("メモ", text: $stepData.stepDetails[index].memo,axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+                .padding(.horizontal)
+                .lineLimit(3...5)
+            NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName)) {
+                HStack {
+                    HStack {
+                        Image(systemName: "rectangle.3.group")
+                        Text("Group")
+                    }
+                    .padding()
+                    Spacer()
+                    HStack {
+                        Text(groupName)
+                                .foregroundColor(.blue)
+                        Image(systemName: "chevron.forward")
+                            .padding(.trailing)
+                    }
+                }
+            }
+            .frame(height:35,alignment:.center)
+            .background(Color(0xcccccc, alpha: 1.0))
+            .foregroundColor(.black)
+            .cornerRadius(CGFloat(5))
+            .padding(.horizontal)
             Spacer()
         }//VStack
     }//body
 }//VIEW
 
-    //                NavigationLink(destination: SeleclGroupView(selectedGroup: $selectedGroup)) {
-    //                    HStack {
-    //                        HStack {
-    //                            Image(systemName: "rectangle.3.group")
-    //                            Text("Group")
-    //                        }
-    //                        .padding()
-    //                        Spacer()
-    //                        HStack {
-    //                            Text(selectedGroup)
-    //                            .foregroundColor(.blue)
-    //                            Image(systemName: "chevron.forward")
-    //                                .padding(.trailing)
-    //                        }
-    //                    }
-    //                }
-    //                .frame(height:35,alignment:.center)
-    //                .background(Color(0xcccccc, alpha: 1.0))
-    //                .foregroundColor(.black)
-    //                .cornerRadius(CGFloat(5))
-    //                .padding(.horizontal)
-    //                Button {
-    //                    self.uiImage =
-    //                        UIApplication
-    //                        .shared
-    //                        .connectedScenes
-    //                        .filter({$0.activationState == .foregroundActive})
-    //                        .map({$0 as? UIWindowScene})
-    //                        .compactMap({$0})
-    //                        .first?.windows
-    //                        .filter({$0.isKeyWindow}).first?
-    //                        .rootViewController?
-    //                        .view!
-    //                        .getImage(rect: CGRect(
-    //                            x: ImageSize.minX,//padding
-    //                            y: ImageSize.minY,
-    //                            width: ImageSize.maxX-ImageSize.minX,
-    //                            height: ImageSize.maxY-ImageSize.minY))
-    ////                    if uiImage != nil {
-    ////                        saveImage(image: uiImage!, path: ImageInDocumentsDirectory(filename: "hihi.png"))
-    ////                    }
-    //                } label: {
-    //                    HStack {
-    //                        Text("Add to Photos")
-    //                    }
-    //                    .foregroundColor(.purple)
-    //                }
-    //                Spacer()
-    //            }
-    //        }
-    //}
-    
-//    struct StepView_Previews: PreviewProvider {
-//        
-//        static var previews: some View {
-//            StepView(stepData: getStep(groupName: "group_1")[0])
-//        }
-//    }
-    //
-    //func ImageInDocumentsDirectory(filename: String) -> String {
-    //
-    //    let fileManager = FileManager.default
-    //    let documentDirectoryFileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    //    let directory = documentDirectoryFileURL.appendingPathComponent("TestDirectory", isDirectory: true)
-    //    do {
-    //        try fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
-    //
-    //    } catch {
-    //        print("createDirectoryに失敗しました")
-    //    }
-    //
-    //    let fileURL = directory.appendingPathComponent(filename)
-    //    print(fileURL)
-    //
-    //    return fileURL.path
-    //}
-    //
-    //func getDocumentsURL() -> NSURL {
-    //    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL
-    //    return documentsURL
-    //}
-    //
-    //func saveImage (image: UIImage, path: String ) -> Bool {
-    //    let pngImageData = image.pngData()
-    //    do {
-    //        try pngImageData!.write(to: URL(fileURLWithPath: path), options: .atomic)
-    //    } catch {
-    //        print("saveImage Error")
-    //        return false
-    //    }
-    //    return true
-    //}
-    //
-    //func getStepData(step: StepModel,id:Int) -> stepProperty {
-    //    var stepProperty = stepProperty(R_x: 0, R_y: 0, R_angle: 0,R_mode: 0, L_x: 0, L_y: 0, L_angle: 0,L_mode: 0, memo: "")
-    //    step.stepData.forEach{step in
-    //        if step.id == id{
-    //            stepProperty.L_x = step.L_x
-    //            stepProperty.L_y = step.L_y
-    //            stepProperty.L_angle = step.L_angle
-    //            stepProperty.L_mode = step.L_mode
-    //            stepProperty.R_x = step.R_x
-    //            stepProperty.R_y = step.R_y
-    //            stepProperty.R_angle = step.R_angle
-    //            stepProperty.R_mode = step.R_mode
-    //            stepProperty.memo = step.memo
-    //        }
-    //    }
-    //    return stepProperty
-    //}
-    //
-    //
-//    extension UIView {
-//        func getImage(rect: CGRect) -> UIImage {
-//            let renderer = UIGraphicsImageRenderer(bounds: rect)
-//            return renderer.image { rendererContext in
-//                layer.render(in: rendererContext.cgContext)
-//            }
-//        }
-//    }
-    //
     func getPickerSelector(mode: Int) -> String {
         var picker = ""
         switch mode {
@@ -345,10 +244,8 @@ struct StepView: View{
         }
         return picker
     }
-    //
-    //
+
     func actionAfterAlert() {
         print("Action after press Ok")
     }
-    //
 

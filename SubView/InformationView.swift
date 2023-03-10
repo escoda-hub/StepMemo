@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct InformationView: View {
-    @State var groupName:String
-    @State var stepTitle:String
-    
+
     
     var body: some View {
         NavigationView {
@@ -20,8 +18,7 @@ struct InformationView: View {
             }
             .onAppear(){
                 print("hi")
-                print(groupName)
-                print(stepTitle)
+ 
             }
             .navigationTitle("タイトル")
                 .toolbar {

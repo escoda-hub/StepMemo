@@ -12,6 +12,7 @@ struct StepListView: View {
             ZStack {
                 VStack {
                     Text(ViewTitle)
+                        .border(.red)
                     List {
                         Section (
                         )
@@ -24,6 +25,7 @@ struct StepListView: View {
                             Spacer(minLength: 10)
                         }
                     }
+                    .border(.red)
                     .onAppear(){
                         getStep(groupName: ViewTitle)
                     }
@@ -47,6 +49,7 @@ struct StepListView: View {
                     }
                 }
             }
+            .border(.red)
 //        }
     }
 }
