@@ -62,8 +62,8 @@ struct DraggableImage: View {
             }
             .onEnded { _ in
                 isDragging = false
-                updateStepDetail(groupName: GroupName, stepName: StepTitle, index: Index+1, isR: isR, location: location)
-                stepData = getStepData(groupName: GroupName, stepName: StepTitle)
+//                updateStepDetail(groupName: GroupName, stepName: StepTitle, index: Index+1, isR: isR, location: location)
+//                stepData = getStepData(groupName: GroupName, stepName: StepTitle)
             }
     }
 

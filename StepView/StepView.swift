@@ -111,158 +111,103 @@ struct StepView: View{
                                   yMin: 40),
                         stepData: $stepData
                     )
-                    DraggableImage(
-                        GroupName: $groupName,
-                        StepTitle: $stepTitle,
-                        Index: $index,
-                        isR: false,
-                        location: $location,
-                        location_L: $location_L,
-                        location_R: $location_R,
-                        angle: $angle,
-                        angle_L: $angle_L,
-                        angle_R: $angle_R,
-                        mode: $mode,
-                        mode_L: $mode_L,
-                        mode_R: $mode_R,
-                        limit:
-                            limit(xMax: geometry.size.width-30,
-                                  xMin: 20,
-                                  yMax: geometry.size.height-40,
-                                  yMin: 40),
-                        stepData: $stepData
-                    )
+//                    DraggableImage(
+//                        GroupName: $groupName,
+//                        StepTitle: $stepTitle,
+//                        Index: $index,
+//                        isR: false,
+//                        location: $location,
+//                        location_L: $location_L,
+//                        location_R: $location_R,
+//                        angle: $angle,
+//                        angle_L: $angle_L,
+//                        angle_R: $angle_R,
+//                        mode: $mode,
+//                        mode_L: $mode_L,
+//                        mode_R: $mode_R,
+//                        limit:
+//                            limit(xMax: geometry.size.width-30,
+//                                  xMin: 20,
+//                                  yMax: geometry.size.height-40,
+//                                  yMin: 40),
+//                        stepData: $stepData
+//                    )
                 }
             }
-            .padding(.horizontal, 10)
-            .frame(height: 300)
+            .frame(width: deviceWidth, height: 300)
 
-            //Small Window reagin
-            HStack {
-                ScrollView(.horizontal){
-                    HStack {
-                        ForEach(0..<stepData.stepDetails.count) {(row: Int) in
-                                ZStack {
-                                    OverView(index: row, stepData: $stepData)
-                                        .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
-                                    .onTapGesture {
-                                        index = row
-                                        indexSmallView = stepData.stepDetails[row].Order
-                                        location_L = CGPoint(
-                                            x: stepData.stepDetails[row].L_x,
-                                            y: stepData.stepDetails[row].L_y)
-                                        location_R = CGPoint(
-                                            x: stepData.stepDetails[row].R_x,
-                                            y: stepData.stepDetails[row].R_y)
-                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
-                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
-                                        mode_L = stepData.stepDetails[row].L_mode
-                                        mode_R = stepData.stepDetails[row].R_mode
-                                    }
-                                    .onLongPressGesture {
-                                        indexSmallView = stepData.stepDetails[row].Order
-                                        showingAlert = true
-                                    }
-                                    Text("\(stepData.stepDetails[row].Order)")
-                                }
-                            }
-                    }
-                }
-                .padding(.horizontal)
-                .alert(isPresented: $showingAlert) { () -> Alert in
-                    Alert(
-                        title: Text("確認"),
-                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
-                        primaryButton: .default(Text("Ok"),
-                                                action: {
-                                                    actionAfterAlert()
-                                                }
-                                               ),
-                        secondaryButton: .default(Text("キャンセル")                      )
-                    )
-                }
-                Button(action: {
-                    print("add")
-                    addStepDetail(groupName: groupName, stepName: stepTitle)
-                    stepData = getStepData(groupName: groupName, stepName: stepTitle)
-                }, label: {
-                    Image(systemName: "plus.circle")
-                        .resizable()
-                        .foregroundColor(.black)
-                        .frame(width:30,height:30)
-                })
-                .padding(.trailing)
-            
-            }//Small Window reagin
+//            //Small Window reagin
+//            HStack {
+//                ScrollView(.horizontal){
+//                    HStack {
+//                        ForEach(0..<stepData.stepDetails.count) {(row: Int) in
+//                                ZStack {
+//                                    OverView(index: row, stepData: $stepData)
+//                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
+//                                    .onTapGesture {
+//                                        index = row
+//                                        indexSmallView = stepData.stepDetails[row].Order
+//                                        location_L = CGPoint(
+//                                            x: stepData.stepDetails[row].L_x,
+//                                            y: stepData.stepDetails[row].L_y)
+//                                        location_R = CGPoint(
+//                                            x: stepData.stepDetails[row].R_x,
+//                                            y: stepData.stepDetails[row].R_y)
+//                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
+//                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
+//                                        mode_L = stepData.stepDetails[row].L_mode
+//                                        mode_R = stepData.stepDetails[row].R_mode
+//                                    }
+//                                    .onLongPressGesture {
+//                                        indexSmallView = stepData.stepDetails[row].Order
+//                                        showingAlert = true
+//                                    }
+//                                    Text("\(stepData.stepDetails[row].Order)")
+//                                }
+//                            }
+//                    }
+//                }
+//                .padding(.horizontal)
+//                .alert(isPresented: $showingAlert) { () -> Alert in
+//                    Alert(
+//                        title: Text("確認"),
+//                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
+//                        primaryButton: .default(Text("Ok"),
+//                                                action: {
+//                                                    actionAfterAlert()
+//                                                }
+//                                               ),
+//                        secondaryButton: .default(Text("キャンセル")                      )
+//                    )
+//                }
+//                Button(action: {
+//                    print("add")
+//                    addStepDetail(groupName: groupName, stepName: stepTitle)
+//                    stepData = getStepData(groupName: groupName, stepName: stepTitle)
+//                }, label: {
+//                    Image(systemName: "plus.circle")
+//                        .resizable()
+//                        .foregroundColor(.black)
+//                        .frame(width:30,height:30)
+//                })
+//                .padding(.trailing)
+//            }//Small Window reagin
+//            HStack{
+//                Spacer()
+//                PickerView(mode: "normal", isR: true, mode_L: 2, mode_R: 2)
+//                Spacer()
+//                PickerView(mode: "normal", isR: false, mode_L: 2, mode_R: 2)
+//                Spacer()
+//            }
+//            TextField("メモ", text: $stepData.stepDetails[index].memo,axis: .vertical)
+//                .textFieldStyle(.roundedBorder)
+//                .padding(.horizontal)
+//                .lineLimit(3...5)
+            Spacer()
         }//VStack
     }//body
 }//VIEW
 
-
-
-    //
-    //                //Picker Region
-    //                HStack{
-    //                    Spacer()
-    //                    ZStack{
-    //                        RoundedRectangle(cornerRadius: 5)
-    //                            .frame(height: 30)
-    //                            .foregroundColor(Color(0xE5BD47, alpha: 1.0))
-    //                        VStack{
-    //                            Picker("", selection: $leftMode) {
-    //                                Label("toes", systemImage: "1.lane").tag("toes")
-    //                                Label("normal", systemImage: "2.lane").tag("normal")
-    //                                Label("heals", systemImage: "3.lane").tag("heals")
-    //                            }
-    //                            .pickerStyle(.wheel)
-    //                            .frame(height: 100)
-    //                            .onChange(of: leftMode) { newValue in
-    //                                switch newValue{
-    //                                case "toes":
-    //                                    mode_L = 1
-    //                                case "normal":
-    //                                    mode_L = 2
-    //                                case "heals":
-    //                                    mode_L = 3
-    //                                default:
-    //                                    break
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-    //                    Spacer()
-    //                    ZStack{
-    //                        RoundedRectangle(cornerRadius: 5)
-    //                            .frame(height: 30)
-    //                            .foregroundColor(Color(0x69af86, alpha: 1.0))
-    //                        VStack {
-    //                            Picker("", selection: $rightMode) {
-    //                                Label("toes", systemImage: "1.lane").tag("toes")
-    //                                Label("normal", systemImage: "2.lane").tag("normal")
-    //                                Label("heals", systemImage: "3.lane").tag("heals")
-    //                            }
-    //                            .pickerStyle(.wheel)
-    //                            .frame(height: 100)
-    //                            .onChange(of: rightMode) { newValue in
-    //                                switch newValue{
-    //                                case "toes":
-    //                                    mode_R = 1
-    //                                case "normal":
-    //                                    mode_R = 2
-    //                                case "heals":
-    //                                    mode_R = 3
-    //                                default:
-    //                                    break
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-    //                    Spacer()
-    //                }
-    //                TextField("メモ", text: $memo,axis: .vertical)
-    //                    .textFieldStyle(.roundedBorder)
-    //                    .padding(.horizontal)
-    //                    .lineLimit(3...5)
     //                NavigationLink(destination: SeleclGroupView(selectedGroup: $selectedGroup)) {
     //                    HStack {
     //                        HStack {

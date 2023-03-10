@@ -8,24 +8,16 @@ struct StepListView: View {
 
     var body: some View {
 
-        NavigationView{
+//        NavigationView{
             ZStack {
                 VStack {
                     Text(ViewTitle)
                     List {
                         Section (
-//                            header: HStack{
-//                                Image(systemName: "rectangle.3.group")
-//                                    .resizable()
-//                                    .frame(width:25,height:18)
-//                                Text("Group")
-//                                    .font(.title)
-//                            }
                         )
                         {
                             ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in
                               NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
-//                                NavigationLink(destination: InformationView(groupName: "group_1", stepTitle: "step_1")) {
                                     Text(getStep(groupName: ViewTitle)[index].title)
                                 }
                              }
@@ -55,7 +47,7 @@ struct StepListView: View {
                     }
                 }
             }
-        }
+//        }
     }
 }
 
