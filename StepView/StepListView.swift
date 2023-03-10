@@ -5,7 +5,8 @@ import RealmSwift
 struct StepListView: View {
 
     @State var ViewTitle :String
-
+    @State private var steps = [Step]()
+    
     var body: some View {
 
 //        NavigationView{
@@ -13,21 +14,37 @@ struct StepListView: View {
                 VStack {
                     Text(ViewTitle)
                         .border(.red)
-                    List {
-                        Section (
-                        )
-                        {
-                            ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in
-                              NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
-                                    Text(getStep(groupName: ViewTitle)[index].title)
-                                }
-                             }
-                            Spacer(minLength: 10)
+//                    List {
+//                        Section (
+//                        )
+//                        {
+//                            ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in
+//                              NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
+//                                    Text(getStep(groupName: ViewTitle)[index].title)
+//                                }
+//                             }
+//                            Spacer(minLength: 10)
+//                        }
+//                    }
+//                    .border(.red)
+//                    .onAppear(){
+//                        getStep(groupName: ViewTitle)
+//                    }
+                    let navigationLinks = getStep(groupName: ViewTitle).map { step in
+                        NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
+                            Text(step.title)
                         }
                     }
-                    .border(.red)
-                    .onAppear(){
-                        getStep(groupName: ViewTitle)
+                    List {
+                        Section {
+                            ForEach(getStep(groupName: ViewTitle).indices, id: \.self) { index in
+                                navigationLinks[index]
+                            }
+                        }
+                    }
+                    .listStyle(InsetGroupedListStyle())
+                    .onAppear {
+                        steps = getStep(groupName: ViewTitle)
                     }
                 }
                 VStack {
@@ -49,6 +66,7 @@ struct StepListView: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)//ナビゲーションバーのタイトルの表示モードを設定
             .border(.red)
 //        }
     }

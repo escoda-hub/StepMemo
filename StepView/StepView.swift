@@ -63,6 +63,7 @@ struct StepView: View{
         let deviceWidth = UIScreen.main.bounds.width
         
         VStack {
+//            Text("\(stepData.stepDetails[0].R_x)")
             HStack {
                 TextField("タイトル", text: $stepData.title)
                     .font(.title)
@@ -111,78 +112,47 @@ struct StepView: View{
                                   yMin: 40),
                         stepData: $stepData
                     )
-//                    DraggableImage(
-//                        GroupName: $groupName,
-//                        StepTitle: $stepTitle,
-//                        Index: $index,
-//                        isR: false,
-//                        location: $location,
-//                        location_L: $location_L,
-//                        location_R: $location_R,
-//                        angle: $angle,
-//                        angle_L: $angle_L,
-//                        angle_R: $angle_R,
-//                        mode: $mode,
-//                        mode_L: $mode_L,
-//                        mode_R: $mode_R,
-//                        limit:
-//                            limit(xMax: geometry.size.width-30,
-//                                  xMin: 20,
-//                                  yMax: geometry.size.height-40,
-//                                  yMin: 40),
-//                        stepData: $stepData
-//                    )
+                    DraggableImage(
+                        GroupName: groupName,
+                        StepTitle: stepTitle,
+                        Index: $index,
+                        isR: false,
+                        location: $location,
+                        location_L: $location_L,
+                        location_R: $location_R,
+                        angle: $angle,
+                        angle_L: $angle_L,
+                        angle_R: $angle_R,
+                        mode: $mode,
+                        mode_L: $mode_L,
+                        mode_R: $mode_R,
+                        limit:
+                            limit(xMax: geometry.size.width-30,
+                                  xMin: 20,
+                                  yMax: geometry.size.height-40,
+                                  yMin: 40),
+                        stepData: $stepData
+                    )
                 }
             }
             .frame(width: deviceWidth, height: 300)
 
-            //Small Window reagin
             HStack {
-                ScrollView(.horizontal){
-                    HStack {
-                        ForEach(stepData.stepDetails.indices, id: \.self) { row in
-                                ZStack {
-                                    OverView(index: row, stepData: $stepData)
-                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
-                                    .onTapGesture {
-                                        index = row
-                                        indexSmallView = stepData.stepDetails[row].Order
-                                        location_L = CGPoint(
-                                            x: stepData.stepDetails[row].L_x,
-                                            y: stepData.stepDetails[row].L_y)
-                                        location_R = CGPoint(
-                                            x: stepData.stepDetails[row].R_x,
-                                            y: stepData.stepDetails[row].R_y)
-                                        angle_L = Angle(degrees: stepData.stepDetails[row].L_angle)
-                                        angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
-                                        mode_L = stepData.stepDetails[row].L_mode
-                                        mode_R = stepData.stepDetails[row].R_mode
-                                    }
-                                    .onLongPressGesture {
-                                        indexSmallView = stepData.stepDetails[row].Order
-                                        showingAlert = true
-                                    }
-                                    Text("\(stepData.stepDetails[row].Order)")
-                                }
-                            }
-                    }
-                }
-                .padding(.horizontal)
-                .alert(isPresented: $showingAlert) { () -> Alert in
-                    Alert(
-                        title: Text("確認"),
-                        message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
-                        primaryButton: .default(Text("Ok"),
-                                                action: {
-                                                    actionAfterAlert()
-                                                }
-                                               ),
-                        secondaryButton: .default(Text("キャンセル"))
-                    )
-                }
+                SmallScrollVIew(index: $index,
+                                stepData: $stepData,
+                                location_L: $location_L,
+                                location_R: $location_R,
+                                angle_L: $angle_L,
+                                angle_R: $angle_R,
+                                mode_L: $mode_L,
+                                mode_R: $mode_R,
+                                indexSmallView: $indexSmallView,
+                                showingAlert: $showingAlert)
                 Button(action: {
                     print("add")
-                    stepData = addStepDetail(groupName: groupName, stepName: stepTitle)
+                    let result = addStepDetail(groupName: groupName, stepName: stepTitle)
+                    stepData = result.step
+                    indexSmallView = result.order
                 }, label: {
                     Image(systemName: "plus.circle")
                         .resizable()
@@ -225,6 +195,7 @@ struct StepView: View{
             .padding(.horizontal)
             Spacer()
         }//VStack
+        .navigationBarTitleDisplayMode(.inline)
     }//body
 }//VIEW
 
