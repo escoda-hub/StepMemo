@@ -165,10 +165,10 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(10))
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-//                            NavigationLink(destination: InformationView()){
-//                                Image(systemName: "info.circle")
-//                                    .foregroundColor(.black)
-//                            }
+                            NavigationLink(destination: InformationView()){
+                                Image(systemName: "info.circle")
+                                    .foregroundColor(.black)
+                            }
                         }
                         ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
                             Button(action: {

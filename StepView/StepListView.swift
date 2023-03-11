@@ -13,7 +13,6 @@ struct StepListView: View {
             ZStack {
                 VStack {
                     Text(ViewTitle)
-                        .border(.red)
 //                    List {
 //                        Section (
 //                        )
@@ -67,7 +66,6 @@ struct StepListView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)//ナビゲーションバーのタイトルの表示モードを設定
-            .border(.red)
 //        }
     }
 }

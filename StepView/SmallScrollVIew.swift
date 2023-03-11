@@ -65,7 +65,8 @@ struct SmallScrollVIew: View {
                                         .frame(width: 15,height: 15)
                                 }
                                 .frame(width:deviceWidth/5,height:60)
-                                .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 1.0)
+                                .border(stepData.stepDetails[row].Order == indexSmallView ? Color.gray : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0.0)
+                                .cornerRadius(2)
                                 .onTapGesture {
                                     index = row
                                     indexSmallView = stepData.stepDetails[row].Order
@@ -111,7 +112,7 @@ struct SmallScrollVIew: View {
                 }
             }
         }
-        .padding(.horizontal)
+//        .padding(.horizontal)
     }
 }
 

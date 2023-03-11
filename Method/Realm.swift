@@ -56,13 +56,13 @@ func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail)
         
         return stepDetailElement
 
-    }catch {
+    } catch {
       print("Error \(error)")
     }
 
 }
 
-func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,location:CGPoint)->(Step) {
+func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,location:CGPoint,angle:Angle)->(Step) {
 
     let realm = try! Realm()
     let group = realm.objects(Group.self)
@@ -72,16 +72,20 @@ func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,locati
     let step_id = Array(subquery_getStepID)[0].steps[0].id
     let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
     
+    print(angle.degrees)
+    print(type(of: angle.degrees))
+    
+//    print()
     do{
       try realm.write{
           if isR {
               results.R_x = location.x
               results.R_y = location.y
-//              results[0].R_angle = angle
+              results.R_angle = angle.degrees
           }else{
               results.L_x = location.x
               results.L_y = location.y
-//              results[0].L_angle = angle
+              results.L_angle = angle.degrees
           }
       }
     }catch {

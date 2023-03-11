@@ -43,13 +43,3 @@ struct OverView: View {
         .frame(width:deviceWidth/5,height:60)
     }
 }
-
-//struct OverView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        OverView()
-//    }
-//}
-
-
-//location_R: CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10),
-//                    y: stepData.stepDetails[row].R_y/5-30),

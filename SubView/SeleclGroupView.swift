@@ -8,8 +8,6 @@ struct SeleclGroupView: View {
     @Environment(\.presentationMode) var presentation
     @ObservedResults(Group.self) var groups
 
-//    private let group = ["hiphop", "house", "ballet"]//load from DB
-    
     var body: some View {
         VStack {
             Text(selectedGroup)
@@ -30,12 +28,6 @@ struct SeleclGroupView: View {
                     }
                 }
             }
-            Button(action: {
-                    self.presentation.wrappedValue.dismiss()
-                }, label: {
-                    Text("Back to MainView.")
-                }
-            )
         }
     }
 }

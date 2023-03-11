@@ -9,10 +9,10 @@ import SwiftUI
 
 struct PickerView: View {
     
-    @State var mode:String
     @State var isR:Bool
-    @State var mode_L:Int
-    @State var mode_R:Int
+    @Binding var mode: Int
+    @Binding var mode_L: Int
+    @Binding var mode_R: Int
     
     var body: some View {
             ZStack{
@@ -27,16 +27,29 @@ struct PickerView: View {
                     }
                     .pickerStyle(.wheel)
                     .frame(height: 100)
-                    .onChange(of: mode) { newValue in
-                        switch newValue{
-                        case "toes":
-                            mode_L = 1
-                        case "normal":
-                            mode_L = 2
-                        case "heals":
-                            mode_L = 3
-                        default:
-                            break
+                    .onChange(of: getPickerSelector(mode: isR ? mode_R : mode_L)) { newValue in
+                        if isR{
+                            switch newValue{
+                            case "toes":
+                                mode_R = 1
+                            case "normal":
+                                mode_R = 2
+                            case "heals":
+                                mode_R = 3
+                            default:
+                                break
+                            }
+                        }else{
+                            switch newValue{
+                            case "toes":
+                                mode_L = 1
+                            case "normal":
+                                mode_L = 2
+                            case "heals":
+                                mode_L = 3
+                            default:
+                                break
+                            }
                         }
                     }
                 }
@@ -44,8 +57,19 @@ struct PickerView: View {
     }
 }
 
-//struct PickerView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PickerView()
-//    }
-//}
+func getPickerSelector(mode: Int) -> String {
+    var picker = ""
+    switch mode {
+    case 0:
+        break
+    case 1:
+        picker = "toes"
+    case 2:
+        picker = "normal"
+    case 3:
+        picker = "heals"
+    default:
+        break
+    }
+    return picker
+}
