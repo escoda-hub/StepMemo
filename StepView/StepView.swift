@@ -182,7 +182,7 @@ struct StepView: View{
                     showMemoView = true
                 }
                 .sheet(isPresented: $showMemoView) {
-                    memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: index)
+                    memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: index, GroupName: groupName, StepTitle: stepTitle)
                         .presentationDetents([.medium])
                 }
 

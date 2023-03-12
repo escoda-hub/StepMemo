@@ -116,7 +116,7 @@ func updateMode(groupName:String,stepName:String,index:Int,isR:Bool,mode:Int)->(
     return getStepData(groupName: groupName, stepName: stepName)
 }
 
-func updateMemo(groupName:String,stepName:String,index:Int,isR:Bool,memo:String)->(Step) {
+func updateMemo(groupName:String,stepName:String,index:Int,memo:String)->(Step) {
 
     let realm = try! Realm()
     let group = realm.objects(Group.self)
@@ -128,11 +128,7 @@ func updateMemo(groupName:String,stepName:String,index:Int,isR:Bool,memo:String)
 
     do{
       try realm.write{
-          if isR {
               results.memo = memo
-          }else{
-              results.memo = memo
-          }
       }
     }catch {
       print("Error \(error)")

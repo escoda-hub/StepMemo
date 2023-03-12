@@ -13,12 +13,14 @@ struct memoInputView: View {
     @Binding var stepData:Step
     @Binding var showMemoView : Bool
     @State var index:Int
+    @State  var GroupName:String
+    @State  var StepTitle:String
     
-    init(stepData: Binding<Step>, showMemoView: Binding<Bool>,index:Int) {
-        self._stepData = stepData
-        self._showMemoView = showMemoView
-        self.index = index
-    }
+//    init(stepData: Binding<Step>, showMemoView: Binding<Bool>,index:Int) {
+//        self._stepData = stepData
+//        self._showMemoView = showMemoView
+//        self.index = index
+//    }
     
     var body: some View {
         VStack {
@@ -28,6 +30,7 @@ struct memoInputView: View {
                 .lineLimit(3...5)
             Button("完了") {
                 showMemoView = false
+                stepData = updateMemo(groupName: GroupName, stepName: StepTitle, index: index + 1, memo: stepData.stepDetails[index].memo)
             }
         }
         
