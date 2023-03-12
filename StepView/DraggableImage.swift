@@ -61,7 +61,7 @@ struct DraggableImage: View {
             }
             .onEnded { _ in
                 isDragging = false
-                stepData = updateStepDetail(groupName: GroupName, stepName: StepTitle, index: Index+1, isR: isR, location: location, angle:angle)
+                stepData = updateStepDetail(groupName: GroupName, stepName: stepData.title, index: Index+1, isR: isR, location: location, angle:angle)
             }
     }
 
@@ -73,7 +73,7 @@ struct DraggableImage: View {
             }
             .onEnded { _ in
                 isDragging = false
-                stepData = updateStepDetail(groupName: GroupName, stepName: StepTitle, index: Index+1, isR: isR, location: location, angle:angle)
+                stepData = updateStepDetail(groupName: GroupName, stepName: stepData.title, index: Index+1, isR: isR, location: location, angle:angle)
             }
     }
 

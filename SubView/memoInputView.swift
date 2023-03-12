@@ -16,12 +16,6 @@ struct memoInputView: View {
     @State  var GroupName:String
     @State  var StepTitle:String
     
-//    init(stepData: Binding<Step>, showMemoView: Binding<Bool>,index:Int) {
-//        self._stepData = stepData
-//        self._showMemoView = showMemoView
-//        self.index = index
-//    }
-    
     var body: some View {
         VStack {
             TextField("メモ", text: $stepData.stepDetails[index].memo,axis: .vertical)

@@ -4,28 +4,28 @@ import RealmSwift
 
 struct StepListView: View {
 
-    @State var ViewTitle :String
-    @State private var steps = [Step]()
+    @State var groupName :String
+    @State var stepList :[String] = []
     
     var body: some View {
             ZStack {
                 VStack {
-                    Text(ViewTitle)
-                    let navigationLinks = getStep(groupName: ViewTitle).map { step in
-                        NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
-                            Text(step.title)
-                        }
-                    }
-                    List {
-                        Section {
-                            ForEach(getStep(groupName: ViewTitle).indices, id: \.self) { index in
-                                navigationLinks[index]
+                    Text(groupName)
+                    VStack {
+                        List{
+                            ForEach(stepList.indices, id: \.self) { index in
+                                NavigationLink(
+                                    destination:  StepView(groupName: groupName, stepTitle: stepList[index]),
+                                    label: {
+                                        Text("\(stepList[index])")
+                                            .padding()
+                                    })
                             }
                         }
-                    }
-                    .listStyle(InsetGroupedListStyle())
-                    .onAppear {
-                        steps = getStep(groupName: ViewTitle)
+                        .listStyle(InsetGroupedListStyle())
+                        .onAppear {
+                            stepList = getStepName(groupName: groupName)
+                        }
                     }
                 }
                 VStack {
@@ -50,13 +50,6 @@ struct StepListView: View {
             .navigationBarTitleDisplayMode(.inline)//ナビゲーションバーのタイトルの表示モードを設定
     }
 }
-
-struct StepListView_Previews: PreviewProvider {
-    static var previews: some View {
-        StepListView(ViewTitle:"title sample")
-    }
-}
-
 //ステップリストの取得
 func getStep(groupName:String)->Array<Step> {
     

@@ -152,7 +152,7 @@ struct StepView: View{
                                 showingAlert: $showingAlert)
                     Button(action: {
                         print("add")
-                        let result = addStepDetail(groupName: groupName, stepName: stepTitle)
+                        let result = addStepDetail(groupName: groupName, stepName: stepData.title)
                         stepData = result.step
                         indexSmallView = result.order
                     }, label: {

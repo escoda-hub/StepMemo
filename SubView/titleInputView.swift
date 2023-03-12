@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct titleInputView: View {
+    
     @FocusState private var isFocused: Bool
     @Binding var stepData:Step
     @Binding var showTitleView : Bool
     @State  var GroupName:String
     @Binding  var StepTitle:String
-    
-//    init(stepData: Binding<Step>, showTitleView: Binding<Bool>) {
-//        self._stepData = stepData
-//        self._showTitleView = showTitleView
-//    }
     
      var body: some View {
          VStack {
@@ -32,6 +28,5 @@ struct titleInputView: View {
                  showTitleView = false
              }
          }
-         
      }
 }

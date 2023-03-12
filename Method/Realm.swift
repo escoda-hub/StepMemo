@@ -17,11 +17,7 @@ func getStepData(groupName:String,stepName:String)->(Step) {
     var step :Step = Step()
     do{
         let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
-//        print(type(of: StepData))
-//        print(Array(Array(StepData)[0].steps)[0])
-//        print(Array(StepData).count)
-//        print(type(of: Array(StepData)[0]))
-        
+
         if (Array(StepData).count == 1){
             if(Array(Array(StepData)[0].steps).count == 1){
                 step = Array(Array(StepData)[0].steps)[0]
@@ -33,6 +29,20 @@ func getStepData(groupName:String,stepName:String)->(Step) {
       print("Error \(error)")
     }
 
+}
+
+//グールが持つステップ名の取得
+func getStepName(groupName:String)->Array<String> {
+    
+    let realm = try! Realm()
+    let group = realm.objects(Group.self).filter("name == %@",groupName).first!//type is Results<Group>
+    
+    var steps: [String] = []
+    for step in Array(group.steps){
+        steps.append(step.title)
+    }
+
+    return steps
 }
 
 //ステップ詳細データの取得
@@ -147,15 +157,13 @@ func upDateTitle(groupName:String,stepName:String,title:String)->(Step) {
     let step_id = Array(subquery_getStepID)[0].steps[0].id
     let results = realm.objects(Step.self).filter("id == %@",step_id).first!
 
-    print(step_id)
-    print(results)
-//    do{
-//      try realm.write{
-//          results.title = title
-//      }
-//    }catch {
-//      print("Error \(error)")
-//    }
+    do{
+      try realm.write{
+          results.title = title
+      }
+    }catch {
+      print("Error \(error)")
+    }
     
     return getStepData(groupName: groupName, stepName: stepName)
 }

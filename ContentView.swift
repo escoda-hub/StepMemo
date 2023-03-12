@@ -18,7 +18,7 @@ struct ContentView: View {
                     VStack{
                         Spacer()
                         HStack{
-                            NavigationLink(destination: StepListView(ViewTitle:"全て")) {
+                            NavigationLink(destination: StepListView(groupName:"全て")) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "list.bullet")
@@ -38,7 +38,7 @@ struct ContentView: View {
                             .background(Color(0x4ABDAC, alpha: 1))
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
-                            NavigationLink(destination: StepListView(ViewTitle:"最近")) {
+                            NavigationLink(destination: StepListView(groupName:"最近")) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "calendar")
@@ -58,7 +58,7 @@ struct ContentView: View {
                             .background(Color(0xFC4A1A, alpha: 0.8))
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
-                            NavigationLink(destination: StepListView(ViewTitle:"お気に入り")) {
+                            NavigationLink(destination: StepListView(groupName:"お気に入り")) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "heart")
@@ -94,7 +94,7 @@ struct ContentView: View {
                                 )
                                 {
                                     ForEach(groups, id: \.self) { groups in
-                                        NavigationLink(destination: StepListView(ViewTitle:groups.name)) {
+                                        NavigationLink(destination: StepListView(groupName:groups.name)) {
                                             Text(groups.name)
                                         }
                                     }
