@@ -71,11 +71,7 @@ func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,locati
     }
     let step_id = Array(subquery_getStepID)[0].steps[0].id
     let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
-    
-    print(angle.degrees)
-    print(type(of: angle.degrees))
-    
-//    print()
+
     do{
       try realm.write{
           if isR {
@@ -86,6 +82,31 @@ func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,locati
               results.L_x = location.x
               results.L_y = location.y
               results.L_angle = angle.degrees
+          }
+      }
+    }catch {
+      print("Error \(error)")
+    }
+    
+    return getStepData(groupName: groupName, stepName: stepName)
+}
+
+func updateMode(groupName:String,stepName:String,index:Int,isR:Bool,mode:Int)->(Step) {
+
+    let realm = try! Realm()
+    let group = realm.objects(Group.self)
+    let subquery_getStepID = group.where {
+        ($0.name == groupName && $0.steps.title == stepName)
+    }
+    let step_id = Array(subquery_getStepID)[0].steps[0].id
+    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+
+    do{
+      try realm.write{
+          if isR {
+              results.R_mode = mode
+          }else{
+              results.L_mode = mode
           }
       }
     }catch {

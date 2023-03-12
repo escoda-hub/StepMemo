@@ -164,9 +164,9 @@ struct StepView: View{
             }//Small Window reagin
             HStack{
                 Spacer()
-                PickerView(isR: true, mode: $mode, mode_L: $mode_L, mode_R: $mode_R)
+                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$index,stepData: $stepData)
                 Spacer()
-                PickerView(isR: false, mode: $mode, mode_L: $mode_L, mode_R: $mode_R)
+                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$index,stepData: $stepData)
                 Spacer()
             }
             
@@ -210,13 +210,9 @@ struct StepView: View{
             Spacer()
         }//VStack
         .navigationBarTitleDisplayMode(.inline)
-        
     }//body
 }//VIEW
-
-
 
     func actionAfterAlert() {
         print("Action after press Ok")
     }
-
