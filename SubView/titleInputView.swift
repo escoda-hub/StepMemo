@@ -11,11 +11,13 @@ struct titleInputView: View {
     @FocusState private var isFocused: Bool
     @Binding var stepData:Step
     @Binding var showTitleView : Bool
+    @State  var GroupName:String
+    @State  var StepTitle:String
     
-    init(stepData: Binding<Step>, showTitleView: Binding<Bool>) {
-        self._stepData = stepData
-        self._showTitleView = showTitleView
-    }
+//    init(stepData: Binding<Step>, showTitleView: Binding<Bool>) {
+//        self._stepData = stepData
+//        self._showTitleView = showTitleView
+//    }
     
      var body: some View {
          VStack {
@@ -24,6 +26,7 @@ struct titleInputView: View {
                  .focused($isFocused)
                  .border(isFocused ? Color.blue : Color.gray)
              Button("完了") {
+                 stepData = upDateTitle(groupName: GroupName, stepName: StepTitle, title: stepData.title)
                  showTitleView = false
              }
          }

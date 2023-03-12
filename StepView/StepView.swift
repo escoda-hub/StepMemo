@@ -65,7 +65,8 @@ struct StepView: View{
                             showTitleView = true
                         }
                         .sheet(isPresented: $showTitleView) {
-                            titleInputView(stepData: $stepData,showTitleView: $showTitleView)
+//                            titleInputView(stepData: $stepData,showTitleView: $showTitleView)
+                            titleInputView(stepData: $stepData, showTitleView: $showTitleView, GroupName: groupName, StepTitle: stepTitle)
                                 .presentationDetents([.medium])
                         }
                 Button(action: {
