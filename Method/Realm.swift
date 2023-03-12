@@ -145,15 +145,17 @@ func upDateTitle(groupName:String,stepName:String,title:String)->(Step) {
         ($0.name == groupName && $0.steps.title == stepName)
     }
     let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(Step.self).filter("step_id == %@",step_id).first!
+    let results = realm.objects(Step.self).filter("id == %@",step_id).first!
 
-    do{
-      try realm.write{
-          results.title = title
-      }
-    }catch {
-      print("Error \(error)")
-    }
+    print(step_id)
+    print(results)
+//    do{
+//      try realm.write{
+//          results.title = title
+//      }
+//    }catch {
+//      print("Error \(error)")
+//    }
     
     return getStepData(groupName: groupName, stepName: stepName)
 }

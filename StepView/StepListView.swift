@@ -8,27 +8,9 @@ struct StepListView: View {
     @State private var steps = [Step]()
     
     var body: some View {
-
-//        NavigationView{
             ZStack {
                 VStack {
                     Text(ViewTitle)
-//                    List {
-//                        Section (
-//                        )
-//                        {
-//                            ForEach(0 ..< getStep(groupName: ViewTitle).count) { index in
-//                              NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
-//                                    Text(getStep(groupName: ViewTitle)[index].title)
-//                                }
-//                             }
-//                            Spacer(minLength: 10)
-//                        }
-//                    }
-//                    .border(.red)
-//                    .onAppear(){
-//                        getStep(groupName: ViewTitle)
-//                    }
                     let navigationLinks = getStep(groupName: ViewTitle).map { step in
                         NavigationLink(destination: StepView(groupName: "group_1", stepTitle: "step_1")) {
                             Text(step.title)
@@ -66,7 +48,6 @@ struct StepListView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)//ナビゲーションバーのタイトルの表示モードを設定
-//        }
     }
 }
 

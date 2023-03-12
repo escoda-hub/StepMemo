@@ -12,7 +12,7 @@ struct titleInputView: View {
     @Binding var stepData:Step
     @Binding var showTitleView : Bool
     @State  var GroupName:String
-    @State  var StepTitle:String
+    @Binding  var StepTitle:String
     
 //    init(stepData: Binding<Step>, showTitleView: Binding<Bool>) {
 //        self._stepData = stepData
@@ -22,11 +22,13 @@ struct titleInputView: View {
      var body: some View {
          VStack {
              Text("タイトル編集")
+             Text("\(GroupName)")
+             Text("\(StepTitle)")
              TextField("Enter text", text: $stepData.title)
                  .focused($isFocused)
                  .border(isFocused ? Color.blue : Color.gray)
              Button("完了") {
-                 stepData = upDateTitle(groupName: GroupName, stepName: StepTitle, title: stepData.title)
+                 stepData = upDateTitle(groupName: GroupName, stepName: stepData.title, title: stepData.title)
                  showTitleView = false
              }
          }
