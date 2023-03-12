@@ -73,7 +73,10 @@ struct StepView: View{
                     print("help")
                 }, label: {
                     Image(systemName: "questionmark.circle")
-                        .frame(width: 40,height: 40)
+//                        .frame(width: 40,height: 40)
+                        .resizable()
+                        .foregroundColor(.blue.opacity(0.8))
+                        .frame(width:25,height:25)
                 })
                 .frame(width: 30,height: 30)
                 .foregroundColor(.black)
@@ -150,6 +153,7 @@ struct StepView: View{
                                 mode_R: $mode_R,
                                 indexSmallView: $indexSmallView,
                                 showingAlert: $showingAlert)
+                VStack{
                     Button(action: {
                         print("add")
                         let result = addStepDetail(groupName: groupName, stepName: stepData.title)
@@ -162,6 +166,12 @@ struct StepView: View{
                             .frame(width:30,height:30)
                     })
                     .padding(.trailing,5)
+                    Image(systemName: "circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width:10)
+                        .opacity(0)
+                    }
             }//Small Window reagin
             HStack{
                 Spacer()

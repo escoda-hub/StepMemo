@@ -27,6 +27,7 @@ struct PickerView: View {
                         Text("toes").tag(1)
                         Text("normal").tag(2)
                         Text("heals").tag(3)
+                        Text("float").tag(4)
                     }
                     .pickerStyle(.wheel)
                     .frame(height: 100)
