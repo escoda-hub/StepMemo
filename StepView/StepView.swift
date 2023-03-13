@@ -143,7 +143,10 @@ struct StepView: View{
             }
             .frame(width: deviceWidth, height: 300)
             HStack {
-                SmallScrollVIew(index: $index,
+                SmallScrollVIew(
+                                GroupName: groupName,
+                                StepTitle: stepTitle,
+                                index: $index,
                                 stepData: $stepData,
                                 location_L: $location_L,
                                 location_R: $location_R,
@@ -180,7 +183,6 @@ struct StepView: View{
                 PickerView(GroupName: groupName,StepTitle: stepTitle,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$index,stepData: $stepData)
                 Spacer()
             }
-            
             Text("\(stepData.stepDetails[index].memo)")
                 .padding(.horizontal)
                 .lineLimit(3...5)
@@ -196,7 +198,6 @@ struct StepView: View{
                     memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: index, GroupName: groupName, StepTitle: stepTitle)
                         .presentationDetents([.medium])
                 }
-
             NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName)) {
                 HStack {
                     HStack {
@@ -223,7 +224,3 @@ struct StepView: View{
         .navigationBarTitleDisplayMode(.inline)
     }//body
 }//VIEW
-
-    func actionAfterAlert() {
-        print("Action after press Ok")
-    }

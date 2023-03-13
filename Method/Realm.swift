@@ -204,3 +204,40 @@ func addStepDetail(groupName:String,stepName:String)->(step:Step, order:Int){
     }
     return (getStepData(groupName: groupName, stepName: stepName),stepDetail_default.Order)
 }
+
+func deleteStepDetail(groupName:String,stepName:String,index:Int) {
+
+    let realm = try! Realm()
+    let group = realm.objects(Group.self)
+    let subquery_getStepID = group.where {
+        ($0.name == groupName && $0.steps.title == stepName)
+    }
+
+    let step_id = Array(subquery_getStepID)[0].steps[0].id
+    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+    
+    //長押しされたステップ詳細情報を削除
+    do{
+      try realm.write{
+          realm.delete(results)
+      }
+    }catch {
+      print("Error \(error)")
+    }
+    
+    let results_after = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
+
+    //Orderの振り直し
+    do{
+      try realm.write{
+          var i = 1
+          for result in results_after {
+              result.Order = i
+              i = i + 1
+          }
+      }
+    }catch {
+      print("Error \(error)")
+    }
+    
+}

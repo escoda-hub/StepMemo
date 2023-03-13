@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SmallScrollVIew: View {
     
+    @State  var GroupName:String
+    @State  var StepTitle:String
+    
     @Binding var index:Int
     @Binding var stepData:Step
     @Binding var location_L :CGPoint
@@ -22,18 +25,20 @@ struct SmallScrollVIew: View {
     
     @State var proxy: ScrollViewProxy?
     
-    init(index:Binding<Int>,stepData: Binding<Step>, location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle_L: Binding<Angle>, angle_R: Binding<Angle>, mode_L: Binding<Int>, mode_R: Binding<Int>, indexSmallView: Binding<Int>, showingAlert: Binding<Bool>) {
-        self._index = index
-        self._stepData = stepData
-        self._location_L = location_L
-        self._location_R = location_R
-        self._angle_L = angle_L
-        self._angle_R = angle_R
-        self._mode_L = mode_L
-        self._mode_R = mode_R
-        self._indexSmallView = indexSmallView
-        self._showingAlert = showingAlert
-    }
+//    init(GroupName: String, StepTitle: String,index:Binding<Int>,stepData: Binding<Step>, location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle_L: Binding<Angle>, angle_R: Binding<Angle>, mode_L: Binding<Int>, mode_R: Binding<Int>, indexSmallView: Binding<Int>, showingAlert: Binding<Bool>) {
+//        self.GroupName = GroupName
+//        self.StepTitle = StepTitle
+//        self._index = index
+//        self._stepData = stepData
+//        self._location_L = location_L
+//        self._location_R = location_R
+//        self._angle_L = angle_L
+//        self._angle_R = angle_R
+//        self._mode_L = mode_L
+//        self._mode_R = mode_R
+//        self._indexSmallView = indexSmallView
+//        self._showingAlert = showingAlert
+//    }
     
     var body: some View {
         
@@ -86,8 +91,9 @@ struct SmallScrollVIew: View {
                                         indexSmallView = stepData.stepDetails[row].Order
                                         showingAlert = true
                                     }
-                                Text("\((stepData.stepDetails[row].Order+1)/2)")
-                                    .opacity(row%2 == 1 ? 0 : 1)
+//                                Text("\((stepData.stepDetails[row].Order+1)/2)")
+                                Text("\(stepData.stepDetails[row].Order)")
+//                                    .opacity(row%2 == 1 ? 0 : 1)
                             }
                             .id(row)
                         Image(systemName: row%2 == 1 ? "circle.fill":"circle")
@@ -103,6 +109,8 @@ struct SmallScrollVIew: View {
                         }
                         index = addIndex
                         indexSmallView = stepData.stepDetails[addIndex].Order
+                        print(index)
+                        print(indexSmallView)
                         location_L = CGPoint(
                             x: stepData.stepDetails[addIndex].L_x,
                             y: stepData.stepDetails[addIndex].L_y)
@@ -120,7 +128,13 @@ struct SmallScrollVIew: View {
                             message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
                             primaryButton: .default(Text("Ok"),
                                                     action: {
-                                                        actionAfterAlert()
+                                                        deleteStepDetail(groupName: GroupName, stepName: StepTitle, index: indexSmallView)
+                                                        index = indexSmallView
+//                                                        indexSmallView = stepData.stepDetails[indexSmallView].Order
+//                                                        location_L = CGPoint(
+//                                                            x: stepData.stepDetails[indexSmallView].L_x,
+//                                                            y: stepData.stepDetails[indexSmallView].L_y)
+                                                        
                                                     }
                                                    ),
                             secondaryButton: .default(Text("キャンセル"))

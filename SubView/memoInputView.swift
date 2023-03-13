@@ -27,9 +27,7 @@ struct memoInputView: View {
                 stepData = updateMemo(groupName: GroupName, stepName: StepTitle, index: index + 1, memo: stepData.stepDetails[index].memo)
             }
         }
-        
     }
-    
 }
 
 //struct memoInputView_Previews: PreviewProvider {
