@@ -24,7 +24,7 @@ struct memoInputView: View {
                 .lineLimit(3...5)
             Button("完了") {
                 showMemoView = false
-                stepData = updateMemo(groupName: GroupName, stepName: StepTitle, index: index + 1, memo: stepData.stepDetails[index].memo)
+                stepData = updateMemo(groupName: GroupName, stepName: StepTitle, index: index, memo: stepData.stepDetails[index].memo)
             }
         }
     }

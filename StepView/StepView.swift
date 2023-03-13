@@ -195,7 +195,7 @@ struct StepView: View{
                     showMemoView = true
                 }
                 .sheet(isPresented: $showMemoView) {
-                    memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: index, GroupName: groupName, StepTitle: stepTitle)
+                    memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView, GroupName: groupName, StepTitle: stepTitle)
                         .presentationDetents([.medium])
                 }
             NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName)) {
