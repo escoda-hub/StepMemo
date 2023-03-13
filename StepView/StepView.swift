@@ -100,7 +100,7 @@ struct StepView: View{
                     DraggableImage(
                         GroupName: groupName,
                         StepTitle: stepTitle,
-                        Index: $index,
+                        Index: $indexSmallView,
                         isR: true,
                         location: $location,
                         location_L: $location_L,
@@ -121,7 +121,7 @@ struct StepView: View{
                     DraggableImage(
                         GroupName: groupName,
                         StepTitle: stepTitle,
-                        Index: $index,
+                        Index: $indexSmallView,
                         isR: false,
                         location: $location,
                         location_L: $location_L,

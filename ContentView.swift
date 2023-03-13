@@ -150,7 +150,7 @@ struct ContentView: View {
                         .disabled(false)
                         Button("get StepDetaildata Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            getStepDetailData(groupName: "group_1", stepName: "step_1",index: 1)
+                            print(getStepDetailData(groupName: "group_1", stepName: "step_1",index: 0))
                         }
                         .disabled(false)
                     }

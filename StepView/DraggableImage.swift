@@ -61,7 +61,7 @@ struct DraggableImage: View {
             }
             .onEnded { _ in
                 isDragging = false
-                stepData = updateStepDetail(groupName: GroupName, stepName: stepData.title, index: Index+1, isR: isR, location: location, angle:angle)
+                stepData = updateStepDetail(groupName: GroupName, stepName: stepData.title, index: Index, isR: isR, location: location, angle:angle)
             }
     }
 
@@ -73,7 +73,7 @@ struct DraggableImage: View {
             }
             .onEnded { _ in
                 isDragging = false
-                stepData = updateStepDetail(groupName: GroupName, stepName: stepData.title, index: Index+1, isR: isR, location: location, angle:angle)
+                stepData = updateStepDetail(groupName: GroupName, stepName: stepData.title, index: Index, isR: isR, location: location, angle:angle)
             }
     }
 
@@ -90,7 +90,7 @@ struct DraggableImage: View {
                 .gesture(rotation)
         }
         .onAppear(){
-            stepDetail = getStepDetailData(groupName: GroupName, stepName: StepTitle, index: Index)
+            stepDetail = getStepDetailData(groupName: GroupName, stepName: StepTitle,index: 1)//初期化時は1番目のデータを表示
             location = isR ? CGPoint(x: stepDetail.R_x, y: stepDetail.R_y) : CGPoint(x: stepDetail.L_x, y: stepDetail.L_y)
             angle = isR ? Angle(degrees: stepDetail.R_angle) : Angle(degrees: stepDetail.L_angle)
             mode_R = stepDetail.R_mode

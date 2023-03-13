@@ -25,21 +25,6 @@ struct SmallScrollVIew: View {
     
     @State var proxy: ScrollViewProxy?
     
-//    init(GroupName: String, StepTitle: String,index:Binding<Int>,stepData: Binding<Step>, location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle_L: Binding<Angle>, angle_R: Binding<Angle>, mode_L: Binding<Int>, mode_R: Binding<Int>, indexSmallView: Binding<Int>, showingAlert: Binding<Bool>) {
-//        self.GroupName = GroupName
-//        self.StepTitle = StepTitle
-//        self._index = index
-//        self._stepData = stepData
-//        self._location_L = location_L
-//        self._location_R = location_R
-//        self._angle_L = angle_L
-//        self._angle_R = angle_R
-//        self._mode_L = mode_L
-//        self._mode_R = mode_R
-//        self._indexSmallView = indexSmallView
-//        self._showingAlert = showingAlert
-//    }
-    
     var body: some View {
         
         let deviceWidth = UIScreen.main.bounds.width

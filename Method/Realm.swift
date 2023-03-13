@@ -48,27 +48,35 @@ func getStepName(groupName:String)->Array<String> {
 //ステップ詳細データの取得
 func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail){
     
+//    let realm = try! Realm()
+//    do{
+//        let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
+//
+//        var stepDetailElement : StepDetail = StepDetail()
+//
+//        if (Array(StepData).count == 1){
+//            let step = Array(StepData)[0].steps
+//            if(step.count == 1){
+//                let stepDetail = Array(Array(StepData)[0].steps)[0].stepDetails
+//                if(stepDetail.count > 0){
+//                    stepDetailElement = Array(Array(Array(StepData)[0].steps)[0].stepDetails).first!
+//                }
+//            }
+//        }
+//
+//        return stepDetailElement
+//
+//    } catch {
+//      print("Error \(error)")
+//    }
     let realm = try! Realm()
-    do{
-        let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
-        
-        var stepDetailElement : StepDetail = StepDetail()
-        
-        if (Array(StepData).count == 1){
-            let step = Array(StepData)[0].steps
-            if(step.count == 1){
-                let stepDetail = Array(Array(StepData)[0].steps)[0].stepDetails
-                if(stepDetail.count > 0){
-                    stepDetailElement = Array(Array(Array(StepData)[0].steps)[0].stepDetails)[index]
-                }
-            }
-        }
-        
-        return stepDetailElement
-
-    } catch {
-      print("Error \(error)")
+    let group = realm.objects(Group.self)
+    let subquery_getStepID = group.where {
+        ($0.name == groupName && $0.steps.title == stepName)
     }
+    let step_id = Array(subquery_getStepID)[0].steps[0].id
+    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+    return results
 
 }
 
