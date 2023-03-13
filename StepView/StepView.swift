@@ -24,7 +24,7 @@ struct StepView: View{
     
     @State var groupName:String
     @State var stepTitle:String
-    @State var index = 0
+
     @State var stepData:Step
     @State var ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
     @State var location   = CGPoint(x: 0, y: 0)
@@ -100,7 +100,7 @@ struct StepView: View{
                     DraggableImage(
                         GroupName: groupName,
                         StepTitle: stepTitle,
-                        Index: $indexSmallView,
+                        indexSmallView: $indexSmallView,
                         isR: true,
                         location: $location,
                         location_L: $location_L,
@@ -121,7 +121,7 @@ struct StepView: View{
                     DraggableImage(
                         GroupName: groupName,
                         StepTitle: stepTitle,
-                        Index: $indexSmallView,
+                        indexSmallView: $indexSmallView,
                         isR: false,
                         location: $location,
                         location_L: $location_L,
@@ -146,7 +146,6 @@ struct StepView: View{
                 SmallScrollVIew(
                                 GroupName: groupName,
                                 StepTitle: stepTitle,
-                                index: $index,
                                 stepData: $stepData,
                                 location_L: $location_L,
                                 location_R: $location_R,
@@ -183,7 +182,7 @@ struct StepView: View{
                 PickerView(GroupName: groupName,StepTitle: stepTitle,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
             }
-            Text("\(stepData.stepDetails[index].memo)")
+            Text("\(stepData.stepDetails[indexSmallView-1].memo)")
                 .padding(.horizontal)
                 .lineLimit(3...5)
                 .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
