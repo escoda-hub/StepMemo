@@ -178,9 +178,9 @@ struct StepView: View{
             }//Small Window reagin
             HStack{
                 Spacer()
-                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$index,stepData: $stepData)
+                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
-                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$index,stepData: $stepData)
+                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
             }
             Text("\(stepData.stepDetails[index].memo)")
