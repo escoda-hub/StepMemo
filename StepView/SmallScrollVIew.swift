@@ -129,7 +129,7 @@ struct SmallScrollVIew: View {
                             primaryButton: .default(Text("Ok"),
                                                     action: {
                                                         deleteStepDetail(groupName: GroupName, stepName: StepTitle, index: indexSmallView)
-                                                        index = indexSmallView
+//                                                        index = indexSmallView
 //                                                        indexSmallView = stepData.stepDetails[indexSmallView].Order
 //                                                        location_L = CGPoint(
 //                                                            x: stepData.stepDetails[indexSmallView].L_x,
