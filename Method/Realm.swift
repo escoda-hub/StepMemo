@@ -48,27 +48,6 @@ func getStepName(groupName:String)->Array<String> {
 //ステップ詳細データの取得
 func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail){
     
-//    let realm = try! Realm()
-//    do{
-//        let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
-//
-//        var stepDetailElement : StepDetail = StepDetail()
-//
-//        if (Array(StepData).count == 1){
-//            let step = Array(StepData)[0].steps
-//            if(step.count == 1){
-//                let stepDetail = Array(Array(StepData)[0].steps)[0].stepDetails
-//                if(stepDetail.count > 0){
-//                    stepDetailElement = Array(Array(Array(StepData)[0].steps)[0].stepDetails).first!
-//                }
-//            }
-//        }
-//
-//        return stepDetailElement
-//
-//    } catch {
-//      print("Error \(error)")
-//    }
     let realm = try! Realm()
     let group = realm.objects(Group.self)
     let subquery_getStepID = group.where {
@@ -249,3 +228,29 @@ func deleteStepDetail(groupName:String,stepName:String,index:Int) {
     }
     
 }
+
+func getGroup() -> Results<Group>? {
+    let realm = try! Realm()
+    let groups = realm.objects(Group.self)
+    return groups
+}
+
+//グループの削除
+func deleteGroup(indexSet:IndexSet){
+    let realm = try! Realm()
+    let groupsToDelete = indexSet.map { getGroup()![$0] }
+    try! realm.write {
+        groupsToDelete.forEach { group in
+            // 削除するGroupオブジェクトからStepオブジェクトを取得し、削除する
+            let stepsToDelete = group.steps
+            stepsToDelete.forEach { step in
+                // 削除するStepオブジェクトからStepDetailオブジェクトを取得し、削除する
+                let stepDetailToDelete = step.stepDetails
+                realm.delete(stepDetailToDelete)
+            }
+            realm.delete(stepsToDelete)
+        }
+        realm.delete(groupsToDelete)
+    }
+}
+

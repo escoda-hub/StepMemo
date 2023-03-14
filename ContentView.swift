@@ -93,12 +93,30 @@ struct ContentView: View {
                                     }
                                 )
                                 {
-                                    ForEach(groups, id: \.self) { groups in
+                                    ForEach(getGroup()!, id: \.self) { groups in
                                         NavigationLink(destination: StepListView(groupName:groups.name)) {
                                             Text(groups.name)
                                         }
                                     }
-                                    .onDelete(perform: $groups.remove)
+                                    .onDelete { indexSet in
+                                        deleteGroup(indexSet: indexSet)
+//                                        print(type(of: indexSet))//IndexSet
+//                                        let realm = try! Realm()
+//                                        let groupsToDelete = indexSet.map { getGroup()![$0] }
+//                                        try! realm.write {
+//                                            groupsToDelete.forEach { group in
+//                                                // 削除するGroupオブジェクトからStepオブジェクトを取得し、削除する
+//                                                let stepsToDelete = group.steps
+//                                                stepsToDelete.forEach { step in
+//                                                    // 削除するStepオブジェクトからStepDetailオブジェクトを取得し、削除する
+//                                                    let stepDetailToDelete = step.stepDetails
+//                                                    realm.delete(stepDetailToDelete)
+//                                                }
+//                                                realm.delete(stepsToDelete)
+//                                            }
+//                                            realm.delete(groupsToDelete)
+//                                        }
+                                    }
                                     Spacer(minLength: 10)
                                 }
                             }
@@ -113,8 +131,6 @@ struct ContentView: View {
                                     Spacer()
                                     Button(action: {
                                         print(Realm.Configuration.defaultConfiguration.fileURL!)
-                                        print(getGroup())
-                                        print(steps)
                                     }, label: {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.white)
@@ -128,11 +144,6 @@ struct ContentView: View {
                                 }
                             }
                         }//List + button
-                        Button("delete Button") {
-                            print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            deleteGroup(deletedata: "group")
-                        }
-                        .disabled(true)
                         Button("deleteALL Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
                             deleteAll()
@@ -141,16 +152,6 @@ struct ContentView: View {
                         Button("add stepdata Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
                             setStepData()
-                        }
-                        .disabled(false)
-                        Button("update stepDetail Button") {
-                            print(Realm.Configuration.defaultConfiguration.fileURL!)
-//                            updateStepDetail(groupName: "group_1", stepName: "step_1", index: 1)
-                        }
-                        .disabled(false)
-                        Button("get StepDetaildata Button") {
-                            print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            print(getStepDetailData(groupName: "group_1", stepName: "step_1",index: 0))
                         }
                         .disabled(false)
                     }
@@ -200,20 +201,6 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-//グループ名の取得
-func getGroup()->[String] {
-
-    var groupList: [String] = []
-    let group = Group()
-    let realm = try! Realm()
-    let groupData = realm.objects(Group.self)//.value(forKey: "name")
-    
-    for i in 0 ..< groupData.count {
-        groupList.append(groupData[i].name)
-    }
-
-    return groupList
-}
 
 //グループ名の取得
 func deleteAll() {
@@ -221,33 +208,6 @@ func deleteAll() {
     let realm = try! Realm()
     try! realm.write {
       realm.deleteAll()
-    }
-
-}
-
-//グループ名の取得
-func deleteGroup(deletedata:String) {
-    let realm = try! Realm()
-    
-    let Step = realm.objects(Step.self)
-    let StepDetail = realm.objects(StepDetail.self)
-    let group = realm.objects(Group.self)
-    
-    do{
-      try realm.write{
-          switch deletedata {
-          case "step":
-              realm.delete(Step)
-              realm.delete(StepDetail)
-          case "group":
-              realm.delete(group)
-          default:
-              print("引数間違えてる")
-              break
-          }
-      }
-    }catch {
-      print("Error \(error)")
     }
 }
 
