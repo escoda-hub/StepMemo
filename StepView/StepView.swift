@@ -22,7 +22,7 @@ struct imageSize {
 
 struct StepView: View{
     
-    @State var groupName:String
+    @Binding var groupName:String
     @State var stepTitle:String
 
     @State var stepData:Step
@@ -41,10 +41,10 @@ struct StepView: View{
     @State var showTitleView = false
     @State var showMemoView = false
     
-    init(groupName: String, stepTitle: String,stepData: Step = Step(),location_L:CGPoint=CGPoint(x: 0, y: 0),location_R:CGPoint=CGPoint(x: 0, y: 0)) {
-        self.groupName = groupName
+    init(groupName: Binding<String>, stepTitle: String,stepData: Step = Step(),location_L:CGPoint=CGPoint(x: 0, y: 0),location_R:CGPoint=CGPoint(x: 0, y: 0)) {
+        self._groupName = groupName
         self.stepTitle = stepTitle
-        self.stepData = getStepData(groupName: groupName, stepName: stepTitle)
+        self.stepData = getStepData(groupName: groupName.wrappedValue, stepName: stepTitle)
     }
 
     var body: some View {
@@ -65,7 +65,6 @@ struct StepView: View{
                             showTitleView = true
                         }
                         .sheet(isPresented: $showTitleView) {
-//                            titleInputView(stepData: $stepData,showTitleView: $showTitleView)
                             titleInputView(stepData: $stepData, showTitleView: $showTitleView, GroupName: groupName, StepTitle: $stepTitle)
                                 .presentationDetents([.medium])
                         }
@@ -73,7 +72,6 @@ struct StepView: View{
                     print("help")
                 }, label: {
                     Image(systemName: "questionmark.circle")
-//                        .frame(width: 40,height: 40)
                         .resizable()
                         .foregroundColor(.blue.opacity(0.8))
                         .frame(width:25,height:25)

@@ -100,22 +100,6 @@ struct ContentView: View {
                                     }
                                     .onDelete { indexSet in
                                         deleteGroup(indexSet: indexSet)
-//                                        print(type(of: indexSet))//IndexSet
-//                                        let realm = try! Realm()
-//                                        let groupsToDelete = indexSet.map { getGroup()![$0] }
-//                                        try! realm.write {
-//                                            groupsToDelete.forEach { group in
-//                                                // 削除するGroupオブジェクトからStepオブジェクトを取得し、削除する
-//                                                let stepsToDelete = group.steps
-//                                                stepsToDelete.forEach { step in
-//                                                    // 削除するStepオブジェクトからStepDetailオブジェクトを取得し、削除する
-//                                                    let stepDetailToDelete = step.stepDetails
-//                                                    realm.delete(stepDetailToDelete)
-//                                                }
-//                                                realm.delete(stepsToDelete)
-//                                            }
-//                                            realm.delete(groupsToDelete)
-//                                        }
                                     }
                                     Spacer(minLength: 10)
                                 }

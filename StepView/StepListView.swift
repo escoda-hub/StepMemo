@@ -15,7 +15,7 @@ struct StepListView: View {
                         List{
                             ForEach(stepList.indices, id: \.self) { index in
                                 NavigationLink(
-                                    destination:  StepView(groupName: groupName, stepTitle: stepList[index]),
+                                    destination:  StepView(groupName: $groupName, stepTitle: stepList[index]),
                                     label: {
                                         Text("\(stepList[index])")
                                             .padding()

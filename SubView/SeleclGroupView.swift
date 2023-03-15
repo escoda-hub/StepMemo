@@ -24,7 +24,7 @@ struct SeleclGroupView: View {
                         let oldGroupName = selectedGroup
                         let newGroupName = groups.name
                         changeGroup(oldGroupName: oldGroupName, newGroupName: newGroupName)
-                        print("oldGroupName :", oldGroupName, "newGroupName :", newGroupName)
+//                        print("oldGroupName :", oldGroupName, "newGroupName :", newGroupName)
                         selectedGroup = groups.name
                         self.presentation.wrappedValue.dismiss()
                     }
