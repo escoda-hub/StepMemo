@@ -48,13 +48,30 @@ import SwiftUI
 struct InformationView: View {
     @State private var isPresented = false
     
+//    @Binding var GroupName:String
+//    @State var title : String
+    @State var stepData:Step
+    
+//    init(GroupName: Binding<String>, title: String,stepData: Step = Step()) {
+//        self._GroupName = GroupName
+//        self.title = title
+//        self.stepData = getStepData(groupName: GroupName.wrappedValue, stepName: title)
+//    }
+    
     var body: some View {
+//        Text("\(title)")
+//        Text("\(GroupName)")
+        Text("\(stepData)")
         Button("Show Modal") {
             self.isPresented.toggle()
         }
         .sheet(isPresented: $isPresented) {
             ModalView()
                 .background(Color.white.opacity(0.5))
+        }
+        .onAppear(){
+//            stepData = getStepData(groupName: GroupName, stepName: title)
+            
         }
     }
 }

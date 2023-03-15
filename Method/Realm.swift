@@ -8,13 +8,11 @@
 import Foundation
 import RealmSwift
 import SwiftUI
-import Realm
 
 //ステップデータの取得
 func getStepData(groupName:String,stepName:String)->(Step) {
     
     let realm = try! Realm()
-    
     var step :Step = Step()
     do{
         let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
@@ -30,6 +28,30 @@ func getStepData(groupName:String,stepName:String)->(Step) {
       print("Error \(error)")
     }
 
+}
+
+//func getStep(groupName:String)->(Step) {
+//
+//    let realm = try! Realm()
+//    var step :Step = Step()
+//    do{
+//        let StepData = realm.objects(Group.self).filter("name == %@",groupName)//type is Results<Group>
+//        print(StepData)
+//
+//        return step
+//    }catch {
+//      print("Error \(error)")
+//    }
+//
+//}
+func getStep(groupName: String) -> [Step] {
+    let realm = try! Realm()
+    guard let group = realm.objects(Group.self).filter("name == %@", groupName).first else {
+        // 該当するGroupが見つからなかった場合
+        return []
+    }
+    print(Array(group.steps))
+    return Array(group.steps)
 }
 
 //グールが持つステップ名の取得
@@ -273,4 +295,38 @@ func changeGroup(oldGroupName:String,newGroupName:String){
             group1?.steps.removeAll()
         }
     }
+}
+
+func addStep(name:String) {
+
+    let newStep = Step()
+    newStep.title = "untitled"
+    newStep.created_at = Date()
+    newStep.updated_at = Date()
+    newStep.favorite = true
+
+    let stepDetail_default = StepDetail()
+    stepDetail_default.step_id = newStep.id
+    stepDetail_default.imagename = "g1_s1_1"
+    stepDetail_default.memo = "memomemomemo_defaultStep"
+    stepDetail_default.L_x = 80
+    stepDetail_default.L_y = 250
+    stepDetail_default.L_angle = 315
+    stepDetail_default.L_mode = 2
+    stepDetail_default.R_x = 320
+    stepDetail_default.R_y = 250
+    stepDetail_default.R_angle = 45
+    stepDetail_default.R_mode = 2
+    stepDetail_default.Order = 1
+    
+    newStep.stepDetails.append(stepDetail_default)
+
+    let realm = try! Realm()
+    // nameで指定したグループを取得
+    let group = realm.objects(Group.self).filter("name == %@", name).first!
+        // Realmのトランザクション内で、グループに新しいステップを追加する
+        try! realm.write {
+            group.steps.append(newStep)
+        }
+    
 }

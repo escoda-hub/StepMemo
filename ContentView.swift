@@ -18,7 +18,7 @@ struct ContentView: View {
                     VStack{
                         Spacer()
                         HStack{
-                            NavigationLink(destination: StepListView(groupName:"全て")) {
+                            NavigationLink(destination: Text("all")) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "list.bullet")
@@ -38,7 +38,7 @@ struct ContentView: View {
                             .background(Color(0x4ABDAC, alpha: 1))
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
-                            NavigationLink(destination: StepListView(groupName:"最近")) {
+                            NavigationLink(destination: Text("recent")) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "calendar")
@@ -58,7 +58,7 @@ struct ContentView: View {
                             .background(Color(0xFC4A1A, alpha: 0.8))
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
-                            NavigationLink(destination: StepListView(groupName:"お気に入り")) {
+                            NavigationLink(destination: Text("heart")) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "heart")
@@ -109,24 +109,26 @@ struct ContentView: View {
                             .background(Color(0xDFDCE3, alpha: 1.0))
                             .padding(.horizontal)
                             .padding(.bottom)
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    Spacer()
-                                    Button(action: {
-                                        print(Realm.Configuration.defaultConfiguration.fileURL!)
-                                    }, label: {
-                                        Image(systemName: "pencil")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 24))
-                                    })
-                                    .frame(width: 60, height: 60)
-                                    .background(Color.orange)
-                                    .cornerRadius(30.0)
-                                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
-                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
-                                }
-                            }
+//                            VStack {
+//                                Spacer()
+//                                HStack {
+//                                    Spacer()
+//                                    Button(action: {
+////                                        print(Realm.Configuration.defaultConfiguration.fileURL!)
+//                                        addStep()
+//
+//                                    }, label: {
+//                                        Image(systemName: "pencil")
+//                                            .foregroundColor(.white)
+//                                            .font(.system(size: 24))
+//                                    })
+//                                    .frame(width: 60, height: 60)
+//                                    .background(Color.orange)
+//                                    .cornerRadius(30.0)
+//                                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
+//                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+//                                }
+//                            }
                         }//List + button
                         Button("deleteALL Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
@@ -138,6 +140,7 @@ struct ContentView: View {
                             setStepData()
                         }
                         .disabled(false)
+                        
                     }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
@@ -150,7 +153,7 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(10))
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: InformationView()){
+                            NavigationLink(destination: Text("information")){
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.black)
                             }

@@ -5,27 +5,31 @@ import RealmSwift
 struct StepListView: View {
 
     @State var groupName :String
-    @State var stepList :[String] = []
+    @State var stepList :[Step] = []
     
     var body: some View {
             ZStack {
                 VStack {
                     Text(groupName)
                     VStack {
-                        List{
-                            ForEach(stepList.indices, id: \.self) { index in
-                                NavigationLink(
-                                    destination:  StepView(groupName: $groupName, stepTitle: stepList[index]),
-                                    label: {
-                                        Text("\(stepList[index])")
-                                            .padding()
-                                    })
+                        if stepList.isEmpty {
+                            Text("No steps found")
+                        } else {
+                            List{
+                                ForEach(0..<stepList.count, id: \.self) { index in
+                                    NavigationLink(
+                                        destination: InformationView(stepData: stepList[index]),
+                                        label: {
+                                            Text("\(stepList[index].title)")
+                                                .padding()
+                                        }
+                                    )
+                                }
                             }
                         }
-                        .listStyle(InsetGroupedListStyle())
-                        .onAppear {
-                            stepList = getStepName(groupName: groupName)
-                        }
+                    }
+                    .onAppear(){
+                        stepList = getStep(groupName: groupName)
                     }
                 }
                 VStack {
@@ -33,7 +37,8 @@ struct StepListView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            print("Tapped!!")
+                            addStep(name: groupName)
+                            stepList = getStep(groupName: groupName)
                         }, label: {
                             Image(systemName: "pencil")
                                 .foregroundColor(.white)
@@ -49,13 +54,4 @@ struct StepListView: View {
             }
             .navigationBarTitleDisplayMode(.inline)//ナビゲーションバーのタイトルの表示モードを設定
     }
-}
-//ステップリストの取得
-func getStep(groupName:String)->Array<Step> {
-    
-    let realm = try! Realm()
-    let groupData = realm.objects(Group.self).filter("name == %@",groupName).first!//type is List
-    
-    return Array(groupData.steps)//type is Array<Step>
-
 }
