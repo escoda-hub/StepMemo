@@ -10,7 +10,6 @@ import SwiftUI
 struct PickerView: View {
     
     @State  var GroupName:String
-    @State  var StepTitle:String
     @State var isR:Bool
     @Binding var mode_L: Int
     @Binding var mode_R: Int

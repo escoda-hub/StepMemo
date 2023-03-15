@@ -10,7 +10,6 @@ struct limit {
 struct DraggableImage: View {
     
     @Binding private var GroupName:String
-    @State private var StepTitle:String
     @Binding private var indexSmallView:Int
     @State private var isR:Bool
     @State private var stepDetail:StepDetail
@@ -27,9 +26,8 @@ struct DraggableImage: View {
     @State private var isDragging = false
     @Binding var stepData:Step
     
-    init(GroupName: Binding<String>, StepTitle: String, indexSmallView: Binding<Int>, isR: Bool, stepDetail: StepDetail = StepDetail(), location:Binding<CGPoint>,location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>,angle_L: Binding<Angle>, angle_R: Binding<Angle>,mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit,stepData:Binding<Step>) {
+    init(GroupName: Binding<String>, indexSmallView: Binding<Int>, isR: Bool, stepDetail: StepDetail = StepDetail(), location:Binding<CGPoint>,location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>,angle_L: Binding<Angle>, angle_R: Binding<Angle>,mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit,stepData:Binding<Step>) {
         self._GroupName = GroupName
-        self.StepTitle = StepTitle
         self._indexSmallView = indexSmallView
         self.isR = isR
         self.stepDetail = stepDetail

@@ -7,44 +7,6 @@
 
 import SwiftUI
 
-//struct InformationView: View {
-//
-//    
-//    var body: some View {
-//        NavigationView {
-//            VStack {
-//                Text("要素1")
-//                Text("要素2")
-//            }
-//            .onAppear(){
-//                print("hi")
-// 
-//            }
-//            .navigationTitle("タイトル")
-//                .toolbar {
-//                    ToolbarItem(placement: .navigationBarLeading) {
-//                        Button(action: {
-//                            print("設定ボタンです")
-//                        }) {
-//                            Image(systemName: "gearshape.fill")
-//                        }
-//                    }
-//                    ToolbarItem(placement: .navigationBarTrailing) {
-//                        Button(action: {
-//                            print("マイページです")
-//                        }){
-//                            HStack {
-//                                Image(systemName: "person.fill")
-//                            }
-//                        }
-//                    }
-//                }
-//        }
-//    }
-//}
-
-
-
 struct InformationView: View {
     @State private var isPresented = false
     

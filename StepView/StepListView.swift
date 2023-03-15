@@ -26,7 +26,7 @@ struct StepListView: View {
                                            destination: StepView(groupName:$groupName,stepData: step),
                                            label: {
                                                VStack{
-                                                   Text("\(step.id)")
+                                                   Text("\(step.title)")
                                                }
                                                .padding()
                                            }

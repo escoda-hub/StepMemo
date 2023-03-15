@@ -92,7 +92,6 @@ struct StepView: View{
                         }
                     DraggableImage(
                         GroupName: $groupName,
-                        StepTitle: stepTitle,
                         indexSmallView: $indexSmallView,
                         isR: true,
                         location: $location,
@@ -113,7 +112,6 @@ struct StepView: View{
                     )
                     DraggableImage(
                         GroupName: $groupName,
-                        StepTitle: stepTitle,
                         indexSmallView: $indexSmallView,
                         isR: false,
                         location: $location,
@@ -170,9 +168,9 @@ struct StepView: View{
             }//Small Window reagin
             HStack{
                 Spacer()
-                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
+                PickerView(GroupName: groupName,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
-                PickerView(GroupName: groupName,StepTitle: stepTitle,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
+                PickerView(GroupName: groupName,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
             }
             Text("\(stepData.stepDetails[indexSmallView-1].memo)")
@@ -185,8 +183,6 @@ struct StepView: View{
                 .contentShape(RoundedRectangle(cornerRadius: 20))
                 .onTapGesture {
                     showMemoView = true
-//                    print(stepData.stepDetails)
-//                    print(indexSmallView)
                 }
                 .sheet(isPresented: $showMemoView) {
                     memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView)
