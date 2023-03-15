@@ -239,7 +239,7 @@ func setStepData() {
     let stepDetail_3 = StepDetail()
     stepDetail_3.step_id = step.id
     stepDetail_3.imagename = "g1_s1_3"
-    stepDetail_3.memo = "memomemomemo_2"
+    stepDetail_3.memo = "memomemomemo_3"
     stepDetail_3.L_x = 80
     stepDetail_3.L_y = 90
     stepDetail_3.L_angle = 80

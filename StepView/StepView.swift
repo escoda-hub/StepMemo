@@ -23,7 +23,7 @@ struct imageSize {
 struct StepView: View{
     
     @Binding var groupName:String
-    @State var stepTitle:String
+    @State var stepTitle = ""
 
     @State var stepData:Step
     @State var ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
@@ -40,18 +40,13 @@ struct StepView: View{
     @State var showingAlert = false
     @State var showTitleView = false
     @State var showMemoView = false
-    
-    init(groupName: Binding<String>, stepTitle: String,stepData: Step = Step(),location_L:CGPoint=CGPoint(x: 0, y: 0),location_R:CGPoint=CGPoint(x: 0, y: 0)) {
-        self._groupName = groupName
-        self.stepTitle = stepTitle
-        self.stepData = getStepData(groupName: groupName.wrappedValue, stepName: stepTitle)
-    }
 
     var body: some View {
         
         let deviceWidth = UIScreen.main.bounds.width
         
         VStack {
+            Text("\(stepData.id)")
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)
@@ -65,7 +60,7 @@ struct StepView: View{
                             showTitleView = true
                         }
                         .sheet(isPresented: $showTitleView) {
-                            titleInputView(stepData: $stepData, showTitleView: $showTitleView, GroupName: groupName, StepTitle: $stepTitle)
+                            titleInputView(stepData: $stepData, showTitleView: $showTitleView, GroupName: groupName)
                                 .presentationDetents([.medium])
                         }
                 Button(action: {
@@ -190,9 +185,12 @@ struct StepView: View{
                 .contentShape(RoundedRectangle(cornerRadius: 20))
                 .onTapGesture {
                     showMemoView = true
+//                    print(stepData.stepDetails)
+//                    print(indexSmallView)
                 }
                 .sheet(isPresented: $showMemoView) {
-                    memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView, GroupName: groupName, StepTitle: stepTitle)
+                    memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView)
+//                    InformationView(stepData: stepData)
                         .presentationDetents([.medium])
                 }
             NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName)) {

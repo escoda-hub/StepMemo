@@ -44,14 +44,25 @@ func getStepData(groupName:String,stepName:String)->(Step) {
 //    }
 //
 //}
-func getStep(groupName: String) -> [Step] {
+func getStepList(groupName: String) -> [Step] {
     let realm = try! Realm()
     guard let group = realm.objects(Group.self).filter("name == %@", groupName).first else {
         // 該当するGroupが見つからなかった場合
         return []
     }
-    print(Array(group.steps))
+//    print(Array(group.steps))
     return Array(group.steps)
+}
+
+
+func getStep(step_id: String) -> Step {
+    let realm = try! Realm()
+    guard let stepData = realm.objects(Step.self).filter("id == %@", step_id).first else {
+        // 該当するGroupが見つからなかった場合
+        return Step()
+    }
+
+    return stepData
 }
 
 //グールが持つステップ名の取得
@@ -82,100 +93,112 @@ func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail)
 
 }
 
-func updateStepDetail(groupName:String,stepName:String,index:Int,isR:Bool,location:CGPoint,angle:Angle)->(Step) {
+func updateStepDetail(step_id:String,index:Int,isR:Bool,location:CGPoint,angle:Angle)->(Step) {
 
     let realm = try! Realm()
-    let group = realm.objects(Group.self)
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
-
+    let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+    
     do{
       try realm.write{
           if isR {
-              results.R_x = location.x
-              results.R_y = location.y
-              results.R_angle = angle.degrees
+              StepDetail.R_x = location.x
+              StepDetail.R_y = location.y
+              StepDetail.R_angle = angle.degrees
           }else{
-              results.L_x = location.x
-              results.L_y = location.y
-              results.L_angle = angle.degrees
+              StepDetail.L_x = location.x
+              StepDetail.L_y = location.y
+              StepDetail.L_angle = angle.degrees
           }
       }
     }catch {
       print("Error \(error)")
     }
     
-    return getStepData(groupName: groupName, stepName: stepName)
+    return getStep(step_id: step_id)
 }
 
-func updateMode(groupName:String,stepName:String,index:Int,isR:Bool,mode:Int)->(Step) {
+func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
 
     let realm = try! Realm()
-    let group = realm.objects(Group.self)
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+    let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
 
     do{
       try realm.write{
           if isR {
-              results.R_mode = mode
+              StepDetail.R_mode = mode
           }else{
-              results.L_mode = mode
+              StepDetail.L_mode = mode
           }
       }
     }catch {
       print("Error \(error)")
     }
     
-    return getStepData(groupName: groupName, stepName: stepName)
+    return getStep(step_id: step_id)
 }
 
-func updateMemo(groupName:String,stepName:String,index:Int,memo:String)->(Step) {
+//func updateMemo(step_id:String,index:Int,memo:String)->(Step) {
+//
+//    let realm = try! Realm()
+//    guard let stepDetail = realm.objects(StepDetail.self)
+//            .filter("step_id == %@ && Order == %@",step_id,index)
+//            .first
+//
+//    else {
+//        print("存在しない")
+//        // StepDetailが見つからない場合はnilを返す
+//        return Step()
+//    }
+//    print(stepDetail)
+////    do{
+////      try realm.write{
+////          StepDetail.memo = memo
+////      }
+////    }catch {
+////      print("Error \(error)")
+////    }
+//
+//    return getStep(step_id: step_id)
+//}
+func updateMemo(step_id:String,index:Int,memo:String) -> Step? {
+    let realm = try! Realm()
+    
+    guard let stepDetail = realm.objects(StepDetail.self)
+            .filter("step_id == %@ && Order == %@",step_id,index)
+            .first
+    else {
+        // StepDetailが見つからない場合はnilを返す
+        return nil
+    }
+    
+    do {
+        try realm.write {
+            stepDetail.memo = memo
+        }
+    } catch {
+        print("Error updating memo: \(error)")
+        // エラーが発生した場合はnilを返す
+        return nil
+    }
+    
+    // getStep関数で更新されたStepオブジェクトを取得して返す
+    return getStep(step_id: step_id)
+}
+
+func upDateTitle(step_id:String,title:String)->(Step) {
 
     let realm = try! Realm()
-    let group = realm.objects(Group.self)
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+    let Step = realm.objects(Step.self).filter("id == %@",step_id).first!
 
     do{
       try realm.write{
-              results.memo = memo
+          Step.title = title
       }
     }catch {
       print("Error \(error)")
     }
     
-    return getStepData(groupName: groupName, stepName: stepName)
-}
-
-func upDateTitle(groupName:String,stepName:String,title:String)->(Step) {
-
-    let realm = try! Realm()
-    let group = realm.objects(Group.self)
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(Step.self).filter("id == %@",step_id).first!
-
-    do{
-      try realm.write{
-          results.title = title
-      }
-    }catch {
-      print("Error \(error)")
-    }
-    
-    return getStepData(groupName: groupName, stepName: stepName)
+    return getStep(step_id: step_id)
 }
 
 func addStepDetail(groupName:String,stepName:String)->(step:Step, order:Int){

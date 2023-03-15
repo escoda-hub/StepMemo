@@ -33,7 +33,8 @@ struct PickerView: View {
                     .frame(height: 100)
                 }
                 .onChange(of: isR ? mode_R : mode_L) { mode in
-                    stepData = updateMode(groupName: GroupName, stepName: stepData.title, index: index, isR: isR, mode: mode)
+//                    stepData = updateMode(groupName: GroupName, stepName: stepData.title, index: index, isR: isR, mode: mode)
+//                    stepData = updateMode(groupName: GroupName, stepName: stepData.title, index: index, isR: isR, mode: mode)
                 }
             }
     }

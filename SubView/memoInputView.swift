@@ -9,22 +9,20 @@ import SwiftUI
 
 struct memoInputView: View {
     
-    @FocusState private var isFocused: Bool
     @Binding var stepData:Step
     @Binding var showMemoView : Bool
     @State var index:Int
-    @State  var GroupName:String
-    @State  var StepTitle:String
     
     var body: some View {
         VStack {
-            TextField("メモ", text: $stepData.stepDetails[index].memo,axis: .vertical)
+            Text("\(index)")
+            TextField("メモ", text: $stepData.stepDetails[index - 1].memo,axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .padding(.horizontal)
                 .lineLimit(3...5)
             Button("完了") {
                 showMemoView = false
-                stepData = updateMemo(groupName: GroupName, stepName: StepTitle, index: index, memo: stepData.stepDetails[index].memo)
+                stepData = updateMemo(step_id: stepData.id, index: index, memo: stepData.stepDetails[index - 1].memo)!
             }
         }
     }
