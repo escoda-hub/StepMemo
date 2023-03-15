@@ -8,6 +8,7 @@
 import Foundation
 import RealmSwift
 import SwiftUI
+import Realm
 
 //ステップデータの取得
 func getStepData(groupName:String,stepName:String)->(Step) {
@@ -254,3 +255,22 @@ func deleteGroup(indexSet:IndexSet){
     }
 }
 
+func changeGroup(oldGroupName:String,newGroupName:String){
+    // Realmインスタンスを取得
+    let realm = try! Realm()
+
+    // group1とgroup2のGroupオブジェクトを取得
+    let group1 = realm.objects(Group.self).filter("name == %@", oldGroupName).first
+    let group2 = realm.objects(Group.self).filter("name == %@", newGroupName).first
+
+    // group1からステップデータを取得
+    let stepsToMove = group1?.steps
+    // group2のstepsプロパティにステップデータを追加
+    try! realm.write {
+        if let stepsToMove = group1?.steps {
+//            group2?.steps.append(objectsIn: List(collection: stepsToMove as! RLMCollection))
+            group2?.steps.append(objectsIn: stepsToMove)
+            group1?.steps.removeAll()
+        }
+    }
+}

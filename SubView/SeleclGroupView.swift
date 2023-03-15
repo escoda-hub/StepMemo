@@ -4,26 +4,28 @@ import RealmSwift
 struct SeleclGroupView: View {
 
     @Binding var selectedGroup :String
-    
     @Environment(\.presentationMode) var presentation
-    @ObservedResults(Group.self) var groups
-
+    
     var body: some View {
         VStack {
             Text(selectedGroup)
             List {
-                ForEach(0..<groups.count) { index in
+                ForEach(getGroup()!, id: \.self) { groups in
                     HStack {
-                        Text("\(groups[index].name)")
+                        Text("\(groups.name)")
                             .padding(.horizontal)
                         Spacer()
-                        Image(systemName: groups[index].name == selectedGroup ? "checkmark" : "")
+                        Image(systemName: groups.name == selectedGroup ? "checkmark" : "")
                             .padding(.horizontal)
                             .foregroundColor(.blue)
                     }
-                    .contentShape(RoundedRectangle(cornerRadius: 5)) 
+                    .contentShape(RoundedRectangle(cornerRadius: 5))
                     .onTapGesture {
-                        selectedGroup = groups[index].name
+                        let oldGroupName = selectedGroup
+                        let newGroupName = groups.name
+                        changeGroup(oldGroupName: oldGroupName, newGroupName: newGroupName)
+                        print("oldGroupName :", oldGroupName, "newGroupName :", newGroupName)
+                        selectedGroup = groups.name
                         self.presentation.wrappedValue.dismiss()
                     }
                 }

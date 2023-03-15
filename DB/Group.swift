@@ -10,7 +10,7 @@ import RealmSwift
 
 class Group: Object,Identifiable {
     
-    @Persisted (primaryKey: true) var name:String
+    @Persisted var name:String
     @Persisted var steps: List<Step>
 
 }

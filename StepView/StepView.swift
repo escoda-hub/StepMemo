@@ -98,7 +98,7 @@ struct StepView: View{
 //                            }
                         }
                     DraggableImage(
-                        GroupName: groupName,
+                        GroupName: $groupName,
                         StepTitle: stepTitle,
                         indexSmallView: $indexSmallView,
                         isR: true,
@@ -119,7 +119,7 @@ struct StepView: View{
                         stepData: $stepData
                     )
                     DraggableImage(
-                        GroupName: groupName,
+                        GroupName: $groupName,
                         StepTitle: stepTitle,
                         indexSmallView: $indexSmallView,
                         isR: false,
