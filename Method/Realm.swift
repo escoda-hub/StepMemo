@@ -201,17 +201,10 @@ func upDateTitle(step_id:String,title:String)->(Step) {
     return getStep(step_id: step_id)
 }
 
-func addStepDetail(groupName:String,stepName:String)->(step:Step, order:Int){
+func addStepDetail(step_id:String)->(step:Step, order:Int){
     
     let realm = try! Realm()
-    let group = realm.objects(Group.self)
-
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
     let step = realm.objects(Step.self).filter("id == %@",step_id).first!
-
     let stepDetail = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
     
     let stepDetail_default = StepDetail()
@@ -227,7 +220,7 @@ func addStepDetail(groupName:String,stepName:String)->(step:Step, order:Int){
     stepDetail_default.R_angle = 45
     stepDetail_default.R_mode = 2
     stepDetail_default.Order = Array(stepDetail)[Array(stepDetail).count-1].Order + 1
-
+    
     do{
       try realm.write{
           step.stepDetails.append(stepDetail_default)
@@ -235,7 +228,7 @@ func addStepDetail(groupName:String,stepName:String)->(step:Step, order:Int){
     }catch {
       print("Error \(error)")
     }
-    return (getStepData(groupName: groupName, stepName: stepName),stepDetail_default.Order)
+    return (getStep(step_id: step_id),stepDetail_default.Order)
 }
 
 func deleteStepDetail(groupName:String,stepName:String,index:Int) {

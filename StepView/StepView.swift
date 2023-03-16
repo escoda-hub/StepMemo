@@ -149,7 +149,7 @@ struct StepView: View{
                 VStack{
                     Button(action: {
                         print("add")
-                        let result = addStepDetail(groupName: groupName, stepName: stepData.title)
+                        let result = addStepDetail(step_id: stepData.id)
                         stepData = result.step
                         indexSmallView = result.order
                     }, label: {
