@@ -3,8 +3,8 @@ import RealmSwift
 
 struct ContentView: View {
 
-    @ObservedResults(Group.self) var groups
-    @ObservedResults(Step.self) var steps
+//    @ObservedResults(Group.self) var groups
+//    @ObservedResults(Step.self) var steps
     
     @State private var showingModal = false
     @State var searchText = ""

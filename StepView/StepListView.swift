@@ -3,7 +3,7 @@ import SwiftUI
 import RealmSwift
 struct StepListView: View {
 
-    @State var groupName :String
+    @State var groupName: String
     @ObservedObject var steps: StepListViewModel
     
     init(groupName: String, stepList: [Step] = []) {
@@ -57,17 +57,14 @@ struct StepListView: View {
             }
         }
         .onAppear(){
-
             steps.fetchSteps()
-            print(steps.stepList.count)
-            print(groupName)
         }
     }
 }
 
 class StepListViewModel: ObservableObject {
     @Published var stepList = [Step]()
-    var groupName: String
+    @Published var groupName: String
 
     init(groupName: String) {
         self.groupName = groupName
@@ -75,14 +72,6 @@ class StepListViewModel: ObservableObject {
 
     func fetchSteps() {
         stepList = getStepList(groupName: groupName)
-        objectWillChange.send() // 追加
     }
 }
 
-//StepListViewで@Stateを使用している変数stepListとgroupNameは、初期化時に渡された値で初期化され、その後は別の箇所で値が変更された場合にのみ更新されます。
-//
-//StepViewから戻ってきたときにstepListの値が変わっていないため、ForEachで表示されるリストも変更されずにそのままになっている可能性があります。
-//
-//そのため、StepListViewで新しいStepが追加された場合には、リストが自動的に更新されるように、stepListの変更を検知してビューを再描画する必要があります。
-//
-//以下は、変更を検知するために、stepListの値を@ObservedObjectでラップする方法です。

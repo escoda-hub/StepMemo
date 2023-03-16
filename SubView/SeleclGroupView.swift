@@ -33,11 +33,3 @@ struct SeleclGroupView: View {
         }
     }
 }
-
-//struct SeleclGroupView_Previews: PreviewProvider {
-//
-//    @State static var selectedGroup =  "hipho"
-//    static var previews: some View {
-//        SeleclGroupView(selectedGroup: $selectedGroup)
-//    }
-//}
