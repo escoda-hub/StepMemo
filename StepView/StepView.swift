@@ -187,7 +187,7 @@ struct StepView: View{
                     memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView)
                         .presentationDetents([.medium])
                 }
-            NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName)) {
+            NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName,stepData: stepData)) {
                 HStack {
                     HStack {
                         Image(systemName: "rectangle.3.group")

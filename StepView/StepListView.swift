@@ -20,7 +20,7 @@ struct StepListView: View {
                         Text("No steps found")
                     } else {
                         List {
-                            ForEach(steps.stepList) { step in
+                            ForEach(steps.stepList, id: \.id) { step in
                                 NavigationLink(
                                     destination: StepView(groupName: $groupName, stepData: step),
                                     label: {
@@ -57,7 +57,10 @@ struct StepListView: View {
             }
         }
         .onAppear(){
+
             steps.fetchSteps()
+            print(steps.stepList.count)
+            print(groupName)
         }
     }
 }
@@ -72,6 +75,7 @@ class StepListViewModel: ObservableObject {
 
     func fetchSteps() {
         stepList = getStepList(groupName: groupName)
+        objectWillChange.send() // 追加
     }
 }
 

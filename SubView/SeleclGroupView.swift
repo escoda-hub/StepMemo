@@ -5,6 +5,7 @@ struct SeleclGroupView: View {
 
     @Binding var selectedGroup :String
     @Environment(\.presentationMode) var presentation
+    @State var stepData:Step
     
     var body: some View {
         VStack {
@@ -23,8 +24,7 @@ struct SeleclGroupView: View {
                     .onTapGesture {
                         let oldGroupName = selectedGroup
                         let newGroupName = groups.name
-                        changeGroup(oldGroupName: oldGroupName, newGroupName: newGroupName)
-//                        print("oldGroupName :", oldGroupName, "newGroupName :", newGroupName)
+                        changeGroup(oldGroupName: oldGroupName, newGroupName: newGroupName,step_id: stepData.id)
                         selectedGroup = groups.name
                         self.presentation.wrappedValue.dismiss()
                     }
@@ -34,10 +34,10 @@ struct SeleclGroupView: View {
     }
 }
 
-struct SeleclGroupView_Previews: PreviewProvider {
-    
-    @State static var selectedGroup =  "hipho"
-    static var previews: some View {
-        SeleclGroupView(selectedGroup: $selectedGroup)
-    }
-}
+//struct SeleclGroupView_Previews: PreviewProvider {
+//
+//    @State static var selectedGroup =  "hipho"
+//    static var previews: some View {
+//        SeleclGroupView(selectedGroup: $selectedGroup)
+//    }
+//}
