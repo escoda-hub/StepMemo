@@ -46,7 +46,6 @@ struct StepView: View{
         let deviceWidth = UIScreen.main.bounds.width
         
         VStack {
-            Text("\(stepData.id)")
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)

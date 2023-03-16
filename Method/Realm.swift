@@ -137,29 +137,6 @@ func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
     return getStep(step_id: step_id)
 }
 
-//func updateMemo(step_id:String,index:Int,memo:String)->(Step) {
-//
-//    let realm = try! Realm()
-//    guard let stepDetail = realm.objects(StepDetail.self)
-//            .filter("step_id == %@ && Order == %@",step_id,index)
-//            .first
-//
-//    else {
-//        print("存在しない")
-//        // StepDetailが見つからない場合はnilを返す
-//        return Step()
-//    }
-//    print(stepDetail)
-////    do{
-////      try realm.write{
-////          StepDetail.memo = memo
-////      }
-////    }catch {
-////      print("Error \(error)")
-////    }
-//
-//    return getStep(step_id: step_id)
-//}
 func updateMemo(step_id:String,index:Int,memo:String) -> Step? {
     let realm = try! Realm()
     
@@ -231,15 +208,15 @@ func addStepDetail(step_id:String)->(step:Step, order:Int){
     return (getStep(step_id: step_id),stepDetail_default.Order)
 }
 
-func deleteStepDetail(groupName:String,stepName:String,index:Int) {
+func deleteStepDetail(step_id:String,index:Int) {
 
     let realm = try! Realm()
-    let group = realm.objects(Group.self)
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
+//    let group = realm.objects(Group.self)
+//    let subquery_getStepID = group.where {
+//        ($0.name == groupName && $0.steps.title == stepName)
+//    }
+//
+//    let step_id = Array(subquery_getStepID)[0].steps[0].id
     let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
     
     //長押しされたステップ詳細情報を削除

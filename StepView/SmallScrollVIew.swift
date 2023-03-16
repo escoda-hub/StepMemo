@@ -31,7 +31,6 @@ struct SmallScrollVIew: View {
         ScrollView(.horizontal){
             ScrollViewReader { proxy in
                 HStack {
-//                    Text("\(indexSmallView)")
                     ForEach(stepData.stepDetails.indices, id: \.self) { row in
                         VStack{
                             ZStack {
@@ -58,7 +57,6 @@ struct SmallScrollVIew: View {
                                     .border(stepData.stepDetails[row].Order == indexSmallView ? Color.blue : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0.0)
                                     .cornerRadius(2)
                                     .onTapGesture {
-//                                        index = row
                                         indexSmallView = stepData.stepDetails[row].Order
                                         location_L = CGPoint(
                                             x: stepData.stepDetails[row].L_x,
@@ -89,7 +87,7 @@ struct SmallScrollVIew: View {
                     .onChange(of: indexSmallView) { newValue in
                         let addIndex = newValue - 1
                         withAnimation{
-                            proxy.scrollTo(addIndex, anchor: .trailing) // プロキシを使用してスクロールする
+                            proxy.scrollTo(addIndex, anchor: .center) // プロキシを使用してスクロールする
                         }
 //                        index = addIndex
                         indexSmallView = stepData.stepDetails[addIndex].Order
@@ -109,23 +107,23 @@ struct SmallScrollVIew: View {
                             title: Text("確認"),
                             message: Text("\(indexSmallView)番目のデータを削除してもよろしいですか？"),
                             primaryButton: .default(Text("Ok"),
-                                                    action: {
-                                                        deleteStepDetail(groupName: GroupName, stepName: StepTitle, index: indexSmallView)
-                                                        let updatedIndex = stepData.stepDetails.count == indexSmallView - 1 ?  stepData.stepDetails.count - 1 : indexSmallView - 1 //最後のstepDetailが削除されたときは、カウント-1のindexを設定する(our of range 回避)
-                                                        indexSmallView = stepData.stepDetails[updatedIndex].Order
-                                                        location_L = CGPoint(
-                                                            x: stepData.stepDetails[updatedIndex].L_x,
-                                                            y: stepData.stepDetails[updatedIndex].L_y)
-                                                        location_R = CGPoint(
-                                                            x: stepData.stepDetails[updatedIndex].R_x,
-                                                            y: stepData.stepDetails[updatedIndex].R_y)
-                                                        angle_L = Angle(degrees: stepData.stepDetails[updatedIndex].L_angle)
-                                                        angle_R = Angle(degrees: stepData.stepDetails[updatedIndex].R_angle)
-                                                        mode_L = stepData.stepDetails[updatedIndex].L_mode
-                                                        mode_R = stepData.stepDetails[updatedIndex].R_mode
-                                                        
-                                                    }
-                                                   ),
+                                action: {
+                                    deleteStepDetail(step_id:stepData.id, index: indexSmallView)
+                                    let updatedIndex = stepData.stepDetails.count == indexSmallView - 1 ?  stepData.stepDetails.count - 1 : indexSmallView - 1 //最後のstepDetailが削除されたときは、カウント-1のindexを設定する(our of range 回避)
+                                    indexSmallView = stepData.stepDetails[updatedIndex].Order
+                                    location_L = CGPoint(
+                                        x: stepData.stepDetails[updatedIndex].L_x,
+                                        y: stepData.stepDetails[updatedIndex].L_y)
+                                    location_R = CGPoint(
+                                        x: stepData.stepDetails[updatedIndex].R_x,
+                                        y: stepData.stepDetails[updatedIndex].R_y)
+                                    angle_L = Angle(degrees: stepData.stepDetails[updatedIndex].L_angle)
+                                    angle_R = Angle(degrees: stepData.stepDetails[updatedIndex].R_angle)
+                                    mode_L = stepData.stepDetails[updatedIndex].L_mode
+                                    mode_R = stepData.stepDetails[updatedIndex].R_mode
+                                    
+                                }
+                               ),
                             secondaryButton: .default(Text("キャンセル"))
                         )
                     }
