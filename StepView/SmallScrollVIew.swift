@@ -32,7 +32,7 @@ struct SmallScrollVIew: View {
             ScrollViewReader { proxy in
                 HStack {
                     ForEach(stepData.stepDetails.indices, id: \.self) { row in
-                        VStack{
+                        VStack(spacing: 0){
                             ZStack {
                                     ZStack {
                                         Rectangle()
@@ -54,7 +54,7 @@ struct SmallScrollVIew: View {
                                             .frame(width: 15,height: 15)
                                     }
                                     .frame(width:deviceWidth/5,height:60)
-                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.blue : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0.0)
+//                                    .border(stepData.stepDetails[row].Order == indexSmallView ? Color.blue : Color.white, width: stepData.stepDetails[row].Order == indexSmallView  ? 2.0 : 0.0)
                                     .cornerRadius(2)
                                     .onTapGesture {
                                         indexSmallView = stepData.stepDetails[row].Order
@@ -78,18 +78,23 @@ struct SmallScrollVIew: View {
 //                                    .opacity(row%2 == 1 ? 0 : 1)
                             }
                             .id(row)
+                        Rectangle()
+                            .foregroundColor(.blue)
+                            .frame(height: 3)
+                            .opacity(stepData.stepDetails[row].Order == indexSmallView  ? 1 : 0)
+                            .padding(.bottom,3)
                         Image(systemName: row%2 == 1 ? "circle.fill":"circle")
                             .resizable()
                             .scaledToFit()
                             .frame(width:10)
                         }
+//                        .frame(height: 73)
                     }
                     .onChange(of: indexSmallView) { newValue in
                         let addIndex = newValue - 1
                         withAnimation{
                             proxy.scrollTo(addIndex, anchor: .center) // プロキシを使用してスクロールする
                         }
-//                        index = addIndex
                         indexSmallView = stepData.stepDetails[addIndex].Order
                         location_L = CGPoint(
                             x: stepData.stepDetails[addIndex].L_x,

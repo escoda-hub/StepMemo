@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct InformationView: View {
+    
     @State private var isPresented = false
-    
     @State var stepData:Step
-    
     
     var body: some View {
         Text("\(stepData)")
@@ -21,10 +20,6 @@ struct InformationView: View {
         .sheet(isPresented: $isPresented) {
             ModalView()
                 .background(Color.white.opacity(0.5))
-        }
-        .onAppear(){
-//            stepData = getStepData(groupName: GroupName, stepName: title)
-            
         }
     }
 }

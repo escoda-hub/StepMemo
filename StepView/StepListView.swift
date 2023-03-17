@@ -1,13 +1,23 @@
 
 import SwiftUI
 import RealmSwift
+
 struct StepListView: View {
 
     @State var groupName: String
     @ObservedObject var steps: StepListViewModel
+    @State var deviceWidth:Double
+    @State var height:Double
     
-    init(groupName: String, stepList: [Step] = []) {
+//    init(groupName: String, stepList: [Step] = []) {
+//        self.groupName = groupName
+//        self.steps = StepListViewModel(groupName: groupName)
+//    }
+    
+    init(groupName: String, deviceWidth: Double, height: Double) {
         self.groupName = groupName
+        self.deviceWidth = deviceWidth
+        self.height = height
         self.steps = StepListViewModel(groupName: groupName)
     }
     
@@ -17,7 +27,11 @@ struct StepListView: View {
                 Text(groupName)
                 VStack {
                     if steps.stepList.isEmpty {
-                        Text("No steps found")
+                        VStack{
+                            Spacer()
+                            Text("No steps found ...")
+                            Spacer()
+                        }
                     } else {
                         List {
                             ForEach(steps.stepList, id: \.id) { step in
@@ -41,7 +55,7 @@ struct StepListView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        addStep(name: groupName)
+                        addStep(name: groupName,deviceWidth: deviceWidth,height: height)
                         steps.fetchSteps()
                     }, label: {
                         Image(systemName: "pencil")
@@ -75,4 +89,3 @@ class StepListViewModel: ObservableObject {
         stepList = getStepList(groupName: groupName)
     }
 }
-

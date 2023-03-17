@@ -9,36 +9,14 @@ import Foundation
 import RealmSwift
 import SwiftUI
 
-//ステップデータの取得
-func getStepData(groupName:String,stepName:String)->(Step) {
-    
-    let realm = try! Realm()
-    var step :Step = Step()
-    do{
-        let StepData = realm.objects(Group.self).filter("name == %@ && ANY steps.title == %@",groupName,stepName)//type is Results<Group>
-
-        if (Array(StepData).count == 1){
-            if(Array(Array(StepData)[0].steps).count == 1){
-                step = Array(Array(StepData)[0].steps)[0]
-            }
-        }
-        return step
-    }catch {
-      print("Error \(error)")
-    }
-
-}
-
 func getStepList(groupName: String) -> [Step] {
     let realm = try! Realm()
     guard let group = realm.objects(Group.self).filter("name == %@", groupName).first else {
         // 該当するGroupが見つからなかった場合
         return []
     }
-//    print(Array(group.steps))
     return Array(group.steps)
 }
-
 
 func getStep(step_id: String) -> Step {
     let realm = try! Realm()
@@ -50,52 +28,25 @@ func getStep(step_id: String) -> Step {
     return stepData
 }
 
-//グールが持つステップ名の取得
-func getStepName(groupName:String)->Array<String> {
-    
-    let realm = try! Realm()
-    let group = realm.objects(Group.self).filter("name == %@",groupName).first!//type is Results<Group>
-    
-    var steps: [String] = []
-    for step in Array(group.steps){
-        steps.append(step.title)
-    }
-    return steps
-}
-
-//ステップ詳細データの取得
-func getStepDetailData(groupName:String,stepName:String,index:Int)->(StepDetail){
-    
-    let realm = try! Realm()
-    let group = realm.objects(Group.self)
-    let subquery_getStepID = group.where {
-        ($0.name == groupName && $0.steps.title == stepName)
-    }
-    let step_id = Array(subquery_getStepID)[0].steps[0].id
-    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
-    return results
-
-}
-
 func updateStepDetail(step_id:String,index:Int,isR:Bool,location:CGPoint,angle:Angle)->(Step) {
 
     let realm = try! Realm()
-    let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
-    
-    do{
-      try realm.write{
-          if isR {
-              StepDetail.R_x = location.x
-              StepDetail.R_y = location.y
-              StepDetail.R_angle = angle.degrees
-          }else{
-              StepDetail.L_x = location.x
-              StepDetail.L_y = location.y
-              StepDetail.L_angle = angle.degrees
+    if let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first{
+        do{
+          try realm.write{
+              if isR {
+                  StepDetail.R_x = location.x
+                  StepDetail.R_y = location.y
+                  StepDetail.R_angle = angle.degrees
+              }else{
+                  StepDetail.L_x = location.x
+                  StepDetail.L_y = location.y
+                  StepDetail.L_angle = angle.degrees
+              }
           }
-      }
-    }catch {
-      print("Error \(error)")
+        }catch {
+          print("Error \(error)")
+        }
     }
     
     return getStep(step_id: step_id)
@@ -104,20 +55,20 @@ func updateStepDetail(step_id:String,index:Int,isR:Bool,location:CGPoint,angle:A
 func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
 
     let realm = try! Realm()
-    let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
-
-    do{
-      try realm.write{
-          if isR {
-              StepDetail.R_mode = mode
-          }else{
-              StepDetail.L_mode = mode
+    if let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first{
+        do{
+          try realm.write{
+              if isR {
+                  StepDetail.R_mode = mode
+              }else{
+                  StepDetail.L_mode = mode
+              }
           }
-      }
-    }catch {
-      print("Error \(error)")
+        }catch {
+          print("Error \(error)")
+        }
     }
-    
+
     return getStep(step_id: step_id)
 }
 
@@ -149,53 +100,64 @@ func updateMemo(step_id:String,index:Int,memo:String) -> Step? {
 func upDateTitle(step_id:String,title:String)->(Step) {
 
     let realm = try! Realm()
-    let Step = realm.objects(Step.self).filter("id == %@",step_id).first!
-
-    do{
-      try realm.write{
-          Step.title = title
-      }
-    }catch {
-      print("Error \(error)")
+    if let step = realm.objects(Step.self).filter("id == %@", step_id).first {
+        // `step`を使って何らかの処理を行う
+        do{
+          try realm.write{
+              step.title = title
+          }
+        }catch {
+          print("Error \(error)")
+        }
+    } else {
+        // `step`がnilだった場合の処理
     }
-    
     return getStep(step_id: step_id)
 }
 
-func addStepDetail(step_id:String)->(step:Step, order:Int){
+func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step, order:Int){
     
     let realm = try! Realm()
-    let step = realm.objects(Step.self).filter("id == %@",step_id).first!
-    let stepDetail = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
-    
-    let stepDetail_default = StepDetail()
-    stepDetail_default.step_id = step_id
-    stepDetail_default.imagename = "g1_s1_1"
-    stepDetail_default.memo = "memomemomemo_adddata"
-    stepDetail_default.L_x = 80
-    stepDetail_default.L_y = 250
-    stepDetail_default.L_angle = 315
-    stepDetail_default.L_mode = 2
-    stepDetail_default.R_x = 320
-    stepDetail_default.R_y = 250
-    stepDetail_default.R_angle = 45
-    stepDetail_default.R_mode = 2
-    stepDetail_default.Order = Array(stepDetail)[Array(stepDetail).count-1].Order + 1
-    
-    do{
-      try realm.write{
-          step.stepDetails.append(stepDetail_default)
-      }
-    }catch {
-      print("Error \(error)")
+    if let step = realm.objects(Step.self).filter("id == %@",step_id).first{
+        
+        let stepDetail = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
+        
+        let stepDetail_default = StepDetail()
+        stepDetail_default.step_id = step_id
+        stepDetail_default.imagename = "g1_s1_1"
+        stepDetail_default.memo = ""
+        stepDetail_default.L_x = deviceWidth/2 - 40
+        stepDetail_default.L_y = height/2
+        stepDetail_default.L_angle = 340
+        stepDetail_default.L_mode = 2
+        stepDetail_default.R_x = deviceWidth/2 + 40.0
+        stepDetail_default.R_y = height/2
+        stepDetail_default.R_angle = 20
+        stepDetail_default.R_mode = 2
+        stepDetail_default.Order = Array(stepDetail)[Array(stepDetail).count-1].Order + 1
+        
+        do{
+          try realm.write{
+              step.stepDetails.append(stepDetail_default)
+          }
+        }catch {
+          print("Error \(error)")
+        }
+        
+        return (getStep(step_id: step_id),stepDetail_default.Order)
     }
-    return (getStep(step_id: step_id),stepDetail_default.Order)
+    
+    return (Step(),1)
+
 }
 
 func deleteStepDetail(step_id:String,index:Int) {
 
     let realm = try! Realm()
-    let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first!
+    guard let results = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first else {
+        // 結果が見つからなかった場合の処理
+        return
+    }
     
     //長押しされたステップ詳細情報を削除
     do{
@@ -230,21 +192,16 @@ func getGroup() -> Results<Group>? {
 }
 
 //グループの削除
-func deleteGroup(indexSet:IndexSet){
+func deleteGroup(groupName:String){
+    // Realmのインスタンスを取得する
     let realm = try! Realm()
-    let groupsToDelete = indexSet.map { getGroup()![$0] }
-    try! realm.write {
-        groupsToDelete.forEach { group in
-            // 削除するGroupオブジェクトからStepオブジェクトを取得し、削除する
-            let stepsToDelete = group.steps
-            stepsToDelete.forEach { step in
-                // 削除するStepオブジェクトからStepDetailオブジェクトを取得し、削除する
-                let stepDetailToDelete = step.stepDetails
-                realm.delete(stepDetailToDelete)
-            }
-            realm.delete(stepsToDelete)
+    // 指定された名前でGroupを検索する
+    let groupToDelete = realm.objects(Group.self).filter("name == %@", groupName).first
+    // もしGroupが存在したら、それをRealmから削除する
+    if let group = groupToDelete {
+        try! realm.write {
+            realm.delete(group)
         }
-        realm.delete(groupsToDelete)
     }
 }
 
@@ -271,25 +228,25 @@ func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
 }
 
 
-func addStep(name:String) {
+func addStep(name:String,deviceWidth:Double,height:Double) {
 
     let newStep = Step()
     newStep.title = "untitled"
     newStep.created_at = Date()
     newStep.updated_at = Date()
-    newStep.favorite = true
+    newStep.favorite = false
 
     let stepDetail_default = StepDetail()
     stepDetail_default.step_id = newStep.id
     stepDetail_default.imagename = "g1_s1_1"
-    stepDetail_default.memo = "memomemomemo_defaultStep"
-    stepDetail_default.L_x = 80
-    stepDetail_default.L_y = 250
-    stepDetail_default.L_angle = 315
+    stepDetail_default.memo = ""
+    stepDetail_default.L_x = deviceWidth/2 - 40
+    stepDetail_default.L_y = height/2
+    stepDetail_default.L_angle = 340
     stepDetail_default.L_mode = 2
-    stepDetail_default.R_x = 320
-    stepDetail_default.R_y = 250
-    stepDetail_default.R_angle = 45
+    stepDetail_default.R_x = deviceWidth/2 + 40.0
+    stepDetail_default.R_y = height/2
+    stepDetail_default.R_angle = 20
     stepDetail_default.R_mode = 2
     stepDetail_default.Order = 1
     
@@ -298,9 +255,131 @@ func addStep(name:String) {
     let realm = try! Realm()
     // nameで指定したグループを取得
     let group = realm.objects(Group.self).filter("name == %@", name).first!
+    
+    
+    if let group = realm.objects(Group.self).filter("name == %@", name).first {
+        // `group`オブジェクトが存在する場合の処理
         // Realmのトランザクション内で、グループに新しいステップを追加する
         try! realm.write {
             group.steps.append(newStep)
         }
+    } else {
+        // `group`オブジェクトがnilの場合の処理
+    }
     
+}
+
+func addGroup(groupname:String)->Bool {
+    
+    var isError :Bool
+    let realm = try! Realm()
+    var groupList: [String] = []
+    let groupData = realm.objects(Group.self)//.value(forKey: "name")
+    
+    for i in 0 ..< groupData.count {
+        groupList.append(groupData[i].name)
+    }
+    
+    if groupList.firstIndex(of: groupname)  != nil {
+        isError = true
+    }else{
+        isError = false
+        do{
+            
+          try realm.write{
+              let group = Group()
+              group.name = groupname
+              realm.add(group)
+          }
+        }catch {
+          print("Error \(error)")
+        }
+    }
+    
+    return isError
+}
+
+//グループ名の取得
+func deleteAll() {
+
+    let realm = try! Realm()
+    try! realm.write {
+      realm.deleteAll()
+    }
+}
+
+func setStepData() {
+    
+    let base = "abcdefghijklmnopqrstuvwxyz"
+
+    //１０文字のランダムな文字列を生成
+    let randomStr = String((0..<10).map{ _ in base.randomElement()! })
+    
+    
+    let group = Group()
+    group.name = randomStr
+
+    let step = Step()
+    step.title = "step_1"
+    step.created_at = Date()
+    step.updated_at = Date()
+    step.favorite = true
+
+    let stepDetail_1 = StepDetail()
+    stepDetail_1.step_id = step.id
+    stepDetail_1.imagename = "g1_s1_1"
+    stepDetail_1.memo = "memomemomemo_1"
+    stepDetail_1.L_x = 100
+    stepDetail_1.L_y = 100
+    stepDetail_1.L_angle = 100
+    stepDetail_1.L_mode = 2
+    stepDetail_1.R_x = 300
+    stepDetail_1.R_y = 200
+    stepDetail_1.R_angle = 50
+    stepDetail_1.R_mode = 1
+    stepDetail_1.Order = 1
+    
+    let stepDetail_2 = StepDetail()
+    stepDetail_2.step_id = step.id
+    stepDetail_2.imagename = "g1_s1_2"
+    stepDetail_2.memo = "memomemomemo_2"
+    stepDetail_2.L_x = 120
+    stepDetail_2.L_y = 120
+    stepDetail_2.L_angle = 10
+    stepDetail_2.L_mode = 1
+    stepDetail_2.R_x = 320
+    stepDetail_2.R_y = 220
+    stepDetail_2.R_angle = 20
+    stepDetail_2.R_mode = 2
+    stepDetail_2.Order = 2
+    
+    let stepDetail_3 = StepDetail()
+    stepDetail_3.step_id = step.id
+    stepDetail_3.imagename = "g1_s1_3"
+    stepDetail_3.memo = "memomemomemo_3"
+    stepDetail_3.L_x = 80
+    stepDetail_3.L_y = 90
+    stepDetail_3.L_angle = 80
+    stepDetail_3.L_mode = 2
+    stepDetail_3.R_x = 300
+    stepDetail_3.R_y = 290
+    stepDetail_3.R_angle = 50
+    stepDetail_3.R_mode = 3
+    stepDetail_3.Order = 3
+    
+    step.stepDetails.append(stepDetail_1)
+    step.stepDetails.append(stepDetail_2)
+    step.stepDetails.append(stepDetail_3)
+    group.steps.append(step)
+
+
+    let realm = try! Realm()
+
+    do{
+      try realm.write{
+          realm.add(group)
+      }
+    }catch {
+      print("Error \(error)")
+    }
 }

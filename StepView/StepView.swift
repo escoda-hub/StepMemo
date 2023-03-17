@@ -44,13 +44,17 @@ struct StepView: View{
     var body: some View {
         
         let deviceWidth = UIScreen.main.bounds.width
+        let height = 300.0
         
         VStack {
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)
                         .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
+                        .frame(minHeight:40)
                         .background(Color(0xDCDCDD, alpha: 1.0))
+                        .lineLimit(1) // 1行に制限する
+                        .truncationMode(.tail)
                         .opacity(0.8)
                         .cornerRadius(5)
                         .contentShape(RoundedRectangle(cornerRadius: 20))
@@ -63,11 +67,11 @@ struct StepView: View{
                                 .presentationDetents([.medium])
                         }
                 Button(action: {
-                    print("help")
+                    print("love")
                 }, label: {
-                    Image(systemName: "questionmark.circle")
+                    Image(systemName: stepData.favorite ? "heart.fill" :"heart")
                         .resizable()
-                        .foregroundColor(.blue.opacity(0.8))
+                        .foregroundColor(.pink.opacity(0.8))
                         .frame(width:25,height:25)
                 })
                 .frame(width: 30,height: 30)
@@ -131,7 +135,7 @@ struct StepView: View{
                     )
                 }
             }
-            .frame(width: deviceWidth, height: 300)
+            .frame(width: deviceWidth, height: CGFloat(height))
             HStack {
                 SmallScrollVIew(
                                 GroupName: groupName,
@@ -148,7 +152,7 @@ struct StepView: View{
                 VStack{
                     Button(action: {
                         print("add")
-                        let result = addStepDetail(step_id: stepData.id)
+                        let result = addStepDetail(step_id: stepData.id,deviceWidth: Double(deviceWidth),height: height)
                         stepData = result.step
                         indexSmallView = result.order
                     }, label: {
@@ -176,6 +180,7 @@ struct StepView: View{
                 .padding(.horizontal)
                 .lineLimit(3...5)
                 .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
+                .frame(minHeight:80)
                 .background(Color(0xDCDCDD, alpha: 1.0))
                 .opacity(0.8)
                 .cornerRadius(5)
@@ -211,5 +216,13 @@ struct StepView: View{
             Spacer()
         }//VStack
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: Text("information")){
+                    Image(systemName: "questionmark.circle")
+                        .foregroundColor(.black)
+                }
+            }
+        }
     }//body
 }//VIEW

@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 
 class StepDetail: Object,Identifiable {
+    
     @Persisted(primaryKey: true) var id : String = UUID().uuidString
     @Persisted  var step_id:String
     @Persisted  var imagename:String

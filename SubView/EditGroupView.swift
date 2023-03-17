@@ -1,6 +1,3 @@
-//SwiftUI.TextField に returnKeyType を設定するために Notification を活用する
-//https://zenn.dev/konomae/articles/5855ba8ac39ec8
-
 
 import SwiftUI
 import Combine
@@ -14,7 +11,6 @@ struct EditGroupView: View {
     @State var isHidden: Bool = true
     @State var text = ""
     @State private var showingAlert = false
-    
     
     let textLimit = 10 //最大文字数
     
@@ -84,7 +80,6 @@ struct EditGroupView: View {
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-//                            print("groupname is \(text)")
                             if addGroup(groupname: text) {
                                 self.showingAlert = true
                             }else{
@@ -112,34 +107,3 @@ struct EditGroupView_Previews: PreviewProvider {
     }
 }
 
-func addGroup(groupname:String)->Bool {
-    
-    var isError :Bool
-//    let group = Group()
-//    group.name = groupname
-    let realm = try! Realm()
-    var groupList: [String] = []
-    let groupData = realm.objects(Group.self)//.value(forKey: "name")
-    
-    for i in 0 ..< groupData.count {
-        groupList.append(groupData[i].name)
-    }
-    
-    if groupList.firstIndex(of: groupname)  != nil {
-        isError = true
-    }else{
-        isError = false
-        do{
-            
-          try realm.write{
-              let group = Group()
-              group.name = groupname
-              realm.add(group)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
-    
-    return isError
-}
