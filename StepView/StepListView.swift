@@ -57,6 +57,7 @@ struct StepListView: View {
             }
         }
         .onAppear(){
+            steps.groupName = groupName
             steps.fetchSteps()
         }
     }
