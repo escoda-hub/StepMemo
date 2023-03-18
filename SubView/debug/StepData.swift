@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StepData: View {
     
-    @State var stepData:Step
+    @Binding var stepData:Step
     
     var body: some View {
         VStack {

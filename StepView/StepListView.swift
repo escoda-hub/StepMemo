@@ -56,25 +56,37 @@ struct StepListView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        
-                        
-                        NavigationLink {
-                            StepData(stepData: step)
-                        } label: {
-                            VStack {
-                                Image(systemName: "pencil")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 24))
-                                Text("Step: \(step.id)")
-                            }
-                            .onTapGesture(){
-                                let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
-                                steps.groupName = group.name
-                                steps.fetchSteps()
-                                step = newStep
-                                print(step)
-                            }
+                        Button(action: { // このボタンをタップすると FirstView に遷移する。
+                            let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
+                            steps.groupName = group.name
+                            steps.fetchSteps()
+                            step = newStep
+                            print(step)
+                            isPresented = true
+                        }) {
+                            Text("Go To the FirstView")
                         }
+                        NavigationLink(destination: StepData(stepData: $step),
+                                       isActive: $isPresented) {
+                            EmptyView()
+                        }
+//                        NavigationLink {
+//                            StepData(stepData: step)
+//                        } label: {
+//                            VStack {
+//                                Image(systemName: "pencil")
+//                                    .foregroundColor(.white)
+//                                    .font(.system(size: 24))
+//                                Text("Step: \(step.id)")
+//                            }
+//                            .onTapGesture(){
+//                                let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
+//                                steps.groupName = group.name
+//                                steps.fetchSteps()
+//                                step = newStep
+//                                print(step)
+//                            }
+//                        }
   
                         
 //                        .frame(width: 60, height: 60)
