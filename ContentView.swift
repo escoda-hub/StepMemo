@@ -86,7 +86,6 @@ struct ContentView: View {
                                     }
                                 )
                                 {
-                                    
                                     if let groups = getGroup() {
                                         ForEach(groups, id: \.id) { group in
                                             NavigationLink(destination: StepListView(groupName: group.name,deviceWidth:deviceWidth,height: height)) {
