@@ -8,7 +8,7 @@ struct ContentView: View {
     
     @State private var showingModal = false
     @State var searchText = ""
-
+    
     var body: some View {
         
         let deviceWidth = UIScreen.main.bounds.width
@@ -86,16 +86,18 @@ struct ContentView: View {
                                     }
                                 )
                                 {
+                                    
                                     if let groups = getGroup() {
                                         ForEach(groups, id: \.id) { group in
                                             NavigationLink(destination: StepListView(groupName: group.name,deviceWidth:deviceWidth,height: height)) {
                                                 Text(group.name)
-                                            }
-                                        }
-                                        .onDelete { indexSet in
-                                            if let groups = getGroup(), let index = indexSet.first {
-                                                let groupName = groups[index].name
-                                                deleteGroup(groupName: groupName)
+                                                    .swipeActions(edge: .trailing) {
+                                                        Button(role: .destructive) {
+                                                            deleteGroup(groupName: group.name)
+                                                        } label: {
+                                                            Image(systemName: "trash.fill")
+                                                        }
+                                                    }
                                             }
                                         }
                                     }
@@ -130,7 +132,7 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(10))
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: Text("information")){
+                            NavigationLink(destination: onDelete()){
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.black)
                             }
