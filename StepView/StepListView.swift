@@ -10,13 +10,15 @@ struct StepListView: View {
     @State var step: Step
     @State var isStepDataActive = false
     @State var isPresented = false
+    @State  var path: [Step]
     
-    init(group: Group, deviceWidth: Double, height: Double,step:Step = Step()) {
+    init(group: Group, deviceWidth: Double, height: Double,step:Step = Step(),path:[Step]=[]) {
         self.group = group
         self.deviceWidth = deviceWidth
         self.height = height
         self.steps = StepListViewModel(groupName: group.name)
         self.step = step
+        self.path = path
         steps.groupName = group.name
         steps.fetchSteps()
     }
@@ -24,7 +26,7 @@ struct StepListView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text(group.name)
+//                Text(group.name)
                 VStack {
                     if steps.stepList.isEmpty {
                         VStack{
@@ -56,41 +58,24 @@ struct StepListView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Button(action: { // このボタンをタップすると FirstView に遷移する。
-                            let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
-                            steps.groupName = group.name
-                            steps.fetchSteps()
-                            step = newStep
-                            print(step)
-                            isPresented = true
-                        }) {
-                            Text("Go To the FirstView")
+                        NavigationStack(path: $path) {
+                                Button {
+                                        let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
+                                        steps.groupName = group.name
+                                        steps.fetchSteps()
+                                        step = newStep
+                                        path.append(step)
+                                } label: {
+                                    Image(systemName: "pencil")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 30))
+                                }
+                            .navigationDestination(for: Step.self) { stepdata in
+                                StepView(stepData: stepdata)
+                            }
+                            .navigationTitle("\(steps.groupName)")
                         }
-                        NavigationLink(destination: StepData(stepData: $step),
-                                       isActive: $isPresented) {
-                            EmptyView()
-                        }
-//                        NavigationLink {
-//                            StepData(stepData: step)
-//                        } label: {
-//                            VStack {
-//                                Image(systemName: "pencil")
-//                                    .foregroundColor(.white)
-//                                    .font(.system(size: 24))
-//                                Text("Step: \(step.id)")
-//                            }
-//                            .onTapGesture(){
-//                                let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
-//                                steps.groupName = group.name
-//                                steps.fetchSteps()
-//                                step = newStep
-//                                print(step)
-//                            }
-//                        }
-  
-                        
-//                        .frame(width: 60, height: 60)
-                        .frame(width: 200, height: 200)
+                        .frame(width: 60, height: 60)
                         .background(Color.orange)
                         .cornerRadius(30.0)
                         .shadow(color: .gray, radius: 3, x: 3, y: 3)

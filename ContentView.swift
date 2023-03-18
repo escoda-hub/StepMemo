@@ -5,18 +5,21 @@ struct ContentView: View {
 
     @State private var showingModal = false
     @State var searchText = ""
-    @State var defaultStep :Step
+    @State var step :Step
+    @State private var path: [Step] = []
+//    @State var step: Step
+    
     let deviceWidth = UIScreen.main.bounds.width
     let height = 300.0
     
-    init(defaultStep: Step = Step()) {
-        self.defaultStep = Step()
+    init(step: Step = Step()) {
+        self.step = Step()
 //        self.defaultStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
     }
     
     var body: some View {
         
-        NavigationStack {
+        NavigationStack(path: $path)  {
                 ZStack {
                     Color(0xDFDCE3, alpha: 1.0).ignoresSafeArea()
                     VStack{
@@ -114,10 +117,19 @@ struct ContentView: View {
                                 Spacer()
                                 HStack {
                                     Spacer()
-                                    NavigationLink(destination: StepView(stepData: defaultStep)) {
-                                        Image(systemName: "pencil")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 24))
+                                    NavigationStack(path: $path) {
+                                            Button {
+                                                    let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
+                                                    step = newStep
+                                                    path.append(step)
+                                            } label: {
+                                                Image(systemName: "pencil")
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 30))
+                                            }
+                                        .navigationDestination(for: Step.self) { stepdata in
+                                            StepView(stepData: stepdata)
+                                        }
                                     }
                                     .frame(width: 60, height: 60)
                                     .background(Color.orange)
