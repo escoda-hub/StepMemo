@@ -13,5 +13,5 @@ class Group: Object,Identifiable {
     @Persisted(primaryKey: true) var id : String = UUID().uuidString
     @Persisted var name:String
     @Persisted var steps: List<Step>
-
+    
 }

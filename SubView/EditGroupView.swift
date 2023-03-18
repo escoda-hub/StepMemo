@@ -62,7 +62,6 @@ struct EditGroupView: View {
                 }
                 Spacer()
                 Spacer()
-                    
             }
             .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

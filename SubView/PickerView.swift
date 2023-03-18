@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PickerView: View {
     
-    @State  var GroupName:String
     @State var isR:Bool
     @Binding var mode_L: Int
     @Binding var mode_R: Int
@@ -35,8 +34,6 @@ struct PickerView: View {
                     .frame(height: 100)
                 }
                 .onChange(of: isR ? mode_R : mode_L) { mode in
-//                    stepData = updateMode(groupName: GroupName, stepName: stepData.title, index: index, isR: isR, mode: mode)
-//                    stepData = updateMode(groupName: GroupName, stepName: stepData.title, index: index, isR: isR, mode: mode)
                 }
             }
             .frame(width: (deviceWidth - (deviceWidth/5)) / 2 )

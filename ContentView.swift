@@ -3,16 +3,18 @@ import RealmSwift
 
 struct ContentView: View {
 
-//    @ObservedResults(Group.self) var groups
-//    @ObservedResults(Step.self) var steps
-    
     @State private var showingModal = false
     @State var searchText = ""
+    @State var defaultStep :Step
+    let deviceWidth = UIScreen.main.bounds.width
+    let height = 300.0
+    
+    init(defaultStep: Step = Step()) {
+        self.defaultStep = Step()
+//        self.defaultStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
+    }
     
     var body: some View {
-        
-        let deviceWidth = UIScreen.main.bounds.width
-        let height = 300.0
         
         NavigationStack {
                 ZStack {
@@ -20,7 +22,7 @@ struct ContentView: View {
                     VStack{
                         Spacer()
                         HStack{
-                            NavigationLink(destination: Text("all")) {
+                            NavigationLink(destination: StepListView_Condition(deviceWidth: deviceWidth, height: height)) {
                                 VStack {
                                     Spacer()
                                     Image(systemName: "list.bullet")
@@ -88,7 +90,7 @@ struct ContentView: View {
                                 {
                                     if let groups = getGroup() {
                                         ForEach(groups, id: \.id) { group in
-                                            NavigationLink(destination: StepListView(groupName: group.name,deviceWidth:deviceWidth,height: height)) {
+                                            NavigationLink(destination: StepListView(group: group,deviceWidth:deviceWidth,height: height)) {
                                                 Text(group.name)
                                                     .swipeActions(edge: .trailing) {
                                                         Button(role: .destructive) {
@@ -108,6 +110,22 @@ struct ContentView: View {
                             .background(Color(0xDFDCE3, alpha: 1.0))
                             .padding(.horizontal)
                             .padding(.bottom)
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                    NavigationLink(destination: StepView(stepData: defaultStep)) {
+                                        Image(systemName: "pencil")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 24))
+                                    }
+                                    .frame(width: 60, height: 60)
+                                    .background(Color.orange)
+                                    .cornerRadius(30.0)
+                                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+                                }
+                            }
                         }//List + button
                         Button("deleteALL Button") {
                             print(Realm.Configuration.defaultConfiguration.fileURL!)
@@ -159,10 +177,3 @@ struct ContentView: View {
         }//navigation stack
     }//body
 }//content view
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-

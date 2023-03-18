@@ -22,9 +22,6 @@ struct imageSize {
 
 struct StepView: View{
     
-    @Binding var groupName:String
-    @State var stepTitle = ""
-
     @State var stepData:Step
     @State var ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
     @State var location   = CGPoint(x: 0, y: 0)
@@ -40,6 +37,7 @@ struct StepView: View{
     @State var showingAlert = false
     @State var showTitleView = false
     @State var showMemoView = false
+    @State var groupName = ""
 
     var body: some View {
         
@@ -47,6 +45,8 @@ struct StepView: View{
         let height = 300.0
         
         VStack {
+            Text("\(groupName)")
+            Text("\(stepData.id)")
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)
@@ -63,7 +63,7 @@ struct StepView: View{
                             showTitleView = true
                         }
                         .sheet(isPresented: $showTitleView) {
-                            titleInputView(stepData: $stepData, showTitleView: $showTitleView, GroupName: groupName)
+                            titleInputView(stepData: $stepData, showTitleView: $showTitleView)
                                 .presentationDetents([.medium])
                         }
                 Button(action: {
@@ -101,7 +101,6 @@ struct StepView: View{
 //                            }
                         }
                     DraggableImage(
-                        GroupName: $groupName,
                         indexSmallView: $indexSmallView,
                         isR: true,
                         location: $location,
@@ -121,7 +120,6 @@ struct StepView: View{
                         stepData: $stepData
                     )
                     DraggableImage(
-                        GroupName: $groupName,
                         indexSmallView: $indexSmallView,
                         isR: false,
                         location: $location,
@@ -145,8 +143,6 @@ struct StepView: View{
             .frame(width: deviceWidth, height: CGFloat(height))
             HStack {
                 SmallScrollVIew(
-                                GroupName: groupName,
-                                StepTitle: stepTitle,
                                 stepData: $stepData,
                                 location_L: $location_L,
                                 location_R: $location_R,
@@ -178,8 +174,8 @@ struct StepView: View{
             }//Small Window reagin
             HStack{
                 Spacer()
-                PickerView(GroupName: groupName,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
-                PickerView(GroupName: groupName,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
+                PickerView(isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
+                PickerView(isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
             }
             Text("\(stepData.stepDetails[indexSmallView-1].memo)")
@@ -222,6 +218,9 @@ struct StepView: View{
             Spacer()
         }//VStack
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear(){
+            groupName = getGroupName(group_id: stepData.group_id)
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: WalkthroughView()){

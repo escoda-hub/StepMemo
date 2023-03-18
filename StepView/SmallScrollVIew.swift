@@ -9,9 +9,6 @@ import SwiftUI
 
 struct SmallScrollVIew: View {
     
-    @State  var GroupName:String
-    @State  var StepTitle:String
-    
     @Binding var stepData:Step
     @Binding var location_L :CGPoint
     @Binding var location_R :CGPoint

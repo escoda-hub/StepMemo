@@ -12,12 +12,10 @@ struct titleInputView: View {
     @FocusState private var isFocused: Bool
     @Binding var stepData:Step
     @Binding var showTitleView : Bool
-    @State  var GroupName:String
     
      var body: some View {
          VStack {
              Text("タイトル編集")
-             Text("\(GroupName)")
              Text("\(stepData.title)")
              TextField("Enter text", text: $stepData.title)
                  .focused($isFocused)

@@ -1,30 +1,26 @@
 
 import SwiftUI
-import RealmSwift
 
 struct StepListView: View {
 
-    @State var groupName: String
+    @State var group: Group
     @ObservedObject var steps: StepListViewModel
     @State var deviceWidth:Double
     @State var height:Double
+    @State private var step: Step
     
-//    init(groupName: String, stepList: [Step] = []) {
-//        self.groupName = groupName
-//        self.steps = StepListViewModel(groupName: groupName)
-//    }
-    
-    init(groupName: String, deviceWidth: Double, height: Double) {
-        self.groupName = groupName
+    init(group: Group, deviceWidth: Double, height: Double,step:Step = Step()) {
+        self.group = group
         self.deviceWidth = deviceWidth
         self.height = height
-        self.steps = StepListViewModel(groupName: groupName)
+        self.steps = StepListViewModel(groupName: group.name)
+        self.step = step
     }
     
     var body: some View {
         ZStack {
             VStack {
-                Text(groupName)
+                Text(group.name)
                 VStack {
                     if steps.stepList.isEmpty {
                         VStack{
@@ -36,7 +32,7 @@ struct StepListView: View {
                         List {
                             ForEach(steps.stepList, id: \.id) { step in
                                 NavigationLink(
-                                    destination: StepView(groupName: $groupName, stepData: step),
+                                    destination: StepView(stepData: step),
                                     label: {
                                         VStack{
                                             Text("\(step.title)")
@@ -54,24 +50,34 @@ struct StepListView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Button(action: {
-                        addStep(name: groupName,deviceWidth: deviceWidth,height: height)
-                        steps.fetchSteps()
-                    }, label: {
-                        Image(systemName: "pencil")
-                            .foregroundColor(.white)
-                            .font(.system(size: 24))
-                    })
-                    .frame(width: 60, height: 60)
-                    .background(Color.orange)
-                    .cornerRadius(30.0)
-                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+                    VStack {
+                        NavigationLink(
+                            destination: StepData(stepData: step),
+                            label: {
+                                Image(systemName: "pencil")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 24))
+                            }
+                        )
+                        .frame(width: 60, height: 60)
+                        .background(Color.orange)
+                        .cornerRadius(30.0)
+                        .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+                    }
                 }
             }
         }
         .onAppear(){
-            steps.groupName = groupName
+            steps.groupName = group.name
+            steps.fetchSteps()
+            if steps.stepList.isEmpty {
+                //ステップがないときに、デフォルトのステップを一つ生成する
+                step = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
+            }else{
+                
+            }
+            steps.groupName = group.name
             steps.fetchSteps()
         }
     }

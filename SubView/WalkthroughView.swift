@@ -49,7 +49,7 @@ struct WalkthroughView: View {
 //            .disabled(currentStep != steps.count - 1)
             .opacity(currentStep != steps.count - 1 ? 0:1)
         }
-        .navigationBarBackButtonHidden(true)
+//        .navigationBarBackButtonHidden(true)
     }
     
 }

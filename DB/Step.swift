@@ -14,11 +14,13 @@ import RealmSwift
 class Step: Object,Identifiable {
     
     @Persisted(primaryKey: true) var id : String = UUID().uuidString
+    @Persisted  var group_id:String
     @Persisted  var title:String
     @Persisted  var created_at = Date()
     @Persisted  var updated_at = Date()
     @Persisted  var favorite:Bool
     @Persisted var stepDetails: List<StepDetail>
+
     
     func toggleFavorite() {
         favorite.toggle()
