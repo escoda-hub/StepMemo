@@ -67,12 +67,19 @@ struct StepView: View{
                                 .presentationDetents([.medium])
                         }
                 Button(action: {
-                    print("love")
+                    stepData = upDateFavorite(step_id: stepData.id)
                 }, label: {
-                    Image(systemName: stepData.favorite ? "heart.fill" :"heart")
-                        .resizable()
-                        .foregroundColor(.pink.opacity(0.8))
-                        .frame(width:25,height:25)
+                    if stepData.favorite {
+                        Image(systemName: "heart.fill")
+                            .resizable()
+                            .foregroundColor(.pink.opacity(0.8))
+                            .frame(width:25,height:25)
+                    } else {
+                        Image(systemName: "heart")
+                            .resizable()
+                            .foregroundColor(.pink.opacity(0.8))
+                            .frame(width:25,height:25)
+                    }
                 })
                 .frame(width: 30,height: 30)
                 .foregroundColor(.black)

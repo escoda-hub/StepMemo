@@ -20,4 +20,8 @@ class Step: Object,Identifiable {
     @Persisted  var favorite:Bool
     @Persisted var stepDetails: List<StepDetail>
     
+    func toggleFavorite() {
+        favorite.toggle()
+    }
+    
 }

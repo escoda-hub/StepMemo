@@ -12,7 +12,6 @@ class StepDetail: Object,Identifiable {
     
     @Persisted(primaryKey: true) var id : String = UUID().uuidString
     @Persisted  var step_id:String
-    @Persisted  var imagename:String
     @Persisted  var memo:String
     @Persisted  var R_x:Double
     @Persisted  var R_y:Double

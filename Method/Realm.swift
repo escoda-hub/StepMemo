@@ -115,6 +115,25 @@ func upDateTitle(step_id:String,title:String)->(Step) {
     return getStep(step_id: step_id)
 }
 
+func upDateFavorite(step_id:String)->(Step) {
+
+    let realm = try! Realm()
+    if let step = realm.objects(Step.self).filter("id == %@", step_id).first {
+        
+        do{
+          try realm.write{
+              step.toggleFavorite()
+          }
+        }catch {
+          print("Error \(error)")
+        }
+
+    } else {
+        // `step`がnilだった場合の処理
+    }
+    return getStep(step_id: step_id)
+}
+
 func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step, order:Int){
     
     let realm = try! Realm()
@@ -124,7 +143,6 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
         
         let stepDetail_default = StepDetail()
         stepDetail_default.step_id = step_id
-        stepDetail_default.imagename = "g1_s1_1"
         stepDetail_default.memo = ""
         stepDetail_default.L_x = deviceWidth/2 - 40
         stepDetail_default.L_y = height/2
@@ -238,7 +256,6 @@ func addStep(name:String,deviceWidth:Double,height:Double) {
 
     let stepDetail_default = StepDetail()
     stepDetail_default.step_id = newStep.id
-    stepDetail_default.imagename = "g1_s1_1"
     stepDetail_default.memo = ""
     stepDetail_default.L_x = deviceWidth/2 - 40
     stepDetail_default.L_y = height/2
@@ -255,7 +272,6 @@ func addStep(name:String,deviceWidth:Double,height:Double) {
     let realm = try! Realm()
     // nameで指定したグループを取得
     let group = realm.objects(Group.self).filter("name == %@", name).first!
-    
     
     if let group = realm.objects(Group.self).filter("name == %@", name).first {
         // `group`オブジェクトが存在する場合の処理
@@ -310,11 +326,10 @@ func deleteAll() {
 
 func setStepData() {
     
-    let base = "abcdefghijklmnopqrstuvwxyz"
+    let base = "abcdefghijklmnopqrstuvwxyz1234567890/:*=~^|¥<,>.?/"
 
     //１０文字のランダムな文字列を生成
     let randomStr = String((0..<10).map{ _ in base.randomElement()! })
-    
     
     let group = Group()
     group.name = randomStr
@@ -327,7 +342,6 @@ func setStepData() {
 
     let stepDetail_1 = StepDetail()
     stepDetail_1.step_id = step.id
-    stepDetail_1.imagename = "g1_s1_1"
     stepDetail_1.memo = "memomemomemo_1"
     stepDetail_1.L_x = 100
     stepDetail_1.L_y = 100
@@ -341,7 +355,6 @@ func setStepData() {
     
     let stepDetail_2 = StepDetail()
     stepDetail_2.step_id = step.id
-    stepDetail_2.imagename = "g1_s1_2"
     stepDetail_2.memo = "memomemomemo_2"
     stepDetail_2.L_x = 120
     stepDetail_2.L_y = 120
@@ -355,7 +368,6 @@ func setStepData() {
     
     let stepDetail_3 = StepDetail()
     stepDetail_3.step_id = step.id
-    stepDetail_3.imagename = "g1_s1_3"
     stepDetail_3.memo = "memomemomemo_3"
     stepDetail_3.L_x = 80
     stepDetail_3.L_y = 90
@@ -371,7 +383,6 @@ func setStepData() {
     step.stepDetails.append(stepDetail_2)
     step.stepDetails.append(stepDetail_3)
     group.steps.append(step)
-
 
     let realm = try! Realm()
 
