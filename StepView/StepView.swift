@@ -50,7 +50,7 @@ struct StepView: View{
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)
-                        .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
+                        .frame(width: deviceWidth - (deviceWidth/5))
                         .frame(minHeight:40)
                         .background(Color(0xDCDCDD, alpha: 1.0))
                         .lineLimit(1) // 1行に制限する
@@ -215,7 +215,7 @@ struct StepView: View{
                     }
                 }
             }
-            .frame(height:35,alignment:.center)
+            .frame(width: deviceWidth - (deviceWidth/5),height:35,alignment:.center)
             .background(Color(0xDCDCDD, alpha: 1.0))
             .foregroundColor(.black)
             .cornerRadius(CGFloat(5))
