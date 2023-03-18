@@ -17,6 +17,9 @@ struct PickerView: View {
     @Binding var stepData:Step
     
     var body: some View {
+        
+        let deviceWidth = UIScreen.main.bounds.width
+        
             ZStack{
                 RoundedRectangle(cornerRadius: 5)
                     .frame(height: 30)
@@ -36,5 +39,6 @@ struct PickerView: View {
 //                    stepData = updateMode(groupName: GroupName, stepName: stepData.title, index: index, isR: isR, mode: mode)
                 }
             }
+            .frame(width: (deviceWidth - (deviceWidth/5)) / 2 )
     }
 }

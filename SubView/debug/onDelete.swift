@@ -9,41 +9,17 @@ import SwiftUI
 
 struct onDelete: View {
     let languages: [String] = [
-        "HTML",
-        "CSS",
-        "Javascript",
-        "PHP",
-        "Ruby",
-        "Java",
-        "C++",
-        "C#",
-        "Python",
-        "Go",
-        "Swift",
-        "Kotlin",
-        "Dart",
+        "プライバシーポリシー",
+        "利用規約",
+        "バージョン",
+        "お問い合せ",
+        "使用方法",
     ];
     
     var body: some View {
         List {
             ForEach(languages, id: \.self) { lang in
                 Text(lang)
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            print("flag action.")
-                            print(lang)
-                        } label: {
-                            Image(systemName: "flag.fill")
-                        }.tint(.orange)
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            print("delete action.")
-                            print(lang)
-                        } label: {
-                            Image(systemName: "trash.fill")
-                        }
-                    }
             }
         }
         .listStyle(.plain)

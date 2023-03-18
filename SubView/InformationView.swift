@@ -8,19 +8,59 @@
 import SwiftUI
 
 struct InformationView: View {
-    
-    @State private var isPresented = false
-    @State var stepData:Step
+    let InfoItems: [String] = [
+        "チュートリアル",
+        "プライバシーポリシー",
+        "利用規約",
+        "お問い合せ",
+        "お知らせ",
+        "評価する",
+    ];
     
     var body: some View {
-        Text("\(stepData)")
-        Button("Show Modal") {
-            self.isPresented.toggle()
+        
+        VStack {
+            Text("information")
+            VStack {
+                    List {
+                        HStack{
+                            Text("version")
+                            Spacer()
+                            Text("1.0.0")
+                        }
+                        ForEach(InfoItems, id: \.self) { InfoItem in
+                            switch InfoItem {
+                            case "チュートリアル":
+                                NavigationLink(
+                                    destination: WalkthroughView(),
+                                    label: {
+                                        VStack{
+                                            Text("\(InfoItem)")
+                                        }
+                                        .padding()
+                                    }
+                                )
+                                    .frame(height: 30)
+                            default:
+                                NavigationLink(
+                                    destination: Text("\(InfoItem)"),
+                                    label: {
+                                        VStack{
+                                            Text("\(InfoItem)")
+                                        }
+                                        .padding()
+                                    }
+                                )
+                                    .frame(height: 30)
+                            }
+                        }
+                }
+                .listStyle(.insetGrouped)
+            }
         }
-        .sheet(isPresented: $isPresented) {
-            ModalView()
-                .background(Color.white.opacity(0.5))
-        }
+        .navigationBarTitleDisplayMode(.inline)
+        
+        
     }
 }
 

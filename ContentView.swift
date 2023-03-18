@@ -131,7 +131,7 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(10))
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: onDelete()){
+                            NavigationLink(destination: InformationView()){
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.black)
                             }

@@ -179,7 +179,6 @@ struct StepView: View{
             HStack{
                 Spacer()
                 PickerView(GroupName: groupName,isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
-                Spacer()
                 PickerView(GroupName: groupName,isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                 Spacer()
             }
@@ -225,7 +224,7 @@ struct StepView: View{
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: Text("information")){
+                NavigationLink(destination: WalkthroughView()){
                     Image(systemName: "questionmark.circle")
                         .foregroundColor(.black)
                 }
