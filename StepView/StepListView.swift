@@ -15,6 +15,8 @@ struct StepListView: View {
         self.height = height
         self.steps = StepListViewModel(groupName: group.name)
         self.step = step
+        steps.groupName = group.name
+        steps.fetchSteps()
     }
     
     var body: some View {
@@ -69,8 +71,6 @@ struct StepListView: View {
             }
         }
         .onAppear(){
-            steps.groupName = group.name
-            steps.fetchSteps()
             if steps.stepList.isEmpty {
                 //ステップがないときに、デフォルトのステップを一つ生成する
                 step = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
