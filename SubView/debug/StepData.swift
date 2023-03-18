@@ -12,12 +12,14 @@ struct StepData: View {
     @State var stepData:Step
     
     var body: some View {
-        Text("\(stepData)")
+        VStack {
+            Text("step ID: \(stepData.id)")
+            Text("Group ID: \(stepData.group_id)")
+            Text("Title: \(stepData.title)")
+            Text("Created At: \(stepData.created_at)")
+            Text("Updated At: \(stepData.updated_at)")
+            Text("Favorite: \(stepData.favorite.description)")
+        }
     }
+    
 }
-
-//struct StepData_Previews: PreviewProvider {
-//    static var previews: some View {
-//        StepData()
-//    }
-//}

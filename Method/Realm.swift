@@ -284,7 +284,7 @@ func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
 }
 
 
-func addStep(name:String,deviceWidth:Double,height:Double) -> (Step){
+func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
 
     let newStep = Step()
     newStep.title = "untitled"

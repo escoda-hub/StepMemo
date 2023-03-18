@@ -7,7 +7,9 @@ struct StepListView: View {
     @ObservedObject var steps: StepListViewModel
     @State var deviceWidth:Double
     @State var height:Double
-    @State private var step: Step
+    @State var step: Step
+    @State var isStepDataActive = false
+    @State var isPresented = false
     
     init(group: Group, deviceWidth: Double, height: Double,step:Step = Step()) {
         self.group = group
@@ -32,7 +34,7 @@ struct StepListView: View {
                         }
                     } else {
                         List {
-                            ForEach(steps.stepList, id: \.id) { step in
+                            ForEach(steps.stepList) { step in
                                 NavigationLink(
                                     destination: StepView(stepData: step),
                                     label: {
@@ -50,18 +52,33 @@ struct StepListView: View {
             .navigationBarTitleDisplayMode(.inline)
             VStack {
                 Spacer()
-                HStack {
+                VStack {
                     Spacer()
-                    VStack {
-                        NavigationLink(
-                            destination: StepData(stepData: step),
-                            label: {
+                    HStack {
+                        Spacer()
+                        
+                        
+                        NavigationLink {
+                            StepData(stepData: step)
+                        } label: {
+                            VStack {
                                 Image(systemName: "pencil")
                                     .foregroundColor(.white)
                                     .font(.system(size: 24))
+                                Text("Step: \(step.id)")
                             }
-                        )
-                        .frame(width: 60, height: 60)
+                            .onTapGesture(){
+                                let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
+                                steps.groupName = group.name
+                                steps.fetchSteps()
+                                step = newStep
+                                print(step)
+                            }
+                        }
+  
+                        
+//                        .frame(width: 60, height: 60)
+                        .frame(width: 200, height: 200)
                         .background(Color.orange)
                         .cornerRadius(30.0)
                         .shadow(color: .gray, radius: 3, x: 3, y: 3)
