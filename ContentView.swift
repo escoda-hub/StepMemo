@@ -1,18 +1,21 @@
 import SwiftUI
 import RealmSwift
 
-enum SamplePath:Hashable{
+enum Route:Hashable{
     case filterView(String)
     case stepView(Step)
+    case informationView
 }
 
 @ViewBuilder
- func coordinator(_ samplePath: SamplePath) -> some View {
-    switch samplePath {
+ func coordinator(_ route: Route) -> some View {
+    switch route {
     case let .filterView(text):
         StepListView_Condition(title:text)
     case let .stepView(stepData):
         StepView(stepData: stepData)
+    case let .informationView:
+        InformationView()
     }
 }
 struct ContentView: View {
@@ -20,7 +23,7 @@ struct ContentView: View {
     @State private var showingModal = false
     @State var searchText = ""
     @State var step :Step
-    @State private var path: [SamplePath] = []
+    @State private var path: [Route] = []
     
     let deviceWidth = UIScreen.main.bounds.width
     let height = 300.0
@@ -38,7 +41,7 @@ struct ContentView: View {
                     Spacer()
                     HStack{
                         Button(action: {
-                            path.append(SamplePath.filterView("all"))
+                            path.append(Route.filterView("all"))
                         }){
                             VStack {
                                 Spacer()
@@ -51,8 +54,8 @@ struct ContentView: View {
                                 Spacer()
                             }
                         }
-                        .navigationDestination(for: SamplePath.self) { samplePath in
-                            coordinator(samplePath)
+                        .navigationDestination(for: Route.self) { route in
+                            coordinator(route)
                         }
                         .padding()
                         .frame(width: 100,height:150,alignment:.center)
@@ -61,7 +64,7 @@ struct ContentView: View {
                         .cornerRadius(CGFloat(15))
                         
                         Button(action: {
-                            path.append(SamplePath.filterView("recent"))
+                            path.append(Route.filterView("recent"))
                         }){
                             VStack {
                                 Spacer()
@@ -74,8 +77,8 @@ struct ContentView: View {
                                 Spacer()
                             }
                         }
-                        .navigationDestination(for: SamplePath.self) { samplePath in
-                            coordinator(samplePath)
+                        .navigationDestination(for: Route.self) { route in
+                            coordinator(route)
                         }
                         .padding()
                         .frame(width: 100,height:150,alignment:.center)
@@ -84,7 +87,7 @@ struct ContentView: View {
                         .cornerRadius(CGFloat(15))
                         
                         Button(action: {
-                            path.append(SamplePath.filterView("heart"))
+                            path.append(Route.filterView("heart"))
                         }){
                             VStack {
                                 Spacer()
@@ -98,8 +101,8 @@ struct ContentView: View {
                             }
                         }
                         .padding()
-                        .navigationDestination(for: SamplePath.self) { samplePath in
-                            coordinator(samplePath)
+                        .navigationDestination(for: Route.self) { route in
+                            coordinator(route)
                         }
                         .frame(width: 100,height:150,alignment:.center)
                         .background(Color(0xF7B733, alpha: 0.9))
@@ -146,38 +149,27 @@ struct ContentView: View {
                             Spacer()
                             HStack {
                                 Spacer()
-                                
                                 Button(action: {
                                     let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
-                                    path.append(SamplePath.stepView(newStep))
+                                    path.append(Route.stepView(newStep))
                                 }){
                                     VStack {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.white)
                                             .font(.system(size: 30))
                                     }
-                                    .navigationDestination(for: SamplePath.self) { stepData in
-                                        coordinator(stepData)
+                                    .navigationDestination(for: Route.self) { route in
+                                        coordinator(route)
                                     }
                                     .frame(width: 60, height: 60)
                                     .background(Color.orange)
                                     .cornerRadius(30.0)
                                     .shadow(color: .gray, radius: 3, x: 3, y: 3)
                                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
-                                    
                                 }
                             }
                         }//List + button
-                        Button("deleteALL Button") {
-                            print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            deleteAll()
-                        }
-                        .disabled(false)
-                        Button("add stepdata Button") {
-                            print(Realm.Configuration.defaultConfiguration.fileURL!)
-                            setStepData()
-                        }
-                        .disabled(false)
+
                     }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
@@ -190,11 +182,20 @@ struct ContentView: View {
                             .cornerRadius(CGFloat(10))
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: InformationView()){
-                                Image(systemName: "info.circle")
-                                    .foregroundColor(.black)
+                            
+                            Button(action: {
+                                path.append(Route.informationView)
+                            }){
+                                VStack {
+                                    Image(systemName: "info.circle")
+                                        .foregroundColor(.black)
+                                }
+                                .navigationDestination(for: Route.self) { route in
+                                    coordinator(route)
+                                }
                             }
                         }
+                        
                         ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
                             Button(action: {
                                 self.showingModal.toggle()
@@ -214,6 +215,16 @@ struct ContentView: View {
                             Spacer()
                         }
                     }//Vstack
+                    Button("deleteALL Button") {
+                        print(Realm.Configuration.defaultConfiguration.fileURL!)
+                        deleteAll()
+                    }
+                    .disabled(false)
+                    Button("add stepdata Button") {
+                        print(Realm.Configuration.defaultConfiguration.fileURL!)
+                        setStepData()
+                    }
+                    .disabled(false)
                 }//ZStack
             }//navigation stack
         }//body
