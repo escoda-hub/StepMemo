@@ -22,6 +22,8 @@ struct imageSize {
 
 struct StepView: View{
     
+    @State private var path: [Step] = []
+    
     @State var stepData:Step
     @State var ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
     @State var location   = CGPoint(x: 0, y: 0)
@@ -194,7 +196,22 @@ struct StepView: View{
                     memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView)
                         .presentationDetents([.medium])
                 }
-            NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName,stepData: stepData)) {
+//            NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName,stepData: stepData)) {
+//                HStack {
+//                    HStack {
+//                        Image(systemName: "rectangle.3.group")
+//                        Text("Group")
+//                    }
+//                    .padding()
+//                    Spacer()
+//                    HStack {
+//                        Text(groupName)
+//                                .foregroundColor(.blue)
+//                        Image(systemName: "chevron.forward")
+//                            .padding(.trailing)
+//                    }
+//                }
+//            }
                 HStack {
                     HStack {
                         Image(systemName: "rectangle.3.group")
@@ -209,7 +226,15 @@ struct StepView: View{
                             .padding(.trailing)
                     }
                 }
-            }
+//                .onTapGesture(){
+//                    path.append(stepData)
+//                }
+//            .navigationDestination(for: Step.self) { stepdata in
+//                SeleclGroupView(selectedGroup: $groupName,stepData: stepdata)
+//            }
+                .navigationDestination(for: Step.self) { stepdata in
+                    Text("Destination")
+                }
             .frame(width: deviceWidth - (deviceWidth/5),height:35,alignment:.center)
             .background(Color(0xDCDCDD, alpha: 1.0))
             .foregroundColor(.black)

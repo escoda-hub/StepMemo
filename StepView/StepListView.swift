@@ -85,12 +85,6 @@ struct StepListView: View {
             }
         }
         .onAppear(){
-            if steps.stepList.isEmpty {
-                //ステップがないときに、デフォルトのステップを一つ生成する
-                step = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
-            }else{
-                
-            }
             steps.groupName = group.name
             steps.fetchSteps()
         }

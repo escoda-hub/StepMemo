@@ -24,6 +24,9 @@ struct SeleclGroupView: View {
                     .onTapGesture {
                         let oldGroupName = selectedGroup
                         let newGroupName = groups.name
+                        print(oldGroupName)
+                        print(newGroupName)
+                        print(stepData.id)
                         changeGroup(oldGroupName: oldGroupName, newGroupName: newGroupName,step_id: stepData.id)
                         selectedGroup = groups.name
                         self.presentation.wrappedValue.dismiss()

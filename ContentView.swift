@@ -117,7 +117,7 @@ struct ContentView: View {
                                 Spacer()
                                 HStack {
                                     Spacer()
-                                    NavigationStack(path: $path) {
+                                    VStack{
                                             Button {
                                                     let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
                                                     step = newStep
@@ -127,9 +127,25 @@ struct ContentView: View {
                                                     .foregroundColor(.white)
                                                     .font(.system(size: 30))
                                             }
-                                        .navigationDestination(for: Step.self) { stepdata in
-                                            StepView(stepData: stepdata)
-                                        }
+//                                        .navigationDestination(for: Step.self) { stepdata in
+//                                            StepView(stepData: stepdata)
+//                                        }
+                                            .navigationDestination(for: Step.self) { stepdata in
+                                                StepView(stepData: stepdata)
+                                                    .onAppear {
+//                                                        self.path.append(stepdata)
+                                                        print(path)
+                                                    }
+                                                    .onDisappear {
+                                                        print(path)
+                                                        // ステップビューから戻ってきたときに、pathからステップを削除する
+//                                                        if let index = path.firstIndex(where: { $0.id == stepdata.id }) {
+//
+//                                                            print(index)
+//                                                            path.remove(at: index)
+//                                                        }
+                                                    }
+                                            }
                                     }
                                     .frame(width: 60, height: 60)
                                     .background(Color.orange)

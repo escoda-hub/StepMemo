@@ -257,32 +257,58 @@ func deleteGroup(groupName:String){
     }
 }
 
+//func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
+//    if oldGroupName != newGroupName {
+//        // Realmインスタンスを取得
+//        let realm = try! Realm()
+//        // group1とgroup2のGroupオブジェクトを取得
+//        let group1 = realm.objects(Group.self).filter("name == %@", oldGroupName).first
+//        let group2 = realm.objects(Group.self).filter("name == %@", newGroupName).first
+//        let step = realm.objects(Step.self).filter("id == %@", step_id).first
+//        let stepToMove = group1?.steps.first(where: { $0.id == step_id })
+//
+//        if let stepToMove = stepToMove {
+//            if let index = group1?.steps.firstIndex(where: { $0.id == step_id }) {
+//                if group1?.steps.indices.contains(index) == true {
+//                    try! realm.write {
+//                        group2?.steps.append(stepToMove)
+//                        group1?.steps.remove(at: index)
+//                        step?.group_id = getGroupID(groupName: newGroupName)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
 func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
-    if oldGroupName != newGroupName {
-        // Realmインスタンスを取得
+    
+//    print(oldGroupName)
+//    print(newGroupName)
+    if oldGroupName != newGroupName{
         let realm = try! Realm()
-        // group1とgroup2のGroupオブジェクトを取得
-        let group1 = realm.objects(Group.self).filter("name == %@", oldGroupName).first
-        let group2 = realm.objects(Group.self).filter("name == %@", newGroupName).first
-        let step = realm.objects(Step.self).filter("id == %@", step_id).first
-        
-        print(group1)
-        print(group2)
-        // group1から指定されたステップを取得
-        let stepToMove = group1?.steps.first(where: { $0.id == step_id })
-        if let stepToMove = stepToMove {
-            // group2のstepsプロパティに指定されたステップを追加
-            try! realm.write {
-                group2?.steps.append(stepToMove)
-                if let index = group1?.steps.firstIndex(where: { $0.id == step_id }) {
-                    group1?.steps.remove(at: index)
-                }
-                step?.group_id = getGroupID(groupName: newGroupName)
+        try! realm.write {
+            // 移動元と移動先のGroupオブジェクトを取得する
+            guard let oldGroup = realm.objects(Group.self).filter("name == %@", oldGroupName).first,
+                  let newGroup = realm.objects(Group.self).filter("name == %@", newGroupName).first else {
+                return
             }
+            // 移動対象のStepオブジェクトを取得する
+            guard let step = oldGroup.steps.first(where: { $0.id == step_id }) else {
+                return
+            }
+            // 移動元からStepオブジェクトを削除する
+            if let index = oldGroup.steps.firstIndex(where: { $0.id == step_id }) {
+                oldGroup.steps.remove(at: index)
+            }
+            // 移動先にStepオブジェクトを追加する
+            newGroup.steps.append(step)
+            // Stepオブジェクトのgroup_idを更新する
+            step.group_id = newGroup.id
         }
     }
-}
 
+}
 
 func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
 
