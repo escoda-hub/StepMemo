@@ -11,19 +11,30 @@ struct StepListView_Condition: View {
     
         @State var groupName = "All"
         @State var steps: [Step]
-        @State var deviceWidth:Double
-        @State var height:Double
-        
-        init(deviceWidth: Double, height: Double) {
-            self.deviceWidth = deviceWidth
-            self.height = height
-            self.steps = getAllStepList()
-        }
+    
+        @State var title:String
+//        @State var deviceWidth:Double
+//        @State var height:Double
+//
+        let deviceWidth = UIScreen.main.bounds.width
+        let height = 300.0
+    
+//        init() {
+////            self.deviceWidth = deviceWidth
+////            self.height = height
+//            self.steps = getAllStepList()
+//        }
+    
+    init(groupName: String = "All",title: String) {
+        self.groupName = groupName
+        self.steps = getAllStepList()
+        self.title = title
+    }
         
         var body: some View {
             ZStack {
                 VStack {
-                    Text("All")
+                    Text(title)
                     VStack {
                         if steps.isEmpty {
                             VStack {

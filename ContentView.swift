@@ -1,157 +1,170 @@
 import SwiftUI
 import RealmSwift
 
-struct ContentView: View {
+enum SamplePath:Hashable{
+    case filterView(String)
+    case stepView(Step)
+}
 
+@ViewBuilder
+ func coordinator(_ samplePath: SamplePath) -> some View {
+    switch samplePath {
+    case let .filterView(text):
+        StepListView_Condition(title:text)
+    case let .stepView(stepData):
+        StepView(stepData: stepData)
+    }
+}
+struct ContentView: View {
+    
     @State private var showingModal = false
     @State var searchText = ""
     @State var step :Step
-    @State private var path: [Step] = []
-//    @State var step: Step
+    @State private var path: [SamplePath] = []
     
     let deviceWidth = UIScreen.main.bounds.width
     let height = 300.0
     
     init(step: Step = Step()) {
         self.step = Step()
-//        self.defaultStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
     }
     
     var body: some View {
         
         NavigationStack(path: $path)  {
-                ZStack {
-                    Color(0xDFDCE3, alpha: 1.0).ignoresSafeArea()
-                    VStack{
-                        Spacer()
-                        HStack{
-                            NavigationLink(destination: StepListView_Condition(deviceWidth: deviceWidth, height: height)) {
-                                VStack {
-                                    Spacer()
-                                    Image(systemName: "list.bullet")
-                                        .resizable()
-                                        .frame(width: 30,height: 30)
-                                    Spacer()
-                                    Text("全て")
-                                        .font(.title3)
-                                    Spacer()
-                                }
-                                .padding()
-                            }
-                            .frame(width: 100,height:150,alignment:.center)
-                            .background(Color(0x4ABDAC, alpha: 1))
-                            .foregroundColor(.black)
-                            .cornerRadius(CGFloat(15))
-                            NavigationLink(destination: Text("recent")) {
-                                VStack {
-                                    Spacer()
-                                    Image(systemName: "calendar")
-                                        .resizable()
-                                        .frame(width: 30,height: 30)
-                                    Spacer()
-                                    Text("最近")
-                                        .font(.title3)
-                                    Spacer()
-                                }
-                                .padding()
-                            }
-                            .frame(width: 100,height:150,alignment:.center)
-                            .background(Color(0xFC4A1A, alpha: 0.8))
-                            .foregroundColor(.black)
-                            .cornerRadius(CGFloat(15))
-                            NavigationLink(destination: Text("heart")) {
-                                VStack {
-                                    Spacer()
-                                    Image(systemName: "heart")
-                                        .resizable()
-                                        .frame(width: 30,height: 30)
-                                    Spacer()
-                                    Text("好き")
-                                        .font(.title3)
-                                    Spacer()
-                                }
-                                .padding()
-                            }
-                            .frame(width: 100,height:150,alignment:.center)
-                            .background(Color(0xF7B733, alpha: 0.9))
-                            .foregroundColor(.black)
-                            .cornerRadius(CGFloat(15))
-                        }
-                        .padding(.vertical)
-                        .padding(.top)
-                        ZStack {
-                            List {
-                                Section (
-                                    header: HStack{
-                                        Image(systemName: "rectangle.3.group")
-                                            .resizable()
-                                            .frame(width:25,height:18)
-                                        Text("Group")
-                                            .font(.title)
-                                    }
-                                )
-                                {
-                                    if let groups = getGroup() {
-                                        ForEach(groups, id: \.id) { group in
-                                            NavigationLink(destination: StepListView(group: group,deviceWidth:deviceWidth,height: height)) {
-                                                Text(group.name)
-                                                    .swipeActions(edge: .trailing) {
-                                                        Button(role: .destructive) {
-                                                            deleteGroup(groupName: group.name)
-                                                        } label: {
-                                                            Image(systemName: "trash.fill")
-                                                        }
-                                                    }
-                                            }
-                                        }
-                                    }
-                                    Spacer(minLength: 10)
-                                }
-                            }
-                            .scrollDisabled(false)
-                            .scrollContentBackground(.hidden)
-                            .background(Color(0xDFDCE3, alpha: 1.0))
-                            .padding(.horizontal)
-                            .padding(.bottom)
+            ZStack {
+                Color(0xDFDCE3, alpha: 1.0).ignoresSafeArea()
+                VStack{
+                    Spacer()
+                    HStack{
+                        Button(action: {
+                            path.append(SamplePath.filterView("all"))
+                        }){
                             VStack {
                                 Spacer()
-                                HStack {
-                                    Spacer()
-                                    VStack{
-                                            Button {
-                                                    let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
-                                                    step = newStep
-                                                    path.append(step)
-                                            } label: {
-                                                Image(systemName: "pencil")
-                                                    .foregroundColor(.white)
-                                                    .font(.system(size: 30))
-                                            }
-//                                        .navigationDestination(for: Step.self) { stepdata in
-//                                            StepView(stepData: stepdata)
-//                                        }
-                                            .navigationDestination(for: Step.self) { stepdata in
-                                                StepView(stepData: stepdata)
-                                                    .onAppear {
-//                                                        self.path.append(stepdata)
-                                                        print(path)
+                                Image(systemName: "list.bullet")
+                                    .resizable()
+                                    .frame(width: 30,height: 30)
+                                Spacer()
+                                Text("全て")
+                                    .font(.title3)
+                                Spacer()
+                            }
+                        }
+                        .navigationDestination(for: SamplePath.self) { samplePath in
+                            coordinator(samplePath)
+                        }
+                        .padding()
+                        .frame(width: 100,height:150,alignment:.center)
+                        .background(Color(0x4ABDAC, alpha: 1))
+                        .foregroundColor(.black)
+                        .cornerRadius(CGFloat(15))
+                        
+                        Button(action: {
+                            path.append(SamplePath.filterView("recent"))
+                        }){
+                            VStack {
+                                Spacer()
+                                Image(systemName: "calendar")
+                                    .resizable()
+                                    .frame(width: 30,height: 30)
+                                Spacer()
+                                Text("最近")
+                                    .font(.title3)
+                                Spacer()
+                            }
+                        }
+                        .navigationDestination(for: SamplePath.self) { samplePath in
+                            coordinator(samplePath)
+                        }
+                        .padding()
+                        .frame(width: 100,height:150,alignment:.center)
+                        .background(Color(0xFC4A1A, alpha: 0.8))
+                        .foregroundColor(.black)
+                        .cornerRadius(CGFloat(15))
+                        
+                        Button(action: {
+                            path.append(SamplePath.filterView("heart"))
+                        }){
+                            VStack {
+                                Spacer()
+                                Image(systemName: "heart")
+                                    .resizable()
+                                    .frame(width: 30,height: 30)
+                                Spacer()
+                                Text("好き")
+                                    .font(.title3)
+                                Spacer()
+                            }
+                        }
+                        .padding()
+                        .navigationDestination(for: SamplePath.self) { samplePath in
+                            coordinator(samplePath)
+                        }
+                        .frame(width: 100,height:150,alignment:.center)
+                        .background(Color(0xF7B733, alpha: 0.9))
+                        .foregroundColor(.black)
+                        .cornerRadius(CGFloat(15))
+                    }
+                    .padding(.vertical)
+                    .padding(.top)
+                    ZStack {
+                        List {
+                            Section (
+                                header: HStack{
+                                    Image(systemName: "rectangle.3.group")
+                                        .resizable()
+                                        .frame(width:25,height:18)
+                                    Text("Group")
+                                        .font(.title)
+                                }
+                            )
+                            {
+                                if let groups = getGroup() {
+                                    ForEach(groups, id: \.id) { group in
+                                        NavigationLink(destination: StepListView(group: group,deviceWidth:deviceWidth,height: height)) {
+                                            Text(group.name)
+                                                .swipeActions(edge: .trailing) {
+                                                    Button(role: .destructive) {
+                                                        deleteGroup(groupName: group.name)
+                                                    } label: {
+                                                        Image(systemName: "trash.fill")
                                                     }
-                                                    .onDisappear {
-                                                        print(path)
-                                                        // ステップビューから戻ってきたときに、pathからステップを削除する
-//                                                        if let index = path.firstIndex(where: { $0.id == stepdata.id }) {
-//
-//                                                            print(index)
-//                                                            path.remove(at: index)
-//                                                        }
-                                                    }
-                                            }
+                                                }
+                                        }
+                                    }
+                                }
+                                Spacer(minLength: 10)
+                            }
+                        }
+                        .scrollDisabled(false)
+                        .scrollContentBackground(.hidden)
+                        .background(Color(0xDFDCE3, alpha: 1.0))
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                
+                                Button(action: {
+                                    let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
+                                    path.append(SamplePath.stepView(newStep))
+                                }){
+                                    VStack {
+                                        Image(systemName: "pencil")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 30))
+                                    }
+                                    .navigationDestination(for: SamplePath.self) { stepData in
+                                        coordinator(stepData)
                                     }
                                     .frame(width: 60, height: 60)
                                     .background(Color.orange)
                                     .cornerRadius(30.0)
                                     .shadow(color: .gray, radius: 3, x: 3, y: 3)
                                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+                                    
                                 }
                             }
                         }//List + button
@@ -192,7 +205,7 @@ struct ContentView: View {
                                 }
                                 .foregroundColor(.black)
                             }.sheet(isPresented: $showingModal,onDismiss: {
-//                                genre = getGroup()
+                                //                                genre = getGroup()
                             }) {
                                 EditGroupView()
                             }
@@ -202,6 +215,7 @@ struct ContentView: View {
                         }
                     }//Vstack
                 }//ZStack
-        }//navigation stack
-    }//body
-}//content view
+            }//navigation stack
+        }//body
+    }//content view
+}
