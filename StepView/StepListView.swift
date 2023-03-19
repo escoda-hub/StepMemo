@@ -15,9 +15,10 @@ struct StepListView: View {
     
     init(group: Group,step:Step = Step()) {
         self.group = group
-        self.steps = StepListViewModel(groupName: group.name)
+        self.steps = StepListViewModel(groupName:group.name,groupId: group.id)
         self.step = step
         steps.groupName = group.name
+        steps.groupId = group.id
         steps.fetchSteps()
     }
     
@@ -49,14 +50,11 @@ struct StepListView: View {
                                             }
                                             HStack{
                                                 Spacer()
-                                                Text("\(step.stepDetails.count)step")
+                                                Text("\(step.stepDetails.count)move")
                                                     .foregroundColor(.black)
                                                     .font(.subheadline)
                                             }
               
-                                        }
-                                        .navigationDestination(for: Route.self) { route in
-                                            coordinator(route)
                                         }
                                         .padding()
                                     }
@@ -121,12 +119,14 @@ struct StepListView: View {
 class StepListViewModel: ObservableObject {
     @Published var stepList = [Step]()
     @Published var groupName: String
+    @Published var groupId: String
 
-    init(groupName: String) {
+    init(groupName: String,groupId: String) {
         self.groupName = groupName
+        self.groupId = groupId
     }
 
     func fetchSteps() {
-        stepList = getStepList(groupName: groupName)
+        stepList = getStepList(mode:.groupID,group_id: groupId)
     }
 }

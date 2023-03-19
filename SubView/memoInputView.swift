@@ -34,9 +34,3 @@ struct memoInputView: View {
         }
     }
 }
-
-//struct memoInputView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        memoInputView()
-//    }
-//}

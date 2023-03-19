@@ -7,7 +7,6 @@ enum Route:Hashable{
     case informationView
     case walkthroughView
     case stepListView(Group)
-    case seleclGroupView(selectedGroup:String,stepData:Step)
     case mainView
 }
 
@@ -24,8 +23,6 @@ enum Route:Hashable{
             WalkthroughView()
         case let .stepListView(group):
             StepListView(group:group)
-        case let .seleclGroupView(selectedGroup,stepData):
-            SeleclGroupView(stepData: stepData, selectedGroup: selectedGroup)
         case let .mainView:
             ContentView()
     }
@@ -40,6 +37,7 @@ struct ContentView: View {
     
     let deviceWidth = UIScreen.main.bounds.width
     let height = 300.0
+    
     
     init(step: Step = Step()) {
         self.step = Step()
@@ -66,18 +64,16 @@ struct ContentView: View {
                                     .font(.title3)
                                 Spacer()
                             }
+                            .padding()
+                            .contentShape(RoundedRectangle(cornerRadius: 0))
+                            .frame(width: 100,height:150,alignment:.center)
+                            .background(Color(0x4ABDAC, alpha: 1))
+                            .foregroundColor(.black)
+                            .cornerRadius(CGFloat(15))
                         }
-                        .navigationDestination(for: Route.self) { route in
-                            coordinator(route)
-                        }
-                        .padding()
-                        .frame(width: 100,height:150,alignment:.center)
-                        .background(Color(0x4ABDAC, alpha: 1))
-                        .foregroundColor(.black)
-                        .cornerRadius(CGFloat(15))
                         
                         Button(action: {
-                            appEnvironment.path.append(Route.filterView("recent"))
+                            appEnvironment.path.append(Route.filterView("rescent"))
                         }){
                             VStack {
                                 Spacer()
@@ -89,18 +85,16 @@ struct ContentView: View {
                                     .font(.title3)
                                 Spacer()
                             }
+                            .padding()
+                            .frame(width: 100,height:150,alignment:.center)
+                            .background(Color(0xFC4A1A, alpha: 0.8))
+                            .foregroundColor(.black)
+                            .cornerRadius(CGFloat(15))
+                            .contentShape(RoundedRectangle(cornerRadius: 0))
                         }
-                        .navigationDestination(for: Route.self) { route in
-                            coordinator(route)
-                        }
-                        .padding()
-                        .frame(width: 100,height:150,alignment:.center)
-                        .background(Color(0xFC4A1A, alpha: 0.8))
-                        .foregroundColor(.black)
-                        .cornerRadius(CGFloat(15))
-                        
+
                         Button(action: {
-                            appEnvironment.path.append(Route.filterView("heart"))
+                            appEnvironment.path.append(Route.filterView("favorite"))
                         }){
                             VStack {
                                 Spacer()
@@ -112,15 +106,13 @@ struct ContentView: View {
                                     .font(.title3)
                                 Spacer()
                             }
+                            .padding()
+                            .frame(width: 100,height:150,alignment:.center)
+                            .background(Color(0xF7B733, alpha: 0.9))
+                            .foregroundColor(.black)
+                            .cornerRadius(CGFloat(15))
+                            .contentShape(RoundedRectangle(cornerRadius: 0))
                         }
-                        .padding()
-                        .navigationDestination(for: Route.self) { route in
-                            coordinator(route)
-                        }
-                        .frame(width: 100,height:150,alignment:.center)
-                        .background(Color(0xF7B733, alpha: 0.9))
-                        .foregroundColor(.black)
-                        .cornerRadius(CGFloat(15))
                     }
                     .padding(.vertical)
                     .padding(.top)
@@ -154,11 +146,9 @@ struct ContentView: View {
                                                             }
                                                         }
                                                 }
-                                                .navigationDestination(for: Route.self) { route in
-                                                    coordinator(route)
-                                                }
                                             }
                                             Spacer()
+                                            Text("\(group.steps.count)")
                                             Image(systemName: "chevron.forward")
                                         }
                                     }
@@ -183,9 +173,6 @@ struct ContentView: View {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.white)
                                             .font(.system(size: 30))
-                                    }
-                                    .navigationDestination(for: Route.self) { route in
-                                        coordinator(route)
                                     }
                                     .frame(width: 60, height: 60)
                                     .background(Color.orange)
@@ -214,9 +201,6 @@ struct ContentView: View {
                                 VStack {
                                     Image(systemName: "info.circle")
                                         .foregroundColor(.black)
-                                }
-                                .navigationDestination(for: Route.self) { route in
-                                    coordinator(route)
                                 }
                             }
                         }
@@ -252,7 +236,11 @@ struct ContentView: View {
                 }
             }//ZStack
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: Route.self) { route in
+                coordinator(route)
+            }
         }//navigation stack
         .environmentObject(appEnvironment)
+        
     }//body
 }//content view

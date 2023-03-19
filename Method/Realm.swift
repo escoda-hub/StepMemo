@@ -9,20 +9,30 @@ import Foundation
 import RealmSwift
 import SwiftUI
 
-func getStepList(groupName: String) -> [Step] {
-    let realm = try! Realm()
-    guard let group = realm.objects(Group.self).filter("name == %@", groupName).first else {
-        // 該当するGroupが見つからなかった場合
-        return []
+func getStepList(mode:filterMode,group_id: String) -> [Step] {
+    
+    switch mode {
+        case .all:
+            let realm = try! Realm()
+            let steps = realm.objects(Step.self)
+            return Array(steps)
+        case .rescent:
+            let sortProperties = [SortDescriptor(keyPath: "updated_at", ascending: false)]
+            let realm = try! Realm()
+            let steps = realm.objects(Step.self).sorted(by: sortProperties)
+            return Array(steps)
+        case .favorite:
+            let realm = try! Realm()
+            let favoriteSteps = realm.objects(Step.self).filter("favorite == true")
+            return Array(favoriteSteps)
+        case .groupID:
+            let realm = try! Realm()
+            guard let group = realm.objects(Group.self).filter("id == %@", group_id).first else {
+                return []
+            }
+            return Array(group.steps)
     }
-    return Array(group.steps)
-}
 
-func getAllStepList() -> [Step] {
-    let realm = try! Realm()
-    let steps = realm.objects(Step.self)
-
-    return Array(steps)
 }
 
 func getAllGroup() -> [Group] {
@@ -50,10 +60,9 @@ func getGroupID(groupName:String) -> (String) {
     return group.id
 }
 
-
 func getStep(step_id: String) -> Step {
+    
     let realm = try! Realm()
-//    guard let stepData = realm.objects(Step.self).filter("id == %@", step_id).first else {
     guard let stepData = realm.object(ofType: Step.self, forPrimaryKey: step_id) else {
         // 該当するGroupが見つからなかった場合
         return Step()
@@ -90,16 +99,19 @@ func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
 
     let realm = try! Realm()
     if let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first{
-        do{
-          try realm.write{
-              if isR {
-                  StepDetail.R_mode = mode
-              }else{
-                  StepDetail.L_mode = mode
+        if let step = realm.objects(Step.self).filter("id == %@", step_id).first {
+            do{
+              try realm.write{
+                  if isR {
+                      StepDetail.R_mode = mode
+                  }else{
+                      StepDetail.L_mode = mode
+                  }
               }
-          }
-        }catch {
-          print("Error \(error)")
+                step.updated_at = Date()
+            }catch {
+              print("Error \(error)")
+            }
         }
     }
 
@@ -139,6 +151,7 @@ func upDateTitle(step_id:String,title:String)->(Step) {
         do{
           try realm.write{
               step.title = title
+              step.updated_at = Date()
           }
         }catch {
           print("Error \(error)")
@@ -157,6 +170,7 @@ func upDateFavorite(step_id:String)->(Step) {
         do{
           try realm.write{
               step.toggleFavorite()
+              step.updated_at = Date()
           }
         }catch {
           print("Error \(error)")
@@ -172,6 +186,8 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
     
     let realm = try! Realm()
     if let step = realm.objects(Step.self).filter("id == %@",step_id).first{
+        
+//        step.updated_at = Date()
         
         let stepDetail = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
         
@@ -263,34 +279,8 @@ func deleteGroup(groupName:String){
     }
 }
 
-//func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
-//    if oldGroupName != newGroupName {
-//        // Realmインスタンスを取得
-//        let realm = try! Realm()
-//        // group1とgroup2のGroupオブジェクトを取得
-//        let group1 = realm.objects(Group.self).filter("name == %@", oldGroupName).first
-//        let group2 = realm.objects(Group.self).filter("name == %@", newGroupName).first
-//        let step = realm.objects(Step.self).filter("id == %@", step_id).first
-//        let stepToMove = group1?.steps.first(where: { $0.id == step_id })
-//
-//        if let stepToMove = stepToMove {
-//            if let index = group1?.steps.firstIndex(where: { $0.id == step_id }) {
-//                if group1?.steps.indices.contains(index) == true {
-//                    try! realm.write {
-//                        group2?.steps.append(stepToMove)
-//                        group1?.steps.remove(at: index)
-//                        step?.group_id = getGroupID(groupName: newGroupName)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
     
-//    print(oldGroupName)
-//    print(newGroupName)
     if oldGroupName != newGroupName{
         let realm = try! Realm()
         try! realm.write {
@@ -307,13 +297,12 @@ func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
             if let index = oldGroup.steps.firstIndex(where: { $0.id == step_id }) {
                 oldGroup.steps.remove(at: index)
             }
-            // 移動先にStepオブジェクトを追加する
-            newGroup.steps.append(step)
-            // Stepオブジェクトのgroup_idを更新する
-            step.group_id = newGroup.id
+
+            step.group_id = newGroup.id// Stepオブジェクトのgroup_idを更新する
+            newGroup.steps.append(step)// 移動先にStepオブジェクトを追加する
+            
         }
     }
-
 }
 
 func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
@@ -412,7 +401,7 @@ func setStepData() {
 
     let stepDetail_1 = StepDetail()
     stepDetail_1.step_id = step.id
-    stepDetail_1.memo = "memomemomemo_1"
+    stepDetail_1.memo = "memo1"
     stepDetail_1.L_x = 100
     stepDetail_1.L_y = 100
     stepDetail_1.L_angle = 100
@@ -425,7 +414,7 @@ func setStepData() {
     
     let stepDetail_2 = StepDetail()
     stepDetail_2.step_id = step.id
-    stepDetail_2.memo = "memomemomemo_2"
+    stepDetail_2.memo = "memo2"
     stepDetail_2.L_x = 120
     stepDetail_2.L_y = 120
     stepDetail_2.L_angle = 10
@@ -438,7 +427,7 @@ func setStepData() {
     
     let stepDetail_3 = StepDetail()
     stepDetail_3.step_id = step.id
-    stepDetail_3.memo = "memomemomemo_3"
+    stepDetail_3.memo = "memo3"
     stepDetail_3.L_x = 80
     stepDetail_3.L_y = 90
     stepDetail_3.L_angle = 80

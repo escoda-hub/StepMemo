@@ -24,8 +24,6 @@ struct StepView: View{
     
     @EnvironmentObject var appEnvironment: AppEnvironment
     
-    @State private var path: [Step] = []
-    
     @State var stepData:Step
     @State var ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
     @State var location   = CGPoint(x: 0, y: 0)
@@ -40,6 +38,7 @@ struct StepView: View{
     @State var indexSmallView = 1
     @State var showingAlert = false
     @State var showTitleView = false
+    @State var showGroupView = false
     @State var showMemoView = false
     @State var groupName = ""
 
@@ -95,13 +94,10 @@ struct StepView: View{
                         .ignoresSafeArea(.all)
                         .foregroundColor(Color(0xDCDCDD, alpha: 1.0))
                         .onAppear(){
-                            // ScrollViewが表示された後にScrollViewProxyを初期化する
-//                            DispatchQueue.main.async {
                                 self.ImageSize.minX = geometry.frame(in: .global).minX
                                 self.ImageSize.maxX = geometry.frame(in: .global).maxX
                                 self.ImageSize.minY = geometry.frame(in: .global).minY
                                 self.ImageSize.maxY = geometry.frame(in: .global).maxY
-//                            }
                         }
                     DraggableImage(
                         indexSmallView: $indexSmallView,
@@ -197,7 +193,6 @@ struct StepView: View{
                         .presentationDetents([.medium])
                 }
             Button(action: {
-                appEnvironment.path.append(Route.seleclGroupView(selectedGroup: groupName, stepData: stepData))
             }){
                 HStack {
                     HStack {
@@ -213,9 +208,14 @@ struct StepView: View{
                             .padding(.trailing)
                     }
                 }
-            }
-            .navigationDestination(for: Route.self) { route in
-                coordinator(route)
+                .contentShape(RoundedRectangle(cornerRadius: 5))
+                .onTapGesture {
+                    showGroupView = true
+                }
+                .sheet(isPresented: $showGroupView) {
+                    SeleclGroupView(stepData: $stepData,selectedGroup: $groupName, isShow: $showGroupView)
+                        .presentationDetents([.medium])
+                }
             }
             .frame(width: deviceWidth - (deviceWidth/5),height:35,alignment:.center)
             .background(Color(0xDCDCDD, alpha: 1.0))
@@ -237,9 +237,6 @@ struct StepView: View{
                         Text("追加")
                             .foregroundColor(.black)
                     }
-                }
-                .navigationDestination(for: Route.self) { route in
-                    coordinator(route)
                 }
             }
         }

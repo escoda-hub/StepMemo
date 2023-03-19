@@ -2,10 +2,11 @@ import SwiftUI
 import RealmSwift
 
 struct SeleclGroupView: View {
-
-    @Environment(\.presentationMode) var presentation
-    @State var stepData:Step
-    @State var selectedGroup = ""
+    
+    @EnvironmentObject var appEnvironment: AppEnvironment
+    @Binding var stepData:Step
+    @Binding var selectedGroup:String
+    @Binding var isShow : Bool
     
     var body: some View {
         VStack {
@@ -24,12 +25,9 @@ struct SeleclGroupView: View {
                     .onTapGesture {
                         let oldGroupName = selectedGroup
                         let newGroupName = groups.name
-                        print(oldGroupName)
-                        print(newGroupName)
-                        print(stepData.id)
                         changeGroup(oldGroupName: oldGroupName, newGroupName: newGroupName,step_id: stepData.id)
                         selectedGroup = groups.name
-                        self.presentation.wrappedValue.dismiss()
+                        isShow = false
                     }
                 }
             }

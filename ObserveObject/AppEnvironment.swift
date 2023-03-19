@@ -9,8 +9,7 @@ import Foundation
 import SwiftUI
 
 class AppEnvironment: ObservableObject {
-    @Published var homePath: [Route] = []
-    @Published var searchPath: [Route] = []
-    @Published var myPagePath: [Route] = []
+//    @Published var otherPath: [Route] = []
     @Published var path: [Route] = []
 }
+
