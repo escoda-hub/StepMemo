@@ -104,9 +104,6 @@ struct StepListView: View {
                             .foregroundColor(.black)
                     }
                 }
-                .navigationDestination(for: Route.self) { route in
-                    coordinator(route)
-                }
             }
         }
         .onAppear(){

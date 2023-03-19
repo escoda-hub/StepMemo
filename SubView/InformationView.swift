@@ -12,7 +12,6 @@ struct InformationView: View {
     
     let InfoItems: [String] = [
         "チュートリアル",
-        "設定",
         "プライバシーポリシー",
         "利用規約",
         "お問い合せ",
@@ -32,11 +31,25 @@ struct InformationView: View {
                             Text("1.0.0")
                         }
                             ForEach(InfoItems, id: \.self) { InfoItem in
-                                switch InfoItem {
-                                case "チュートリアル":
+
                                     HStack{
                                         Button(action: {
-                                            appEnvironment.path.append(Route.walkthroughView)
+                                            switch InfoItem {
+                                                case "チュートリアル":
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                case "プライバシーポリシー":
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                case "利用規約":
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                case "お問い合せ":
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                case "お知らせ":
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                case "評価する":
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                default:
+                                                    appEnvironment.path.append(Route.walkthroughView)
+                                            }
                                         }){
                                             VStack {
                                                 Text("\(InfoItem)")
@@ -50,34 +63,13 @@ struct InformationView: View {
                                         Spacer()
                                         Image(systemName: "chevron.forward")
                                     }
-
-                                default:
-                                    NavigationLink(
-                                        destination: Text("\(InfoItem)"),
-                                        label: {
-                                            VStack{
-                                                Text("\(InfoItem)")
-                                            }
-                                            .padding()
-                                        }
-                                    )
-                                        .frame(height: 30)
                                 }
                             }
-                          
-                        
-
-                        
-                        
                 }
                 .listStyle(.insetGrouped)
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        
-        
     }
-}
 
 struct ModalView: View {
     @Environment(\.presentationMode) private var presentationMode

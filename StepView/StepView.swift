@@ -48,7 +48,6 @@ struct StepView: View{
         let height = 300.0
         
         VStack {
-            Text("\(stepData.group_id)")
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)
@@ -230,11 +229,10 @@ struct StepView: View{
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    appEnvironment.path.append(Route.mainView)
-                    appEnvironment.path.removeAll()
+                    appEnvironment.path.append(Route.walkthroughView)
                 }){
                     VStack {
-                        Text("追加")
+                        Image(systemName: "questionmark.circle")
                             .foregroundColor(.black)
                     }
                 }
