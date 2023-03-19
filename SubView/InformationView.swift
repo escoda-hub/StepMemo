@@ -12,6 +12,7 @@ struct InformationView: View {
     
     let InfoItems: [String] = [
         "チュートリアル",
+        "設定",
         "プライバシーポリシー",
         "利用規約",
         "お問い合せ",

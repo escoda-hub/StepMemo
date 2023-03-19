@@ -75,21 +75,25 @@ func updateStepDetail(step_id:String,index:Int,isR:Bool,location:CGPoint,angle:A
 
     let realm = try! Realm()
     if let StepDetail = realm.objects(StepDetail.self).filter("step_id == %@ && Order == %@",step_id,index).first{
-        do{
-          try realm.write{
-              if isR {
-                  StepDetail.R_x = location.x
-                  StepDetail.R_y = location.y
-                  StepDetail.R_angle = angle.degrees
-              }else{
-                  StepDetail.L_x = location.x
-                  StepDetail.L_y = location.y
-                  StepDetail.L_angle = angle.degrees
+        if let step = realm.objects(Step.self).filter("id == %@", step_id).first {
+            do{
+              try realm.write{
+                  if isR {
+                      StepDetail.R_x = location.x
+                      StepDetail.R_y = location.y
+                      StepDetail.R_angle = angle.degrees
+                  }else{
+                      StepDetail.L_x = location.x
+                      StepDetail.L_y = location.y
+                      StepDetail.L_angle = angle.degrees
+                  }
+                  step.updated_at = Date()
               }
-          }
-        }catch {
-          print("Error \(error)")
+            }catch {
+              print("Error \(error)")
+            }
         }
+ 
     }
     
     return getStep(step_id: step_id)
@@ -107,8 +111,9 @@ func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
                   }else{
                       StepDetail.L_mode = mode
                   }
+                  step.updated_at = Date()
               }
-                step.updated_at = Date()
+                
             }catch {
               print("Error \(error)")
             }
@@ -187,8 +192,6 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
     let realm = try! Realm()
     if let step = realm.objects(Step.self).filter("id == %@",step_id).first{
         
-//        step.updated_at = Date()
-        
         let stepDetail = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
         
         let stepDetail_default = StepDetail()
@@ -206,6 +209,7 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
         
         do{
           try realm.write{
+              step.updated_at = Date()
               step.stepDetails.append(stepDetail_default)
           }
         }catch {

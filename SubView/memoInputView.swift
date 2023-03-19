@@ -16,20 +16,40 @@ struct memoInputView: View {
     
     var body: some View {
         VStack {
-            Text("\(index)")
+            Text("メモ入力欄")
             TextField("メモ", text: $stepData.stepDetails[index - 1].memo,axis: .vertical)
                 .textFieldStyle(.roundedBorder)
+                .border(isFocused ? Color.blue : Color.gray)
                 .padding(.horizontal)
                 .lineLimit(3...5)
                 .keyboardType(.asciiCapable)
                 .focused(self.$isFocused)
-                .border(isFocused ? Color.blue : Color.gray)
                 .onAppear(){
                     self.isFocused = true
                 }
-            Button("完了") {
+
+            Button(action: {
+                if let updatedMemo = updateMemo(step_id: stepData.id, index: index, memo: stepData.stepDetails[index - 1].memo) {
+                    stepData = updatedMemo
+                }
                 showMemoView = false
-                stepData = updateMemo(step_id: stepData.id, index: index, memo: stepData.stepDetails[index - 1].memo)!
+            }){
+                HStack {
+//                    Spacer()
+                    Image(systemName: "checkmark.circle")
+//                    Spacer()
+                    Text("完了")
+//                    Spacer()
+                }
+                .fontWeight(.semibold)
+                .frame(width: 160, height: 48)
+                .foregroundColor(Color(.black))
+                .background(Color(.white))
+                .cornerRadius(24)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(Color(.black), lineWidth: 1.0)
+                )
             }
         }
     }

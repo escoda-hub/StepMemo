@@ -10,7 +10,7 @@ struct SeleclGroupView: View {
     
     var body: some View {
         VStack {
-            Text(selectedGroup)
+            Text("グループ選択")
             List {
                 ForEach(getGroup()!, id: \.self) { groups in
                     HStack {

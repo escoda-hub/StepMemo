@@ -34,6 +34,7 @@ struct PickerView: View {
                     .frame(height: 100)
                 }
                 .onChange(of: isR ? mode_R : mode_L) { mode in
+                    stepData = updateMode(step_id: stepData.id, index: index, isR: isR, mode: mode)
                 }
             }
             .frame(width: (deviceWidth - (deviceWidth/5)) / 2 )
