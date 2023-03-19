@@ -15,6 +15,7 @@ struct StepLoggerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(AppEnvironment())
         }
     }
 }

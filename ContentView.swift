@@ -5,25 +5,29 @@ enum Route:Hashable{
     case filterView(String)
     case stepView(Step)
     case informationView
+    case walkthroughView
 }
 
 @ViewBuilder
  func coordinator(_ route: Route) -> some View {
     switch route {
-    case let .filterView(text):
-        StepListView_Condition(title:text)
-    case let .stepView(stepData):
-        StepView(stepData: stepData)
-    case let .informationView:
-        InformationView()
+        case let .filterView(text):
+            StepListView_Condition(title:text)
+        case let .stepView(stepData):
+            StepView(stepData: stepData)
+        case let .informationView:
+            InformationView()
+        case let .walkthroughView:
+            WalkthroughView()
     }
 }
+
 struct ContentView: View {
     
+    @EnvironmentObject var appEnvironment: AppEnvironment
     @State private var showingModal = false
     @State var searchText = ""
     @State var step :Step
-    @State private var path: [Route] = []
     
     let deviceWidth = UIScreen.main.bounds.width
     let height = 300.0
@@ -34,14 +38,14 @@ struct ContentView: View {
     
     var body: some View {
         
-        NavigationStack(path: $path)  {
+        NavigationStack(path: $appEnvironment.path)  {
             ZStack {
                 Color(0xDFDCE3, alpha: 1.0).ignoresSafeArea()
                 VStack{
                     Spacer()
                     HStack{
                         Button(action: {
-                            path.append(Route.filterView("all"))
+                            appEnvironment.path.append(Route.filterView("all"))
                         }){
                             VStack {
                                 Spacer()
@@ -64,7 +68,7 @@ struct ContentView: View {
                         .cornerRadius(CGFloat(15))
                         
                         Button(action: {
-                            path.append(Route.filterView("recent"))
+                            appEnvironment.path.append(Route.filterView("recent"))
                         }){
                             VStack {
                                 Spacer()
@@ -87,7 +91,7 @@ struct ContentView: View {
                         .cornerRadius(CGFloat(15))
                         
                         Button(action: {
-                            path.append(Route.filterView("heart"))
+                            appEnvironment.path.append(Route.filterView("heart"))
                         }){
                             VStack {
                                 Spacer()
@@ -111,6 +115,7 @@ struct ContentView: View {
                     }
                     .padding(.vertical)
                     .padding(.top)
+
                     ZStack {
                         List {
                             Section (
@@ -151,7 +156,7 @@ struct ContentView: View {
                                 Spacer()
                                 Button(action: {
                                     let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
-                                    path.append(Route.stepView(newStep))
+                                    appEnvironment.path.append(Route.stepView(newStep))
                                 }){
                                     VStack {
                                         Image(systemName: "pencil")
@@ -169,8 +174,8 @@ struct ContentView: View {
                                 }
                             }
                         }//List + button
-
                     }
+                    
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
                             HStack {
@@ -184,7 +189,7 @@ struct ContentView: View {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             
                             Button(action: {
-                                path.append(Route.informationView)
+                                appEnvironment.path.append(Route.informationView)
                             }){
                                 VStack {
                                     Image(systemName: "info.circle")
@@ -228,5 +233,9 @@ struct ContentView: View {
                 }//ZStack
             }//navigation stack
         }//body
+        .environmentObject(appEnvironment)
+        .onAppear(){
+            print(appEnvironment.path)
+        }
     }//content view
 }

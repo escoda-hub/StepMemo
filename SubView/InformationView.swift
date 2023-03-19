@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InformationView: View {
+    @EnvironmentObject var appEnvironment: AppEnvironment
+    
     let InfoItems: [String] = [
         "チュートリアル",
         "プライバシーポリシー",
@@ -28,32 +30,44 @@ struct InformationView: View {
                             Spacer()
                             Text("1.0.0")
                         }
-                        ForEach(InfoItems, id: \.self) { InfoItem in
-                            switch InfoItem {
-                            case "チュートリアル":
-                                NavigationLink(
-                                    destination: WalkthroughView(),
-                                    label: {
-                                        VStack{
-                                            Text("\(InfoItem)")
+                            ForEach(InfoItems, id: \.self) { InfoItem in
+                                switch InfoItem {
+                                case "チュートリアル":
+                                    HStack{
+                                        Button(action: {
+                                            appEnvironment.path.append(Route.walkthroughView)
+                                        }){
+                                            VStack {
+                                                Text("\(InfoItem)")
+                                                    .foregroundColor(.black)
+                                            }
                                         }
-                                        .padding()
-                                    }
-                                )
-                                    .frame(height: 30)
-                            default:
-                                NavigationLink(
-                                    destination: Text("\(InfoItem)"),
-                                    label: {
-                                        VStack{
-                                            Text("\(InfoItem)")
+                                        .navigationDestination(for: Route.self) { route in
+                                            coordinator(route)
                                         }
-                                        .padding()
+                                        .frame(height: 30)
+                                        Spacer()
+                                        Image(systemName: "chevron.forward")
                                     }
-                                )
-                                    .frame(height: 30)
+
+                                default:
+                                    NavigationLink(
+                                        destination: Text("\(InfoItem)"),
+                                        label: {
+                                            VStack{
+                                                Text("\(InfoItem)")
+                                            }
+                                            .padding()
+                                        }
+                                    )
+                                        .frame(height: 30)
+                                }
                             }
-                        }
+                          
+                        
+
+                        
+                        
                 }
                 .listStyle(.insetGrouped)
             }
