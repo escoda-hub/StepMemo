@@ -5,28 +5,27 @@ struct StepListView: View {
 
     @State var group: Group
     @ObservedObject var steps: StepListViewModel
-    @State var deviceWidth:Double
-    @State var height:Double
+    @EnvironmentObject var appEnvironment: AppEnvironment
     @State var step: Step
     @State var isStepDataActive = false
     @State var isPresented = false
-    @State  var path: [Step]
     
-    init(group: Group, deviceWidth: Double, height: Double,step:Step = Step(),path:[Step]=[]) {
+    let deviceWidth = UIScreen.main.bounds.width
+    let height = 300.0
+    
+    init(group: Group,step:Step = Step()) {
         self.group = group
-        self.deviceWidth = deviceWidth
-        self.height = height
         self.steps = StepListViewModel(groupName: group.name)
         self.step = step
-        self.path = path
         steps.groupName = group.name
         steps.fetchSteps()
     }
     
     var body: some View {
+        
         ZStack {
             VStack {
-//                Text(group.name)
+                Text(group.name)
                 VStack {
                     if steps.stepList.isEmpty {
                         VStack{
@@ -37,15 +36,34 @@ struct StepListView: View {
                     } else {
                         List {
                             ForEach(steps.stepList) { step in
-                                NavigationLink(
-                                    destination: StepView(stepData: step),
-                                    label: {
-                                        VStack{
-                                            Text("\(step.title)")
+                                HStack {
+                                    Button(action: {
+                                        appEnvironment.path.append(Route.stepView(step))
+                                    }){
+                                        VStack {
+                                            HStack{
+                                                Text("\(step.title)")
+                                                    .foregroundColor(.black)
+                                                    .font(.title2)
+                                                Spacer()
+                                            }
+                                            HStack{
+                                                Spacer()
+                                                Text("\(step.stepDetails.count)step")
+                                                    .foregroundColor(.black)
+                                                    .font(.subheadline)
+                                            }
+              
+                                        }
+                                        .navigationDestination(for: Route.self) { route in
+                                            coordinator(route)
                                         }
                                         .padding()
                                     }
-                                )
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                }
+                                .frame(height: 50)
                             }
                         }
                     }
@@ -54,26 +72,20 @@ struct StepListView: View {
             .navigationBarTitleDisplayMode(.inline)
             VStack {
                 Spacer()
-                VStack {
+                HStack {
                     Spacer()
-                    HStack {
-                        Spacer()
-                        NavigationStack(path: $path) {
-                                Button {
-                                        let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
-                                        steps.groupName = group.name
-                                        steps.fetchSteps()
-                                        step = newStep
-                                        path.append(step)
-                                } label: {
-                                    Image(systemName: "pencil")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 30))
-                                }
-                            .navigationDestination(for: Step.self) { stepdata in
-                                StepView(stepData: stepdata)
-                            }
-                            .navigationTitle("\(steps.groupName)")
+                    Button(action: {
+                        let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
+                        steps.fetchSteps()//refrexh
+                        appEnvironment.path.append(Route.stepView(newStep))
+                    }){
+                        VStack {
+                            Image(systemName: "pencil")
+                                .foregroundColor(.white)
+                                .font(.system(size: 30))
+                        }
+                        .navigationDestination(for: Route.self) { route in
+                            coordinator(route)
                         }
                         .frame(width: 60, height: 60)
                         .background(Color.orange)
@@ -81,6 +93,21 @@ struct StepListView: View {
                         .shadow(color: .gray, radius: 3, x: 3, y: 3)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
                     }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    appEnvironment.path.append(Route.walkthroughView)
+                }){
+                    VStack {
+                        Image(systemName: "questionmark.circle")
+                            .foregroundColor(.black)
+                    }
+                }
+                .navigationDestination(for: Route.self) { route in
+                    coordinator(route)
                 }
             }
         }

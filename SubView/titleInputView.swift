@@ -18,8 +18,12 @@ struct titleInputView: View {
              Text("タイトル編集")
              Text("\(stepData.title)")
              TextField("Enter text", text: $stepData.title)
-                 .focused($isFocused)
+                 .keyboardType(.asciiCapable)
+                 .focused(self.$isFocused)
                  .border(isFocused ? Color.blue : Color.gray)
+                 .onAppear(){
+                     self.isFocused = true
+                 }
              Button("完了") {
                  stepData = upDateTitle(step_id: stepData.id, title: stepData.title)
                  showTitleView = false

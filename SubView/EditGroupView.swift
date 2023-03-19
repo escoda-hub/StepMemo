@@ -5,6 +5,7 @@ import RealmSwift
 
 struct EditGroupView: View {
 
+    @EnvironmentObject var appEnvironment: AppEnvironment
     @Environment(\.dismiss) var dismiss
     @FocusState var focus:Bool
     @State var enable: Bool = false
@@ -83,6 +84,7 @@ struct EditGroupView: View {
                                 self.showingAlert = true
                             }else{
                                 self.showingAlert = false
+                                appEnvironment.path.removeAll()//after transitioning, MainList doesn't update. So,I added this line.
                                 dismiss()
                             }
                         }){
@@ -97,12 +99,6 @@ struct EditGroupView: View {
                     }
                 }
         }
-    }
-}
-
-struct EditGroupView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditGroupView()
     }
 }
 

@@ -22,6 +22,8 @@ struct imageSize {
 
 struct StepView: View{
     
+    @EnvironmentObject var appEnvironment: AppEnvironment
+    
     @State private var path: [Step] = []
     
     @State var stepData:Step
@@ -47,8 +49,7 @@ struct StepView: View{
         let height = 300.0
         
         VStack {
-            Text("\(groupName)")
-            Text("\(stepData.id)")
+            Text("\(stepData.group_id)")
             HStack {
                 Text("\(stepData.title)")
                         .font(.title)
@@ -156,7 +157,6 @@ struct StepView: View{
                                 showingAlert: $showingAlert)
                 VStack{
                     Button(action: {
-                        print("add")
                         let result = addStepDetail(step_id: stepData.id,deviceWidth: Double(deviceWidth),height: height)
                         stepData = result.step
                         indexSmallView = result.order
@@ -196,22 +196,9 @@ struct StepView: View{
                     memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView)
                         .presentationDetents([.medium])
                 }
-//            NavigationLink(destination: SeleclGroupView(selectedGroup: $groupName,stepData: stepData)) {
-//                HStack {
-//                    HStack {
-//                        Image(systemName: "rectangle.3.group")
-//                        Text("Group")
-//                    }
-//                    .padding()
-//                    Spacer()
-//                    HStack {
-//                        Text(groupName)
-//                                .foregroundColor(.blue)
-//                        Image(systemName: "chevron.forward")
-//                            .padding(.trailing)
-//                    }
-//                }
-//            }
+            Button(action: {
+                appEnvironment.path.append(Route.seleclGroupView(selectedGroup: groupName, stepData: stepData))
+            }){
                 HStack {
                     HStack {
                         Image(systemName: "rectangle.3.group")
@@ -226,21 +213,15 @@ struct StepView: View{
                             .padding(.trailing)
                     }
                 }
-//                .onTapGesture(){
-//                    path.append(stepData)
-//                }
-//            .navigationDestination(for: Step.self) { stepdata in
-//                SeleclGroupView(selectedGroup: $groupName,stepData: stepdata)
-//            }
-                .navigationDestination(for: Step.self) { stepdata in
-                    Text("Destination")
-                }
+            }
+            .navigationDestination(for: Route.self) { route in
+                coordinator(route)
+            }
             .frame(width: deviceWidth - (deviceWidth/5),height:35,alignment:.center)
             .background(Color(0xDCDCDD, alpha: 1.0))
             .foregroundColor(.black)
             .cornerRadius(CGFloat(5))
             .padding(.horizontal)
-            Spacer()
         }//VStack
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(){
@@ -248,9 +229,17 @@ struct StepView: View{
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: WalkthroughView()){
-                    Image(systemName: "questionmark.circle")
-                        .foregroundColor(.black)
+                Button(action: {
+                    appEnvironment.path.append(Route.mainView)
+                    appEnvironment.path.removeAll()
+                }){
+                    VStack {
+                        Text("追加")
+                            .foregroundColor(.black)
+                    }
+                }
+                .navigationDestination(for: Route.self) { route in
+                    coordinator(route)
                 }
             }
         }

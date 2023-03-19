@@ -243,6 +243,12 @@ func getGroup() -> Results<Group>? {
     return groups
 }
 
+func getGroupById(group_id:String) -> Group? {
+    let realm = try! Realm()
+    let group = realm.objects(Group.self).filter("id == %@", group_id).first
+    return group
+}
+
 //グループの削除
 func deleteGroup(groupName:String){
     // Realmのインスタンスを取得する

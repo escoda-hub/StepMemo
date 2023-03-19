@@ -3,9 +3,9 @@ import RealmSwift
 
 struct SeleclGroupView: View {
 
-    @Binding var selectedGroup :String
     @Environment(\.presentationMode) var presentation
     @State var stepData:Step
+    @State var selectedGroup = ""
     
     var body: some View {
         VStack {
@@ -33,6 +33,9 @@ struct SeleclGroupView: View {
                     }
                 }
             }
+        }
+        .onAppear(){
+            selectedGroup = getGroupName(group_id: stepData.group_id)
         }
     }
 }

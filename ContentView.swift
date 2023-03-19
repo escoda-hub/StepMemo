@@ -6,6 +6,9 @@ enum Route:Hashable{
     case stepView(Step)
     case informationView
     case walkthroughView
+    case stepListView(Group)
+    case seleclGroupView(selectedGroup:String,stepData:Step)
+    case mainView
 }
 
 @ViewBuilder
@@ -19,6 +22,12 @@ enum Route:Hashable{
             InformationView()
         case let .walkthroughView:
             WalkthroughView()
+        case let .stepListView(group):
+            StepListView(group:group)
+        case let .seleclGroupView(selectedGroup,stepData):
+            SeleclGroupView(stepData: stepData, selectedGroup: selectedGroup)
+        case let .mainView:
+            ContentView()
     }
 }
 
@@ -130,15 +139,27 @@ struct ContentView: View {
                             {
                                 if let groups = getGroup() {
                                     ForEach(groups, id: \.id) { group in
-                                        NavigationLink(destination: StepListView(group: group,deviceWidth:deviceWidth,height: height)) {
-                                            Text(group.name)
-                                                .swipeActions(edge: .trailing) {
-                                                    Button(role: .destructive) {
-                                                        deleteGroup(groupName: group.name)
-                                                    } label: {
-                                                        Image(systemName: "trash.fill")
-                                                    }
+                                        HStack{
+                                            Button(action: {
+                                                appEnvironment.path.append(Route.stepListView(group))
+                                            }){
+                                                VStack {
+                                                    Text(group.name)
+                                                        .foregroundColor(.black)
+                                                        .swipeActions(edge: .trailing) {
+                                                            Button(role: .destructive) {
+                                                                deleteGroup(groupName: group.name)
+                                                            } label: {
+                                                                Image(systemName: "trash.fill")
+                                                            }
+                                                        }
                                                 }
+                                                .navigationDestination(for: Route.self) { route in
+                                                    coordinator(route)
+                                                }
+                                            }
+                                            Spacer()
+                                            Image(systemName: "chevron.forward")
                                         }
                                     }
                                 }
@@ -175,7 +196,6 @@ struct ContentView: View {
                             }
                         }//List + button
                     }
-                    
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading){
                             HStack {
@@ -200,7 +220,6 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        
                         ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
                             Button(action: {
                                 self.showingModal.toggle()
@@ -230,12 +249,10 @@ struct ContentView: View {
                         setStepData()
                     }
                     .disabled(false)
-                }//ZStack
-            }//navigation stack
-        }//body
+                }
+            }//ZStack
+            .navigationBarTitleDisplayMode(.inline)
+        }//navigation stack
         .environmentObject(appEnvironment)
-        .onAppear(){
-            print(appEnvironment.path)
-        }
-    }//content view
-}
+    }//body
+}//content view
