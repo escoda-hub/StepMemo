@@ -10,8 +10,8 @@ struct StepListView: View {
     @State var isStepDataActive = false
     @State var isPresented = false
     
-    let deviceWidth = UIScreen.main.bounds.width
-    let height = 300.0
+    let deviceWidth = DisplayData.deviceWidth
+    let height = DisplayData.height
     
     init(group: Group,step:Step = Step()) {
         self.group = group
@@ -86,7 +86,7 @@ struct StepListView: View {
                             coordinator(route)
                         }
                         .frame(width: 60, height: 60)
-                        .background(Color.orange)
+                        .background(BackgroundColor_MainView.createStepBtn)
                         .cornerRadius(30.0)
                         .shadow(color: .gray, radius: 3, x: 3, y: 3)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))

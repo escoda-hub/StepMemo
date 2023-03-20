@@ -1,12 +1,5 @@
 import SwiftUI
 
-struct limit {
-    var xMax:CGFloat
-    var xMin:CGFloat
-    var yMax:CGFloat
-    var yMin:CGFloat
-}
-
 struct DraggableImage: View {
 
     @Binding private var indexSmallView:Int
@@ -78,7 +71,7 @@ struct DraggableImage: View {
             Image(getImageName(isR: isR, mode_R: mode_R, mode_L: mode_L))
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(isDragging ? Color(0x2E94B9, alpha: 1.0) : (isR ? Color(0x69af86, alpha: 1.0): Color(0xE5BD47, alpha: 1.0)))
+                .foregroundColor(isDragging ? FootColor.dragging : (isR ? FootColor.right: FootColor.left))
                 .rotationEffect(isR ? angle_R : angle_L,anchor: .center)
                 .frame(width: 50)
                 .position(isR ? location_R:location_L)

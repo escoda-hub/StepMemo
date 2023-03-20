@@ -1,18 +1,6 @@
 import SwiftUI
 import RealmSwift
 
-enum Route:Hashable{
-    case filterView(String)
-    case stepView(Step)
-    case informationView
-    case walkthroughView
-    case stepListView(Group)
-    case mainView
-    case termsOfServiceView
-    case privacyPolicyView
-}
-
-
 @ViewBuilder
  func coordinator(_ route: Route) -> some View {
     switch route {
@@ -44,9 +32,8 @@ struct ContentView: View {
     @State var searchText = ""
     @State var step :Step
     
-    let deviceWidth = UIScreen.main.bounds.width
-    let height = 300.0
-    
+    let deviceWidth = DisplayData.deviceWidth
+    let height = DisplayData.height
     
     init(step: Step = Step()) {
         self.step = Step()
@@ -56,7 +43,7 @@ struct ContentView: View {
         
         NavigationStack(path: $appEnvironment.path)  {
             ZStack {
-                Color(0xDFDCE3, alpha: 1.0).ignoresSafeArea()
+                BackgroundColor_MainView.background.ignoresSafeArea()
                 VStack{
                     Spacer()
                     HStack{
@@ -76,7 +63,7 @@ struct ContentView: View {
                             .padding()
                             .contentShape(RoundedRectangle(cornerRadius: 0))
                             .frame(width: 100,height:150,alignment:.center)
-                            .background(Color(0x4ABDAC, alpha: 1))
+                            .background(BackgroundColor_MainView.allBtn)
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
                         }
@@ -96,7 +83,7 @@ struct ContentView: View {
                             }
                             .padding()
                             .frame(width: 100,height:150,alignment:.center)
-                            .background(Color(0xFC4A1A, alpha: 0.8))
+                            .background(BackgroundColor_MainView.rescentBtn)
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
                             .contentShape(RoundedRectangle(cornerRadius: 0))
@@ -117,7 +104,7 @@ struct ContentView: View {
                             }
                             .padding()
                             .frame(width: 100,height:150,alignment:.center)
-                            .background(Color(0xF7B733, alpha: 0.9))
+                            .background(BackgroundColor_MainView.favoriteBtn)
                             .foregroundColor(.black)
                             .cornerRadius(CGFloat(15))
                             .contentShape(RoundedRectangle(cornerRadius: 0))
@@ -184,7 +171,7 @@ struct ContentView: View {
                                             .font(.system(size: 30))
                                     }
                                     .frame(width: 60, height: 60)
-                                    .background(Color.orange)
+                                    .background(BackgroundColor_MainView.createStepBtn)
                                     .cornerRadius(30.0)
                                     .shadow(color: .gray, radius: 3, x: 3, y: 3)
                                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
@@ -193,15 +180,6 @@ struct ContentView: View {
                         }//List + button
                     }
                     .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading){
-                            HStack {
-                                Image(systemName: "magnifyingglass") //検索アイコン
-                                TextField("Search ...", text: $searchText)
-                            }
-                            .frame(width: deviceWidth - 100)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(CGFloat(10))
-                        }
                         ToolbarItem(placement: .navigationBarTrailing) {
                             
                             Button(action: {

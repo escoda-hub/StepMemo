@@ -17,12 +17,12 @@ struct PickerView: View {
     
     var body: some View {
         
-        let deviceWidth = UIScreen.main.bounds.width
-        
+        let deviceWidth = DisplayData.deviceWidth
+
             ZStack{
                 RoundedRectangle(cornerRadius: 5)
                     .frame(height: 30)
-                    .foregroundColor(isR ? Color(0x69af86, alpha: 1.0):Color(0xE5BD47, alpha: 1.0))
+                    .foregroundColor(isR ? FootColor.right:FootColor.left)
                 VStack {
                     Picker("",selection: isR ? $mode_R : $mode_L) {
                         Text("toes").tag(1)

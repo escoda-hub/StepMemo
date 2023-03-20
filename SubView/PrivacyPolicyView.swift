@@ -25,7 +25,7 @@ struct PrivacyPolicyView: View {
             }
             List {
                 Text("　StepDraft（以下、「当方」といいます。）は、本アプリ上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。")
-                    .font(.subheadline)
+                    .font(.caption2)
                 ForEach(0 ..< terms.count) { index in
                     VStack {
                         HStack {
@@ -46,6 +46,12 @@ struct PrivacyPolicyView: View {
                     Spacer()
                     Text("以上")
                         .font(.subheadline)
+                }
+                HStack{
+                    Spacer()
+                    Text(system.copyright)
+                        .font(.caption2)
+                    Spacer()
                 }
             }
         }

@@ -13,8 +13,6 @@ struct EditGroupView: View {
     @State var text = ""
     @State private var showingAlert = false
     
-
-    
     let textLimit = 10 //最大文字数
     
     var body: some View {

@@ -26,7 +26,7 @@ struct TermsOfServiceView: View {
             }
             List {
                 Text("　本規約は、StepDraft（以下「当方」といいます。）が提供する「StepDraft」（以下「本サービス」といいます。）を利用される際に適用されます。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。")
-                    .font(.subheadline)
+                    .font(.caption2)
                 ForEach(0 ..< terms.count) { index in
                     VStack {
                         HStack {
@@ -47,6 +47,12 @@ struct TermsOfServiceView: View {
                     Spacer()
                     Text("以上")
                         .font(.subheadline)
+                }
+                HStack{
+                    Spacer()
+                    Text(system.copyright)
+                        .font(.caption2)
+                    Spacer()
                 }
             }
         }

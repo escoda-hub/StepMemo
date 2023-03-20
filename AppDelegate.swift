@@ -18,7 +18,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 }
 
-
 // Realmマイグレーション処理
 func migration() {
   // 次のバージョン（現バージョンが０なので、１をセット）

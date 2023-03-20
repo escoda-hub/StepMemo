@@ -35,11 +35,8 @@ struct memoInputView: View {
                 showMemoView = false
             }){
                 HStack {
-//                    Spacer()
                     Image(systemName: "checkmark.circle")
-//                    Spacer()
                     Text("完了")
-//                    Spacer()
                 }
                 .fontWeight(.semibold)
                 .frame(width: 160, height: 48)

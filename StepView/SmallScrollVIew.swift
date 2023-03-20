@@ -22,8 +22,8 @@ struct SmallScrollVIew: View {
     @State var proxy: ScrollViewProxy?
     
     var body: some View {
-        
-        let deviceWidth = UIScreen.main.bounds.width
+
+        let deviceWidth = DisplayData.deviceWidth
         
         ScrollView(.horizontal){
             ScrollViewReader { proxy in
@@ -34,18 +34,18 @@ struct SmallScrollVIew: View {
                                     ZStack {
                                         Rectangle()
                                             .ignoresSafeArea(.all)
-                                            .foregroundColor(Color(0xDCDCDD, alpha: 1.0))
+                                            .foregroundColor(BackgroundColor_StepView.SmallScroll)
                                         Image(getImageName(isR: true, mode_R: stepData.stepDetails[row].R_mode, mode_L: stepData.stepDetails[row].L_mode))
                                             .resizable()
                                             .scaledToFit()
-                                            .foregroundColor(Color(0x69af86, alpha: 1.0))
+                                            .foregroundColor(FootColor.right)
                                             .rotationEffect(Angle(degrees: stepData.stepDetails[row].R_angle),anchor: .center)
                                             .position(CGPoint(x: stepData.stepDetails[row].R_x/5-(deviceWidth/10)+10,y: stepData.stepDetails[row].R_y/5-30+5))
                                             .frame(width: 15,height: 15)
                                         Image(getImageName(isR: false, mode_R: stepData.stepDetails[row].R_mode, mode_L: stepData.stepDetails[row].L_mode))
                                             .resizable()
                                             .scaledToFit()
-                                            .foregroundColor(Color(0xE5BD47, alpha: 1.0))
+                                            .foregroundColor(FootColor.left)
                                             .rotationEffect(Angle(degrees: stepData.stepDetails[row].L_angle),anchor: .center)
                                             .position(CGPoint(x: stepData.stepDetails[row].L_x/5-(deviceWidth/10)+10,y: stepData.stepDetails[row].L_y/5-30+5))
                                             .frame(width: 15,height: 15)

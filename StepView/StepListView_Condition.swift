@@ -13,9 +13,9 @@ struct StepListView_Condition: View {
     @State var steps=[Step]()
     @State var title:String
     @State var title_jp = ""
-    
-    let deviceWidth = UIScreen.main.bounds.width
-    let height = 300.0
+
+    let deviceWidth = DisplayData.deviceWidth
+    let height = DisplayData.height
     
     init(title: String) {
         self.title = title

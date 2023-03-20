@@ -1,31 +1,12 @@
 import SwiftUI
 import RealmSwift
 
-struct stepProperty {
-    var R_x: Double
-    var R_y: Double
-    var R_angle: Double
-    var R_mode: Int
-    var L_x: Double
-    var L_y: Double
-    var L_angle: Double
-    var L_mode: Int
-    var memo: String
-}
-
-struct imageSize {
-    var minX: Double
-    var maxX: Double
-    var minY: Double
-    var maxY: Double
-}
-
 struct StepView: View{
     
     @EnvironmentObject var appEnvironment: AppEnvironment
     
     @State var stepData:Step
-    @State var ImageSize = imageSize(minX: 0, maxX: 0, minY: 0, maxY: 0)
+    @State var stepDisplaySize = StepDisplaySize(minX: 0, maxX: 0, minY: 0, maxY: 0)
     @State var location   = CGPoint(x: 0, y: 0)
     @State var location_L = CGPoint(x: 0, y: 0)
     @State var location_R = CGPoint(x: 0, y: 0)
@@ -44,8 +25,8 @@ struct StepView: View{
 
     var body: some View {
         
-        let deviceWidth = UIScreen.main.bounds.width
-        let height = 300.0
+        let deviceWidth = DisplayData.deviceWidth
+        let height = DisplayData.height
         
         VStack {
             HStack {
@@ -53,7 +34,7 @@ struct StepView: View{
                         .font(.title)
                         .frame(width: deviceWidth - (deviceWidth/5))
                         .frame(minHeight:40)
-                        .background(Color(0xDCDCDD, alpha: 1.0))
+                        .background(BackgroundColor_StepView.title)
                         .lineLimit(1) // 1行に制限する
                         .truncationMode(.tail)
                         .opacity(0.8)
@@ -91,12 +72,12 @@ struct StepView: View{
                 ZStack {
                     Rectangle()
                         .ignoresSafeArea(.all)
-                        .foregroundColor(Color(0xDCDCDD, alpha: 1.0))
+                        .foregroundColor(BackgroundColor_StepView.StepDisplay)
                         .onAppear(){
-                                self.ImageSize.minX = geometry.frame(in: .global).minX
-                                self.ImageSize.maxX = geometry.frame(in: .global).maxX
-                                self.ImageSize.minY = geometry.frame(in: .global).minY
-                                self.ImageSize.maxY = geometry.frame(in: .global).maxY
+                                self.stepDisplaySize.minX = geometry.frame(in: .global).minX
+                                self.stepDisplaySize.maxX = geometry.frame(in: .global).maxX
+                                self.stepDisplaySize.minY = geometry.frame(in: .global).minY
+                                self.stepDisplaySize.maxY = geometry.frame(in: .global).maxY
                         }
                     DraggableImage(
                         indexSmallView: $indexSmallView,
@@ -180,7 +161,7 @@ struct StepView: View{
                 .lineLimit(3...5)
                 .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
                 .frame(minHeight:80)
-                .background(Color(0xDCDCDD, alpha: 1.0))
+                .background(BackgroundColor_StepView.memo)
                 .opacity(0.8)
                 .cornerRadius(5)
                 .contentShape(RoundedRectangle(cornerRadius: 20))
@@ -217,7 +198,7 @@ struct StepView: View{
                 }
             }
             .frame(width: deviceWidth - (deviceWidth/5),height:35,alignment:.center)
-            .background(Color(0xDCDCDD, alpha: 1.0))
+            .background(BackgroundColor_StepView.group)
             .foregroundColor(.black)
             .cornerRadius(CGFloat(5))
             .padding(.horizontal)

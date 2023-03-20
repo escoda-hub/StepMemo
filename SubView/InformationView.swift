@@ -8,28 +8,17 @@
 import SwiftUI
 
 struct InformationView: View {
-    @EnvironmentObject var appEnvironment: AppEnvironment
     
-    let InfoItems: [String] = [
-        "チュートリアル",
-        "プライバシーポリシー",
-        "利用規約",
-        "お問い合せ",
-        "お知らせ",
-        "評価する",
-    ];
+    @EnvironmentObject var appEnvironment: AppEnvironment
+    let InfoItems = InformationContent.Items
     
     var body: some View {
         
         VStack {
             Text("information")
+                .foregroundColor(.gray)
             VStack {
                     List {
-                        HStack{
-                            Text("version")
-                            Spacer()
-                            Text("1.0.0")
-                        }
                             ForEach(InfoItems, id: \.self) { InfoItem in
 
                                     HStack{
@@ -42,7 +31,7 @@ struct InformationView: View {
                                                 case "利用規約":
                                                     appEnvironment.path.append(Route.termsOfServiceView)
                                                 case "お問い合せ":
-                                                    if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSeCHz6iSnSUZqpcm1JlRxibyYTU5cnBvvFr8Q2WzusuJg40Hw/viewform?usp=sf_link") {
+                                                    if let url = URL(string: InformationContent.inquiryURL) {
                                                         UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
                                                             print(completed)
                                                         })
@@ -57,7 +46,7 @@ struct InformationView: View {
                                         }){
                                             VStack {
                                                 Text("\(InfoItem)")
-                                                    .foregroundColor(.black)
+                                                    .foregroundColor(.gray)
                                             }
                                         }
                                         .navigationDestination(for: Route.self) { route in
@@ -66,8 +55,13 @@ struct InformationView: View {
                                         .frame(height: 30)
                                         Spacer()
                                         Image(systemName: "chevron.forward")
+                                            .foregroundColor(.gray)
                                     }
                                 }
+                            }
+                            HStack{
+                                Text("StepDraft バージョン " + system.version)
+                                    .font(.caption2)
                             }
                 }
                 .listStyle(.insetGrouped)
