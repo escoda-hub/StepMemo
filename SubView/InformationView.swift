@@ -42,7 +42,11 @@ struct InformationView: View {
                                                 case "利用規約":
                                                     appEnvironment.path.append(Route.walkthroughView)
                                                 case "お問い合せ":
-                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                    if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSeCHz6iSnSUZqpcm1JlRxibyYTU5cnBvvFr8Q2WzusuJg40Hw/viewform?usp=sf_link") {
+                                                        UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
+                                                            print(completed)
+                                                        })
+                                                    }
                                                 case "お知らせ":
                                                     appEnvironment.path.append(Route.walkthroughView)
                                                 case "評価する":

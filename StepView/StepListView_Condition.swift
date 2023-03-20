@@ -12,6 +12,7 @@ struct StepListView_Condition: View {
     @EnvironmentObject var appEnvironment: AppEnvironment
     @State var steps=[Step]()
     @State var title:String
+    @State var title_jp = ""
     
     let deviceWidth = UIScreen.main.bounds.width
     let height = 300.0
@@ -23,7 +24,7 @@ struct StepListView_Condition: View {
     var body: some View {
         ZStack {
             VStack {
-                Text(title)
+                Text(title_jp)
                 VStack {
                     if steps.isEmpty {
                         VStack {
@@ -69,12 +70,16 @@ struct StepListView_Condition: View {
             switch title {
             case "all":
                 steps = getStepList(mode: .all, group_id: "")
+                title_jp = "全て"
             case "rescent":
                 steps = getStepList(mode: .rescent, group_id: "")
+                title_jp = "最近"
             case "favorite":
                 steps = getStepList(mode: .favorite, group_id: "")
+                title_jp = "好き"
             default:
                 steps = getStepList(mode: .all, group_id: "")
+                title_jp = "全て"
             }
         }
     }
