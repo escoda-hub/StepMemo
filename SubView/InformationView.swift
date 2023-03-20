@@ -40,7 +40,7 @@ struct InformationView: View {
                                                 case "プライバシーポリシー":
                                                     appEnvironment.path.append(Route.walkthroughView)
                                                 case "利用規約":
-                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                    appEnvironment.path.append(Route.termsOfServiceView)
                                                 case "お問い合せ":
                                                     if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSeCHz6iSnSUZqpcm1JlRxibyYTU5cnBvvFr8Q2WzusuJg40Hw/viewform?usp=sf_link") {
                                                         UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in

@@ -8,7 +8,9 @@ enum Route:Hashable{
     case walkthroughView
     case stepListView(Group)
     case mainView
+    case termsOfServiceView
 }
+
 
 @ViewBuilder
  func coordinator(_ route: Route) -> some View {
@@ -25,6 +27,8 @@ enum Route:Hashable{
             StepListView(group:group)
         case let .mainView:
             ContentView()
+        case let .termsOfServiceView:
+            TermsOfServiceView()
     }
 }
 
