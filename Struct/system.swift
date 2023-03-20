@@ -8,6 +8,7 @@
 import Foundation
 
 struct system{
+    static let env = "local"
     static let version = "1.0.0"
     static let appName = "StepDraft"
     static let appID = "idfweafefwea"

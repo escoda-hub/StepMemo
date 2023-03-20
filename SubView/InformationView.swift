@@ -51,6 +51,7 @@ struct InformationView: View {
                                             VStack {
                                                 Text("\(InfoItem)")
                                                     .foregroundColor(.gray)
+                                                    .listRowBackground(Color.orange)
                                             }
                                         }
                                         .navigationDestination(for: Route.self) { route in

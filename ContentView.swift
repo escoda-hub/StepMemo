@@ -47,73 +47,102 @@ struct ContentView: View {
             ZStack {
                 BackgroundColor_MainView.background.ignoresSafeArea()
                 VStack{
-                    Spacer()
                     HStack{
                         Button(action: {
                             appEnvironment.path.append(Route.filterView("all"))
                         }){
+//                            VStack {
+//                                Spacer()
+//                                Image(systemName: "list.bullet")
+//                                    .resizable()
+//                                    .frame(width: 30,height: 30)
+//                                Spacer()
+//                                Text("全て")
+//                                    .font(.title3)
+//                                Spacer()
+//                            }
+//                            .padding()
+//                            .contentShape(RoundedRectangle(cornerRadius: 0))
+//                            .frame(width: 100,height:150,alignment:.center)
+//                            .background(BackgroundColor_MainView.allBtn)
+//                            .foregroundColor(.black)
+//                            .cornerRadius(CGFloat(15))
                             VStack {
-                                Spacer()
-                                Image(systemName: "list.bullet")
-                                    .resizable()
-                                    .frame(width: 30,height: 30)
-                                Spacer()
+                                VStack {
+                                    Image(systemName: "list.bullet")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 40))
+                                }
+                                .frame(width: 100, height: 100)
+                                .background(BackgroundColor_MainView.allBtn)
+                                .cornerRadius(50.0)
+//                                .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 Text("全て")
-                                    .font(.title3)
-                                Spacer()
+                                    .font(.callout)
+                                    .foregroundColor(.white)
                             }
-                            .padding()
-                            .contentShape(RoundedRectangle(cornerRadius: 0))
-                            .frame(width: 100,height:150,alignment:.center)
-                            .background(BackgroundColor_MainView.allBtn)
-                            .foregroundColor(.black)
-                            .cornerRadius(CGFloat(15))
                         }
                         
                         Button(action: {
                             appEnvironment.path.append(Route.filterView("rescent"))
                         }){
+//                            VStack {
+//                                Spacer()
+//                                Image(systemName: "calendar")
+//                                    .resizable()
+//                                    .frame(width: 30,height: 30)
+//                                Spacer()
+//                                Text("最近")
+//                                    .font(.title3)
+//                                Spacer()
+//                            }
+//                            .padding()
+//                            .frame(width: 100,height:150,alignment:.center)
+//                            .background(BackgroundColor_MainView.rescentBtn)
+//                            .foregroundColor(.black)
+//                            .cornerRadius(CGFloat(15))
+//                            .contentShape(RoundedRectangle(cornerRadius: 0))
                             VStack {
-                                Spacer()
-                                Image(systemName: "calendar")
-                                    .resizable()
-                                    .frame(width: 30,height: 30)
-                                Spacer()
+                                VStack {
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 40))
+                                }
+                                .frame(width: 100, height: 100)
+                                .background(BackgroundColor_MainView.rescentBtn)
+                                .cornerRadius(50.0)
+//                                .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 Text("最近")
-                                    .font(.title3)
-                                Spacer()
+                                    .font(.callout)
+                                    .foregroundColor(.white)
                             }
-                            .padding()
-                            .frame(width: 100,height:150,alignment:.center)
-                            .background(BackgroundColor_MainView.rescentBtn)
-                            .foregroundColor(.black)
-                            .cornerRadius(CGFloat(15))
-                            .contentShape(RoundedRectangle(cornerRadius: 0))
                         }
 
                         Button(action: {
                             appEnvironment.path.append(Route.filterView("favorite"))
                         }){
                             VStack {
-                                Spacer()
-                                Image(systemName: "heart")
-                                    .resizable()
-                                    .frame(width: 30,height: 30)
-                                Spacer()
+                                VStack {
+                                    Image(systemName: "heart")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 40))
+                                }
+                                .frame(width: 100, height: 100)
+                                .background(BackgroundColor_MainView.favoriteBtn)
+                                .cornerRadius(50.0)
+//                                .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 Text("好き")
-                                    .font(.title3)
-                                Spacer()
+                                    .font(.callout)
+                                    .foregroundColor(.white)
                             }
-                            .padding()
-                            .frame(width: 100,height:150,alignment:.center)
-                            .background(BackgroundColor_MainView.favoriteBtn)
-                            .foregroundColor(.black)
-                            .cornerRadius(CGFloat(15))
-                            .contentShape(RoundedRectangle(cornerRadius: 0))
                         }
                     }
                     .padding(.vertical)
                     .padding(.top)
+                    Spacer()
 
                     ZStack {
                         List {
@@ -122,8 +151,10 @@ struct ContentView: View {
                                     Image(systemName: "rectangle.3.group")
                                         .resizable()
                                         .frame(width:25,height:18)
+                                        .foregroundColor(.white)
                                     Text("Group")
                                         .font(.title)
+                                        .foregroundColor(.white)
                                 }
                             )
                             {
@@ -136,10 +167,10 @@ struct ContentView: View {
                                                 VStack {
                                                     if group.name == "-" {
                                                         Text(group.name)
-                                                            .foregroundColor(.black)
+                                                            .foregroundColor(.white)
                                                     }else{
                                                         Text(group.name)
-                                                            .foregroundColor(.black)
+                                                            .foregroundColor(.white)
                                                             .swipeActions(edge: .trailing) {
                                                                 Button(role: .destructive) {
                                                                     deleteGroup(groupName: group.name)
@@ -152,16 +183,19 @@ struct ContentView: View {
                                             }
                                             Spacer()
                                             Text("\(group.steps.count)")
+                                                .foregroundColor(.white)
                                             Image(systemName: "chevron.forward")
+                                                .foregroundColor(.white)
                                         }
+                                        .listRowBackground(BackgroundColor_MainView.list)
                                     }
                                 }
-                                Spacer(minLength: 10)
+//                                Spacer(minLength: 10)
                             }
                         }
+//                        .border(.white)
                         .scrollDisabled(false)
                         .scrollContentBackground(.hidden)
-                        .background(Color(0xDFDCE3, alpha: 1.0))
                         .padding(.horizontal)
                         .padding(.bottom)
                         VStack {
@@ -174,14 +208,14 @@ struct ContentView: View {
                                 }){
                                     VStack {
                                         Image(systemName: "pencil")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
                                             .font(.system(size: 30))
                                     }
                                     .frame(width: 60, height: 60)
                                     .background(BackgroundColor_MainView.createStepBtn)
                                     .cornerRadius(30.0)
-                                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
-                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+//                                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0.0, trailing: 30.0))
                                 }
                             }
                         }//List + button
@@ -194,7 +228,7 @@ struct ContentView: View {
                             }){
                                 VStack {
                                     Image(systemName: "info.circle")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.white)
                                 }
                             }
                         }
@@ -206,7 +240,7 @@ struct ContentView: View {
                                     Image(systemName: "rectangle.3.group")
                                     Text("add group")
                                 }
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                             }.sheet(isPresented: $showingModal,onDismiss: {
                                 //                                genre = getGroup()
                             }) {
@@ -222,11 +256,13 @@ struct ContentView: View {
                         deleteAll()
                     }
                     .disabled(false)
+                    .opacity(system.env == "local" ? 1 : 0)
                     Button("add stepdata Button") {
                         print(Realm.Configuration.defaultConfiguration.fileURL!)
                         setStepData()
                     }
                     .disabled(false)
+                    .opacity(system.env == "local" ? 1 : 0)
                 }
             }//ZStack
             .navigationBarTitleDisplayMode(.inline)
