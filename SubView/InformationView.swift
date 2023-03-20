@@ -38,7 +38,7 @@ struct InformationView: View {
                                                 case "チュートリアル":
                                                     appEnvironment.path.append(Route.walkthroughView)
                                                 case "プライバシーポリシー":
-                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                    appEnvironment.path.append(Route.privacyPolicyView)
                                                 case "利用規約":
                                                     appEnvironment.path.append(Route.termsOfServiceView)
                                                 case "お問い合せ":

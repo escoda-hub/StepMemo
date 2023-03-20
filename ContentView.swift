@@ -9,6 +9,7 @@ enum Route:Hashable{
     case stepListView(Group)
     case mainView
     case termsOfServiceView
+    case privacyPolicyView
 }
 
 
@@ -29,6 +30,10 @@ enum Route:Hashable{
             ContentView()
         case let .termsOfServiceView:
             TermsOfServiceView()
+        case let .termsOfServiceView:
+            TermsOfServiceView()
+        case let .privacyPolicyView:
+            PrivacyPolicyView()
     }
 }
 

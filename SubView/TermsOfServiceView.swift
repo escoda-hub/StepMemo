@@ -3,22 +3,17 @@
 //  StepLogger
 //
 //  Created by rei asahina on 2023/03/20.
-//　StepLogger/StepLogger/Doc/利用規約.txt
+//　StepLogger/StepLogger/Doc/利用規約.md
 //
 
 import SwiftUI
-
-struct article{
-    var title:String
-    var content:String
-}
 
 struct TermsOfServiceView: View {
 
     @State var terms : [article]
     
     init(terms: [article] = [article]()) {
-        self.terms = initialize()
+        self.terms = initializeTermsOfService()
     }
     
     var body: some View {
@@ -31,6 +26,7 @@ struct TermsOfServiceView: View {
             }
             List {
                 Text("　本規約は、StepDraft（以下「当方」といいます。）が提供する「StepDraft」（以下「本サービス」といいます。）を利用される際に適用されます。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。")
+                    .font(.subheadline)
                 ForEach(0 ..< terms.count) { index in
                     VStack {
                         HStack {
@@ -44,7 +40,7 @@ struct TermsOfServiceView: View {
                         }
 
                         Text(terms[index].content)
-                            .font(.subheadline)
+                            .font(.caption)
                     }
                 }
                 HStack {
@@ -63,7 +59,7 @@ struct TermsOfServiceView_Previews: PreviewProvider {
     }
 }
 
-func initialize()->[article]{
+func initializeTermsOfService()->[article]{
     let terms : [article] = [
         article(title : "適用", content : "　本規約は、ユーザーと当方との間の本サービスの利用に関わる一切の関係に適用されるものとします。\n　当方は本サービスに関し、本規約のほか、ご利用にあたってのルール等、各種の定め（以下、「個別規定」といいます。）をすることがあります。これら個別規定はその名称のいかんに関わらず、本規約の一部を構成するものとします。\n　本規約の規定が前条の個別規定の規定と矛盾する場合には、個別規定において特段の定めなき限り、個別規定の規定が優先されるものとします。"),
         article(title : "利用登録", content : "　本サービスにおいては、登録希望者が本規約に同意の上、当方の定める方法によって利用登録を申請し、当方がこれを承認することによって、利用登録が完了するものとします。\n　当方は、利用登録の申請者に以下の事由があると判断した場合、利用登録の申請を承認しないことがあり、その理由については一切の開示義務を負わないものとします。\n・利用登録の申請に際して虚偽の事項を届け出た場合\n・本規約に違反したことがある者からの申請である場合\n・その他、当方が利用登録を相当でないと判断した場合"),
