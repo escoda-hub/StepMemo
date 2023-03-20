@@ -54,7 +54,6 @@ struct StepListView: View {
                                                     .foregroundColor(.black)
                                                     .font(.subheadline)
                                             }
-              
                                         }
                                         .padding()
                                     }

@@ -132,15 +132,20 @@ struct ContentView: View {
                                                 appEnvironment.path.append(Route.stepListView(group))
                                             }){
                                                 VStack {
-                                                    Text(group.name)
-                                                        .foregroundColor(.black)
-                                                        .swipeActions(edge: .trailing) {
-                                                            Button(role: .destructive) {
-                                                                deleteGroup(groupName: group.name)
-                                                            } label: {
-                                                                Image(systemName: "trash.fill")
+                                                    if group.name == "-" {
+                                                        Text(group.name)
+                                                            .foregroundColor(.black)
+                                                    }else{
+                                                        Text(group.name)
+                                                            .foregroundColor(.black)
+                                                            .swipeActions(edge: .trailing) {
+                                                                Button(role: .destructive) {
+                                                                    deleteGroup(groupName: group.name)
+                                                                } label: {
+                                                                    Image(systemName: "trash.fill")
+                                                                }
                                                             }
-                                                        }
+                                                    }
                                                 }
                                             }
                                             Spacer()
@@ -228,6 +233,11 @@ struct ContentView: View {
             }
         }//navigation stack
         .environmentObject(appEnvironment)
-        
+        .onAppear(){
+            let defaultGroup = DBsetting.defautlGrouup
+            if !checkGroup(groupname: defaultGroup) {
+                addGroup(groupname: defaultGroup)
+            }
+        }
     }//body
 }//content view

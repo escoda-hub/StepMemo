@@ -4,7 +4,6 @@ struct DraggableImage: View {
 
     @Binding private var indexSmallView:Int
     @State private var isR:Bool
-    @State private var stepDetail:StepDetail
     @Binding var location_L: CGPoint
     @Binding var location_R: CGPoint
     @Binding var location  : CGPoint
@@ -18,10 +17,9 @@ struct DraggableImage: View {
     @State private var isDragging = false
     @Binding var stepData:Step
     
-    init(indexSmallView: Binding<Int>, isR: Bool, stepDetail: StepDetail = StepDetail(), location:Binding<CGPoint>,location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>,angle_L: Binding<Angle>, angle_R: Binding<Angle>,mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit,stepData:Binding<Step>) {
+    init(indexSmallView: Binding<Int>, isR: Bool, location:Binding<CGPoint>,location_L: Binding<CGPoint>, location_R: Binding<CGPoint>, angle: Binding<Angle>,angle_L: Binding<Angle>, angle_R: Binding<Angle>,mode: Binding<Int>,mode_L: Binding<Int>, mode_R: Binding<Int>, limit: limit,stepData:Binding<Step>) {
         self._indexSmallView = indexSmallView
         self.isR = isR
-        self.stepDetail = stepDetail
         self._location_L = location_L
         self._location_R = location_R
         self._location = isR ? location_R : location_L
@@ -79,11 +77,12 @@ struct DraggableImage: View {
                 .gesture(rotation)
         }
         .onAppear(){
-            stepDetail = stepData.stepDetails[0]//初期化時は1番目のデータを表示
-            location = isR ? CGPoint(x: stepDetail.R_x, y: stepDetail.R_y) : CGPoint(x: stepDetail.L_x, y: stepDetail.L_y)
-            angle = isR ? Angle(degrees: stepDetail.R_angle) : Angle(degrees: stepDetail.L_angle)
-            mode_R = stepDetail.R_mode
-            mode_L = stepDetail.L_mode
+            if let stepDetailData = Array(stepData.stepDetails).first {
+                location = isR ? CGPoint(x: stepDetailData.R_x, y: stepDetailData.R_y) : CGPoint(x: stepDetailData.L_x, y: stepDetailData.L_y)
+                angle = isR ? Angle(degrees: stepDetailData.R_angle) : Angle(degrees: stepDetailData.L_angle)
+                mode_R = stepDetailData.R_mode
+                mode_L = stepDetailData.L_mode
+            }
         }
     }
 }

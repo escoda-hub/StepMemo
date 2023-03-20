@@ -32,23 +32,15 @@ func getStepList(mode:filterMode,group_id: String) -> [Step] {
             }
             return Array(group.steps)
     }
-
-}
-
-func getAllGroup() -> [Group] {
-    let realm = try! Realm()
-    let groups = realm.objects(Group.self)
-
-    return Array(groups)
 }
 
 func getGroupName(group_id:String) -> (String) {
     let realm = try! Realm()
-    guard let group = realm.objects(Group.self).filter("id == %@", group_id).first else {
-        // 該当するGroupが見つからなかった場合
-        return ""
+    
+    if let group = realm.objects(Group.self).filter("id == %@", group_id).first {
+        return group.name
     }
-    return group.name
+    return ""
 }
 
 func getGroupID(groupName:String) -> (String) {
@@ -335,7 +327,6 @@ func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
     
     let realm = try! Realm()
     if let group = realm.objects(Group.self).filter("name == %@", name).first {
-        // `group`オブジェクトが存在する場合の処理
         // Realmのトランザクション内で、グループに新しいステップを追加する
         try! realm.write {
             group.steps.append(newStep)
@@ -345,6 +336,14 @@ func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
     }
 
     return newStep
+}
+
+func checkGroup(groupname:String)->Bool{
+    let realm = try! Realm()
+    if let group = realm.objects(Group.self).filter("name == %@", groupname).first {
+        return true
+    }
+    return false
 }
 
 func addGroup(groupname:String)->Bool {
