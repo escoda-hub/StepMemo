@@ -22,6 +22,8 @@ import RealmSwift
             TermsOfServiceView()
         case let .privacyPolicyView:
             PrivacyPolicyView()
+        case let .noticeView:
+            NoticeView()
     }
 }
 

@@ -33,13 +33,17 @@ struct InformationView: View {
                                                 case "お問い合せ":
                                                     if let url = URL(string: InformationContent.inquiryURL) {
                                                         UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
-                                                            print(completed)
+//                                                            print(completed)
                                                         })
                                                     }
                                                 case "お知らせ":
-                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                    appEnvironment.path.append(Route.noticeView)
                                                 case "評価する":
-                                                    appEnvironment.path.append(Route.walkthroughView)
+                                                    if let url = URL(string: system.reviewURL) {
+                                                        UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
+//                                                            print(completed)
+                                                        })
+                                                    }
                                                 default:
                                                     appEnvironment.path.append(Route.walkthroughView)
                                             }

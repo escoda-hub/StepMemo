@@ -9,5 +9,8 @@ import Foundation
 
 struct system{
     static let version = "1.0.0"
-    static let copyright = "© 2023 StepDraft"
+    static let appName = "StepDraft"
+    static let appID = "idfweafefwea"
+    static let copyright = "© 2023 " + appName
+    static let reviewURL = "https://apps.apple.com/jp/app/" + "/" + appName + "/" + appID
 }
