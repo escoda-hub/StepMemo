@@ -13,8 +13,9 @@ struct ComponentColor{
     static let rescentBtn = Color(0xFC4A1A, alpha: 1.0)
     static let favoriteBtn = Color(0xF7B733, alpha: 1.0)
     static let cancelBtn = Color(0xFC4A1A, alpha: 1.0)
-    static let completeBtn_light = Color(0x191d21, alpha: 1.0)
-    static let completeBtn_dark = Color(0xebecde, alpha: 1.0)
+    static let completeBtn_light = Color(0x00c07f, alpha: 1.0)
+    static let completeBtn_dark = Color(0x00c07f, alpha: 1.0)
+    static let completeBtn_disable = Color(0xb3b3b3, alpha: 1.0)
     static let createStepBtn_light = Color(0x191d21, alpha: 1.0)
     static let createStepBtn_dark = Color(0xebecde, alpha: 1.0)
     static let background_light = Color(0xebecde, alpha: 1.0)
@@ -37,7 +38,6 @@ struct ComponentColor_StepView{
     static let selectedLine_light = Color(0xFC4A1A, alpha: 1.0)
     static let selectedLine_dark = Color(0xFC4A1A, alpha: 1.0)
 }
-
 
 struct FootColor{
     static let right = Color(0xDCAE1D, alpha: 1.0)

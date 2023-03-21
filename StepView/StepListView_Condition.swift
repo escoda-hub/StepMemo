@@ -31,8 +31,13 @@ struct StepListView_Condition: View {
             ComponentColor.background_light.ignoresSafeArea()
                 .opacity(isDarkMode ? 0 : 1)
             VStack {
-                Text(title_jp)
-                    .foregroundColor(isDarkMode ? .white : .black)
+                HStack {
+                    Spacer()
+                    Text(title_jp)
+                    Text("(\(steps.count))")
+                    Spacer()
+                }
+                .foregroundColor(isDarkMode ? .white : .black)
                 VStack {
                     if steps.isEmpty {
                         VStack {

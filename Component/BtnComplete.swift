@@ -9,25 +9,25 @@ import SwiftUI
 
 struct BtnComplete: View {
     @State var isDarkMode:Bool
-    
+    @State var size:Int
     var body: some View {
-        
-        HStack {
+        VStack {
             Image(systemName: "checkmark.circle")
-            Text("完了")
+                .foregroundColor(isDarkMode ? .black : .white)
+                .font(.system(size: CGFloat(size)))
         }
-        .fontWeight(.semibold)
-        .frame(width: 100, height: 48)
-        .foregroundColor(isDarkMode ? .black : .white)
+        .frame(width: CGFloat(size) * 2, height: CGFloat(size) * 2)
         .background(isDarkMode ? ComponentColor.completeBtn_dark : ComponentColor.completeBtn_light)
-        .cornerRadius(24)
+        .cornerRadius(CGFloat(size))
+//        .disabled(isDisable)
     }
 }
 
 struct BtnComplete_Previews: PreviewProvider {
     @State static var isDarkMode = true
+    @State static var size = 20
     
     static var previews: some View {
-        BtnComplete(isDarkMode: isDarkMode)
+        BtnComplete(isDarkMode: isDarkMode,size: size)
     }
 }

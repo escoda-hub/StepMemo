@@ -14,6 +14,7 @@ struct titleInputView: View {
     @Binding var stepData:Step
     @Binding var showTitleView : Bool
     @State  private var isDarkMode = true
+    @State  private var title = ""
     
     var body: some View {
         
@@ -26,11 +27,18 @@ struct titleInputView: View {
                     .opacity(isDarkMode ? 0 : 1)
                 VStack {
                     HStack{
-                        Spacer()
                         Button(action: {
                             showTitleView = false
                         }){
-                            BtnCancel(isDarkMode: isDarkMode,size: 20)
+                            BtnCancel(isDarkMode: isDarkMode,size: 15)
+                                .padding()
+                        }
+                        Spacer()
+                        Button(action: {
+                            stepData = upDateTitle(step_id: stepData.id, title: title)
+                            showTitleView = false
+                        }){
+                            BtnComplete(isDarkMode: isDarkMode, size: 15)
                                 .padding()
                         }
                     }
@@ -38,7 +46,7 @@ struct titleInputView: View {
                     VStack {
                          Text("タイトル編集")
                             .foregroundColor(isDarkMode ? .white : .black)
-                         TextField("Enter text", text: $stepData.title)
+                         TextField("Enter text", text: $title)
                             .border(isFocused ? Color.blue : Color.gray)
                             .foregroundColor(isDarkMode ? .white : .black)
                             .background(isDarkMode ? ComponentColor_StepView.title_dark : ComponentColor_StepView.title_light)
@@ -47,14 +55,8 @@ struct titleInputView: View {
                             .focused(self.$isFocused)
                             .onAppear(){
                                  self.isFocused = true
+                                title = stepData.title
                              }
-
-                         Button(action: {
-                             stepData = upDateTitle(step_id: stepData.id, title: stepData.title)
-                             showTitleView = false
-                         }){
-                             BtnComplete(isDarkMode: isDarkMode)
-                         }
                     }
                     Spacer()
                 }

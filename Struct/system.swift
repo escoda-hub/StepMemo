@@ -14,4 +14,5 @@ struct system{
     static let appID = "idfweafefwea"
     static let copyright = "© 2023 " + appName
     static let reviewURL = "https://apps.apple.com/jp/app/" + "/" + appName + "/" + appID
+    static let maxGroupName = 20
 }

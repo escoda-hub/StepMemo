@@ -15,6 +15,7 @@ struct memoInputView: View {
     @Binding var showMemoView : Bool
     @State var index:Int
     @State  private var isDarkMode = true
+    @State  private var memo = ""
     
     var body: some View {
         
@@ -27,11 +28,20 @@ struct memoInputView: View {
                 .opacity(isDarkMode ? 0 : 1)
             VStack {
                 HStack{
-                    Spacer()
                     Button(action: {
                         showMemoView = false
                     }){
-                        BtnCancel(isDarkMode: isDarkMode,size: 20)
+                        BtnCancel(isDarkMode: isDarkMode,size: 15)
+                            .padding()
+                    }
+                    Spacer()
+                    Button(action: {
+                        if let updatedMemo = updateMemo(step_id: stepData.id, index: index, memo: memo) {
+                            stepData = updatedMemo
+                        }
+                        showMemoView = false
+                    }){
+                        BtnComplete(isDarkMode: isDarkMode, size: 15)
                             .padding()
                     }
                 }
@@ -39,7 +49,7 @@ struct memoInputView: View {
                 VStack {
                     Text("メモ入力欄")
                         .foregroundColor(isDarkMode ? .white : .black)
-                    TextField("メモ", text: $stepData.stepDetails[index - 1].memo,axis: .vertical)
+                    TextField("メモ", text: $memo,axis: .vertical)
                         .border(isFocused ? Color.blue : Color.gray)
                         .foregroundColor(isDarkMode ? .white : .black)
                         .background(isDarkMode ? ComponentColor_StepView.memo_dark : ComponentColor_StepView.memo_light)
@@ -49,16 +59,9 @@ struct memoInputView: View {
                         .focused(self.$isFocused)
                         .onAppear(){
                             self.isFocused = true
+                            memo = stepData.stepDetails[index - 1].memo
                         }
-                    
-                    Button(action: {
-                        if let updatedMemo = updateMemo(step_id: stepData.id, index: index, memo: stepData.stepDetails[index - 1].memo) {
-                            stepData = updatedMemo
-                        }
-                        showMemoView = false
-                    }){
-                        BtnComplete(isDarkMode: isDarkMode)
-                    }
+
                 }
                 Spacer()
             }
