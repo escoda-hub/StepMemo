@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SmallScrollVIew: View {
     
+    @EnvironmentObject var appEnvironment: AppEnvironment
+    @State  private var isDarkMode = true
+    
     @Binding var stepData:Step
     @Binding var location_L :CGPoint
     @Binding var location_R :CGPoint
@@ -24,6 +27,7 @@ struct SmallScrollVIew: View {
     var body: some View {
 
         let deviceWidth = DisplayData.deviceWidth
+        let isDarkMode = appEnvironment.isDark
         
         ScrollView(.horizontal){
             ScrollViewReader { proxy in
@@ -34,7 +38,7 @@ struct SmallScrollVIew: View {
                                     ZStack {
                                         Rectangle()
                                             .ignoresSafeArea(.all)
-                                            .foregroundColor(BackgroundColor_StepView.SmallScroll)
+                                            .foregroundColor(isDarkMode ? ComponentColor_StepView.SmallScroll_dark : ComponentColor_StepView.SmallScroll_light)
                                         Image(getImageName(isR: true, mode_R: stepData.stepDetails[row].R_mode, mode_L: stepData.stepDetails[row].L_mode))
                                             .resizable()
                                             .scaledToFit()
@@ -72,11 +76,12 @@ struct SmallScrollVIew: View {
                                     }
 //                                Text("\((stepData.stepDetails[row].Order+1)/2)")
                                 Text("\(stepData.stepDetails[row].Order)")
+                                    .foregroundColor(isDarkMode ? .white : .black)
 //                                    .opacity(row%2 == 1 ? 0 : 1)
                             }
                             .id(row)
                         Rectangle()
-                            .foregroundColor(.blue)
+                                .foregroundColor(isDarkMode ? ComponentColor_StepView.selectedLine_dark : ComponentColor_StepView.selectedLine_light)
                             .frame(height: 3)
                             .opacity(stepData.stepDetails[row].Order == indexSmallView  ? 1 : 0)
                             .padding(.bottom,3)
@@ -84,6 +89,7 @@ struct SmallScrollVIew: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width:10)
+                            .foregroundColor(isDarkMode ? .white : .black)
                         }
 //                        .frame(height: 73)
                     }

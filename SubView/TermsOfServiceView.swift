@@ -10,7 +10,9 @@ import SwiftUI
 
 struct TermsOfServiceView: View {
 
+    @EnvironmentObject var appEnvironment: AppEnvironment
     @State var terms : [article]
+    @State private var isDarkMode = true
     
     init(terms: [article] = [article]()) {
         self.terms = initializeTermsOfService()
@@ -18,44 +20,66 @@ struct TermsOfServiceView: View {
     
     var body: some View {
         
-        VStack {
-            HStack {
-                Spacer()
-                Text("利用規約")
-                Spacer()
-            }
-            List {
-                Text("　本規約は、StepDraft（以下「当方」といいます。）が提供する「StepDraft」（以下「本サービス」といいます。）を利用される際に適用されます。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。")
-                    .font(.caption2)
-                ForEach(0 ..< terms.count) { index in
-                    VStack {
-                        HStack {
-                            Text("第\(index + 1)条")
-                                .font(.headline)
-                                .bold()
-                            Text(terms[index].title)
-                                .font(.headline)
-                                .bold()
-                            Spacer()
-                        }
-
-                        Text(terms[index].content)
-                            .font(.caption)
-                    }
-                }
+        let isDarkMode = appEnvironment.isDark
+        
+        ZStack {
+            ComponentColor.background_dark.ignoresSafeArea()
+                .opacity(isDarkMode ? 1 : 0)
+            ComponentColor.background_light.ignoresSafeArea()
+                .opacity(isDarkMode ? 0 : 1)
+            VStack {
                 HStack {
                     Spacer()
-                    Text("以上")
-                        .font(.subheadline)
-                }
-                HStack{
+                    Text("利用規約")
+                        .foregroundColor(isDarkMode ? .white : .black)
                     Spacer()
-                    Text(system.copyright)
+                }
+                List {
+                    Text("　本規約は、StepDraft（以下「当方」といいます。）が提供する「StepDraft」（以下「本サービス」といいます。）を利用される際に適用されます。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本規約に従って、本サービスをご利用いただきます。")
+                        .foregroundColor(isDarkMode ? .white : .black)
                         .font(.caption2)
-                    Spacer()
+                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                    ForEach(0 ..< terms.count) { index in
+                        VStack {
+                            HStack {
+                                Text("第\(index + 1)条")
+                                    .foregroundColor(isDarkMode ? .white : .black)
+                                    .font(.headline)
+                                    .bold()
+                                Text(terms[index].title)
+                                    .foregroundColor(isDarkMode ? .white : .black)
+                                    .font(.headline)
+                                    .bold()
+                                Spacer()
+                            }
+
+                            Text(terms[index].content)
+                                .foregroundColor(isDarkMode ? .white : .black)
+                                .font(.caption)
+                        }
+                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                    }
+                    HStack {
+                        Spacer()
+                        Text("以上")
+                            .foregroundColor(isDarkMode ? .white : .black)
+                            .font(.subheadline)
+                    }
+                    .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                    HStack{
+                        Spacer()
+                        Text(system.copyright)
+                            .foregroundColor(isDarkMode ? .white : .black)
+                            .font(.caption2)
+                        Spacer()
+                    }
+                    .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                 }
+                .listRowSeparatorTint(isDarkMode ? .white : .gray)
             }
         }
+        .scrollDisabled(false)
+        .scrollContentBackground(.hidden)
     }
 }
 

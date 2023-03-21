@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PickerView: View {
     
+    @EnvironmentObject var appEnvironment: AppEnvironment
+    @State  private var isDarkMode = true
     @State var isR:Bool
     @Binding var mode_L: Int
     @Binding var mode_R: Int
@@ -18,6 +20,7 @@ struct PickerView: View {
     var body: some View {
         
         let deviceWidth = DisplayData.deviceWidth
+        let isDarkMode = appEnvironment.isDark
 
             ZStack{
                 RoundedRectangle(cornerRadius: 5)
@@ -26,9 +29,13 @@ struct PickerView: View {
                 VStack {
                     Picker("",selection: isR ? $mode_R : $mode_L) {
                         Text("toes").tag(1)
+                            .foregroundColor(isDarkMode ? .white : .black)
                         Text("normal").tag(2)
+                            .foregroundColor(isDarkMode ? .white : .black)
                         Text("heals").tag(3)
+                            .foregroundColor(isDarkMode ? .white : .black)
                         Text("float").tag(4)
+                            .foregroundColor(isDarkMode ? .white : .black)
                     }
                     .pickerStyle(.wheel)
                     .frame(height: 100)

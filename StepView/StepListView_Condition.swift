@@ -13,23 +13,32 @@ struct StepListView_Condition: View {
     @State var steps=[Step]()
     @State var title:String
     @State var title_jp = ""
-
-    let deviceWidth = DisplayData.deviceWidth
-    let height = DisplayData.height
+    @State  private var isDarkMode = true
     
     init(title: String) {
         self.title = title
     }
     
     var body: some View {
+        
+        let deviceWidth = DisplayData.deviceWidth
+        let height = DisplayData.height
+        let isDarkMode = appEnvironment.isDark
+        
         ZStack {
+            ComponentColor.background_dark.ignoresSafeArea()
+                .opacity(isDarkMode ? 1 : 0)
+            ComponentColor.background_light.ignoresSafeArea()
+                .opacity(isDarkMode ? 0 : 1)
             VStack {
                 Text(title_jp)
+                    .foregroundColor(isDarkMode ? .white : .black)
                 VStack {
                     if steps.isEmpty {
                         VStack {
                             Spacer()
                             Text("No steps found ...")
+                                .foregroundColor(isDarkMode ? .white : .black)
                             Spacer()
                         }
                     } else {
@@ -42,14 +51,14 @@ struct StepListView_Condition: View {
                                         VStack {
                                             HStack{
                                                 Text("\(step.title)")
-                                                    .foregroundColor(.black)
+                                                    .foregroundColor(isDarkMode ? .white : .black)
                                                     .font(.title2)
                                                 Spacer()
                                             }
                                             HStack{
                                                 Spacer()
                                                 Text("\(step.stepDetails.count)move")
-                                                    .foregroundColor(.black)
+                                                    .foregroundColor(.gray)
                                                     .font(.subheadline)
                                             }
                                         }
@@ -57,14 +66,35 @@ struct StepListView_Condition: View {
                                     }
                                     Spacer()
                                     Image(systemName: "chevron.forward")
+                                        .foregroundColor(isDarkMode ? .white : .black)
                                 }
-                                .frame(height: 50)
+                                .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                                .frame(height: 40)
                             }
+                            .listRowSeparatorTint(isDarkMode ? .white : .gray)
+                            Spacer(minLength: 10)
+                                .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                         }
+                        .scrollDisabled(false)
+                        .scrollContentBackground(.hidden)
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    appEnvironment.path.append(Route.walkthroughView)
+                }){
+                    VStack {
+                        Image(systemName: "questionmark.circle")
+                            .foregroundColor(isDarkMode ? .white : .black)
+                    }
+                }
+            }
         }
         .onAppear(){
             switch title {

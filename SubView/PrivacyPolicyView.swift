@@ -9,7 +9,9 @@ import SwiftUI
 
 struct PrivacyPolicyView: View {
 
+    @EnvironmentObject var appEnvironment: AppEnvironment
     @State var terms : [article]
+    @State private var isDarkMode = true
     
     init(terms: [article] = [article]()) {
         self.terms = initializePrivacyPolicy()
@@ -17,44 +19,65 @@ struct PrivacyPolicyView: View {
     
     var body: some View {
         
-        VStack {
-            HStack {
-                Spacer()
-                Text("プライバシーポリシー")
-                Spacer()
-            }
-            List {
-                Text("　StepDraft（以下、「当方」といいます。）は、本アプリ上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。")
-                    .font(.caption2)
-                ForEach(0 ..< terms.count) { index in
-                    VStack {
-                        HStack {
-                            Text("第\(index + 1)条")
-                                .font(.headline)
-                                .bold()
-                            Text(terms[index].title)
-                                .font(.headline)
-                                .bold()
-                            Spacer()
-                        }
-
-                        Text(terms[index].content)
-                            .font(.caption)
-                    }
-                }
+        let isDarkMode = appEnvironment.isDark
+        
+        ZStack {
+            ComponentColor.background_dark.ignoresSafeArea()
+                .opacity(isDarkMode ? 1 : 0)
+            ComponentColor.background_light.ignoresSafeArea()
+                .opacity(isDarkMode ? 0 : 1)
+            VStack {
                 HStack {
                     Spacer()
-                    Text("以上")
-                        .font(.subheadline)
-                }
-                HStack{
+                    Text("プライバシーポリシー")
+                        .foregroundColor(isDarkMode ? .white : .black)
                     Spacer()
-                    Text(system.copyright)
+                }
+                List {
+                    Text("　StepDraft（以下、「当方」といいます。）は、本アプリ上で提供するサービス（以下、「本サービス」といいます。）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。")
                         .font(.caption2)
-                    Spacer()
+                        .foregroundColor(isDarkMode ? .white : .black)
+                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                    ForEach(0 ..< terms.count) { index in
+                        VStack {
+                            HStack {
+                                Text("第\(index + 1)条")
+                                    .font(.headline)
+                                    .foregroundColor(isDarkMode ? .white : .black)
+                                    .bold()
+                                Text(terms[index].title)
+                                    .font(.headline)
+                                    .foregroundColor(isDarkMode ? .white : .black)
+                                    .bold()
+                                Spacer()
+                            }
+                            Text(terms[index].content)
+                                .font(.caption)
+                                .foregroundColor(isDarkMode ? .white : .black)
+                        }
+                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                    }
+                    HStack {
+                        Spacer()
+                        Text("以上")
+                            .font(.subheadline)
+                            .foregroundColor(isDarkMode ? .white : .black)
+                    }
+                    .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                    HStack{
+                        Spacer()
+                        Text(system.copyright)
+                            .font(.caption2)
+                            .foregroundColor(isDarkMode ? .white : .black)
+                        Spacer()
+                    }
+                    .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                 }
+                .listRowSeparatorTint(isDarkMode ? .white : .gray)
             }
         }
+        .scrollDisabled(false)
+        .scrollContentBackground(.hidden)
     }
 }
 

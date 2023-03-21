@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 
 class AppEnvironment: ObservableObject {
-//    @Published var otherPath: [Route] = []
+//    @Published var otherPath: [Route] = [] //if you use other path,add here.
     @Published var path: [Route] = []
+    @Published var isDark: Bool = false
 }
 

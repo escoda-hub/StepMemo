@@ -9,10 +9,8 @@ struct StepListView: View {
     @State var step: Step
     @State var isStepDataActive = false
     @State var isPresented = false
-    
-    let deviceWidth = DisplayData.deviceWidth
-    let height = DisplayData.height
-    
+    @State  private var isDarkMode = true
+
     init(group: Group,step:Step = Step()) {
         self.group = group
         self.steps = StepListViewModel(groupName:group.name,groupId: group.id)
@@ -21,17 +19,27 @@ struct StepListView: View {
         steps.groupId = group.id
         steps.fetchSteps()
     }
-    
+
     var body: some View {
         
+        let deviceWidth = DisplayData.deviceWidth
+        let height = DisplayData.height
+        let isDarkMode = appEnvironment.isDark
+        
         ZStack {
+            ComponentColor.background_dark.ignoresSafeArea()
+                .opacity(isDarkMode ? 1 : 0)
+            ComponentColor.background_light.ignoresSafeArea()
+                .opacity(isDarkMode ? 0 : 1)
             VStack {
                 Text(group.name)
+                    .foregroundColor(isDarkMode ? .white : .black)
                 VStack {
                     if steps.stepList.isEmpty {
                         VStack{
                             Spacer()
                             Text("No steps found ...")
+                                .foregroundColor(isDarkMode ? .white : .black)
                             Spacer()
                         }
                     } else {
@@ -44,14 +52,14 @@ struct StepListView: View {
                                         VStack {
                                             HStack{
                                                 Text("\(step.title)")
-                                                    .foregroundColor(.black)
+                                                    .foregroundColor(isDarkMode ? .white : .black)
                                                     .font(.title2)
                                                 Spacer()
                                             }
                                             HStack{
                                                 Spacer()
                                                 Text("\(step.stepDetails.count)move")
-                                                    .foregroundColor(.black)
+                                                    .foregroundColor(.gray)
                                                     .font(.subheadline)
                                             }
                                         }
@@ -59,12 +67,22 @@ struct StepListView: View {
                                     }
                                     Spacer()
                                     Image(systemName: "chevron.forward")
+                                        .foregroundColor(isDarkMode ? .white : .black)
                                 }
-                                .frame(height: 50)
+                                .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                                .frame(height: 40)
                             }
+                            .listRowSeparatorTint(isDarkMode ? .white : .gray)
+                            Spacer(minLength: 10)
+                                .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                         }
+                        .scrollDisabled(false)
+                        .scrollContentBackground(.hidden)
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
                 }
+                
             }
             .navigationBarTitleDisplayMode(.inline)
             VStack {
@@ -76,19 +94,8 @@ struct StepListView: View {
                         steps.fetchSteps()//refrexh
                         appEnvironment.path.append(Route.stepView(newStep))
                     }){
-                        VStack {
-                            Image(systemName: "pencil")
-                                .foregroundColor(.white)
-                                .font(.system(size: 30))
-                        }
-                        .navigationDestination(for: Route.self) { route in
-                            coordinator(route)
-                        }
-                        .frame(width: 60, height: 60)
-                        .background(BackgroundColor_MainView.createStepBtn)
-                        .cornerRadius(30.0)
-                        .shadow(color: .gray, radius: 3, x: 3, y: 3)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 16.0, trailing: 16.0))
+                        BtnCreate(isDarkMode: isDarkMode, size: 30)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0.0, trailing: 30.0))
                     }
                 }
             }
@@ -100,7 +107,7 @@ struct StepListView: View {
                 }){
                     VStack {
                         Image(systemName: "questionmark.circle")
-                            .foregroundColor(.black)
+                            .foregroundColor(isDarkMode ? .white : .black)
                     }
                 }
             }

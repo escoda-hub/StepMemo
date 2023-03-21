@@ -28,45 +28,29 @@ import RealmSwift
 }
 
 struct ContentView: View {
-    
+//    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var appEnvironment: AppEnvironment
     @State private var showingModal = false
     @State var searchText = ""
-    @State var step :Step
+    @State  private var isDarkMode = true
     
     let deviceWidth = DisplayData.deviceWidth
     let height = DisplayData.height
-    
-    init(step: Step = Step()) {
-        self.step = Step()
-    }
-    
+
     var body: some View {
         
         NavigationStack(path: $appEnvironment.path)  {
             ZStack {
-                BackgroundColor_MainView.background.ignoresSafeArea()
+                ComponentColor.background_dark.ignoresSafeArea()
+                    .opacity(isDarkMode ? 1 : 0)
+                ComponentColor.background_light.ignoresSafeArea()
+                    .opacity(isDarkMode ? 0 : 1)
                 VStack{
+//                    Text(colorScheme == .dark ? "Dark" : "Light")
                     HStack{
                         Button(action: {
                             appEnvironment.path.append(Route.filterView("all"))
                         }){
-//                            VStack {
-//                                Spacer()
-//                                Image(systemName: "list.bullet")
-//                                    .resizable()
-//                                    .frame(width: 30,height: 30)
-//                                Spacer()
-//                                Text("全て")
-//                                    .font(.title3)
-//                                Spacer()
-//                            }
-//                            .padding()
-//                            .contentShape(RoundedRectangle(cornerRadius: 0))
-//                            .frame(width: 100,height:150,alignment:.center)
-//                            .background(BackgroundColor_MainView.allBtn)
-//                            .foregroundColor(.black)
-//                            .cornerRadius(CGFloat(15))
                             VStack {
                                 VStack {
                                     Image(systemName: "list.bullet")
@@ -74,35 +58,19 @@ struct ContentView: View {
                                         .font(.system(size: 40))
                                 }
                                 .frame(width: 100, height: 100)
-                                .background(BackgroundColor_MainView.allBtn)
+                                .background(ComponentColor.allBtn)
                                 .cornerRadius(50.0)
 //                                .shadow(color: .gray, radius: 3, x: 3, y: 3)
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 Text("全て")
                                     .font(.callout)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(isDarkMode ? .white : .black)
                             }
                         }
                         
                         Button(action: {
                             appEnvironment.path.append(Route.filterView("rescent"))
                         }){
-//                            VStack {
-//                                Spacer()
-//                                Image(systemName: "calendar")
-//                                    .resizable()
-//                                    .frame(width: 30,height: 30)
-//                                Spacer()
-//                                Text("最近")
-//                                    .font(.title3)
-//                                Spacer()
-//                            }
-//                            .padding()
-//                            .frame(width: 100,height:150,alignment:.center)
-//                            .background(BackgroundColor_MainView.rescentBtn)
-//                            .foregroundColor(.black)
-//                            .cornerRadius(CGFloat(15))
-//                            .contentShape(RoundedRectangle(cornerRadius: 0))
                             VStack {
                                 VStack {
                                     Image(systemName: "calendar")
@@ -110,13 +78,13 @@ struct ContentView: View {
                                         .font(.system(size: 40))
                                 }
                                 .frame(width: 100, height: 100)
-                                .background(BackgroundColor_MainView.rescentBtn)
+                                .background(ComponentColor.rescentBtn)
                                 .cornerRadius(50.0)
 //                                .shadow(color: .gray, radius: 3, x: 3, y: 3)
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 Text("最近")
                                     .font(.callout)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(isDarkMode ? .white : .black)
                             }
                         }
 
@@ -130,13 +98,13 @@ struct ContentView: View {
                                         .font(.system(size: 40))
                                 }
                                 .frame(width: 100, height: 100)
-                                .background(BackgroundColor_MainView.favoriteBtn)
+                                .background(ComponentColor.favoriteBtn)
                                 .cornerRadius(50.0)
 //                                .shadow(color: .gray, radius: 3, x: 3, y: 3)
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 Text("好き")
                                     .font(.callout)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(isDarkMode ? .white : .black)
                             }
                         }
                     }
@@ -147,15 +115,18 @@ struct ContentView: View {
                     ZStack {
                         List {
                             Section (
-                                header: HStack{
-                                    Image(systemName: "rectangle.3.group")
-                                        .resizable()
-                                        .frame(width:25,height:18)
-                                        .foregroundColor(.white)
-                                    Text("Group")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                }
+                                header:
+                                    HStack{
+                                        Spacer()
+                                        Image(systemName: "rectangle.3.group")
+                                            .resizable()
+                                            .frame(width:20,height:15)
+                                            .foregroundColor(isDarkMode ? .white : .black)
+                                        Text("Group")
+                                            .font(.title3)
+                                            .foregroundColor(isDarkMode ? .white : .black)
+                                        Spacer()
+                                    }
                             )
                             {
                                 if let groups = getGroup() {
@@ -167,10 +138,10 @@ struct ContentView: View {
                                                 VStack {
                                                     if group.name == "-" {
                                                         Text(group.name)
-                                                            .foregroundColor(.white)
+                                                            .foregroundColor(isDarkMode ? .white : .black)
                                                     }else{
                                                         Text(group.name)
-                                                            .foregroundColor(.white)
+                                                            .foregroundColor(isDarkMode ? .white : .black)
                                                             .swipeActions(edge: .trailing) {
                                                                 Button(role: .destructive) {
                                                                     deleteGroup(groupName: group.name)
@@ -183,17 +154,20 @@ struct ContentView: View {
                                             }
                                             Spacer()
                                             Text("\(group.steps.count)")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.gray)
+                                                .font(.subheadline)
                                             Image(systemName: "chevron.forward")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(isDarkMode ? .white : .black)
                                         }
-                                        .listRowBackground(BackgroundColor_MainView.list)
+                                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                                        .frame(height: 20)
                                     }
+                                    .listRowSeparatorTint(isDarkMode ? .white : .gray)
+                                    Spacer(minLength: 10)
+                                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                                 }
-//                                Spacer(minLength: 10)
                             }
                         }
-//                        .border(.white)
                         .scrollDisabled(false)
                         .scrollContentBackground(.hidden)
                         .padding(.horizontal)
@@ -206,41 +180,53 @@ struct ContentView: View {
                                     let newStep = addStep(name: "-", deviceWidth: deviceWidth, height: height)
                                     appEnvironment.path.append(Route.stepView(newStep))
                                 }){
+//                                    BtnCreate(isDarkMode: isDarkMode, size: 30)
                                     VStack {
-                                        Image(systemName: "pencil")
-                                            .foregroundColor(.black)
-                                            .font(.system(size: 30))
+                                        Image(systemName: "pencil.tip")
+                                            .foregroundColor(isDarkMode ? .black : .white)
+                                            .font(.system(size: CGFloat(30)))
                                     }
-                                    .frame(width: 60, height: 60)
-                                    .background(BackgroundColor_MainView.createStepBtn)
-                                    .cornerRadius(30.0)
-//                                    .shadow(color: .gray, radius: 3, x: 3, y: 3)
+                                    .frame(width: CGFloat(30) * 2, height: CGFloat(30) * 2)
+                                    .background(isDarkMode ? ComponentColor.createStepBtn_dark :  ComponentColor.createStepBtn_light)
+                                    .cornerRadius(CGFloat(30))
                                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 0.0, trailing: 30.0))
                                 }
                             }
                         }//List + button
                     }
                     .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                isDarkMode.toggle()
+                                appEnvironment.isDark = isDarkMode
+                            }){
+                                VStack {
+                                    Image(systemName: isDarkMode ?  "sun.min":"moon")
+                                        .foregroundColor(isDarkMode ? .white : .black)
+                                }
+                            }
+                            //.preferredColorScheme(isDarkMode ? .dark : .light)
+                        }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            
                             Button(action: {
                                 appEnvironment.path.append(Route.informationView)
                             }){
                                 VStack {
                                     Image(systemName: "info.circle")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(isDarkMode ? .white : .black)
                                 }
                             }
                         }
+
                         ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
                             Button(action: {
                                 self.showingModal.toggle()
                             }) {
                                 HStack{
-                                    Image(systemName: "rectangle.3.group")
+                                    Image(systemName: "plus.circle")
                                     Text("add group")
                                 }
-                                .foregroundColor(.white)
+                                .foregroundColor(isDarkMode ? .white : .black)
                             }.sheet(isPresented: $showingModal,onDismiss: {
                                 //                                genre = getGroup()
                             }) {
@@ -276,6 +262,7 @@ struct ContentView: View {
             if !checkGroup(groupname: defaultGroup) {
                 addGroup(groupname: defaultGroup)
             }
+            appEnvironment.isDark = isDarkMode
         }
     }//body
 }//content view

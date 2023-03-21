@@ -10,67 +10,84 @@ import SwiftUI
 struct InformationView: View {
     
     @EnvironmentObject var appEnvironment: AppEnvironment
-    let InfoItems = InformationContent.Items
+    @State private var isDarkMode = true
     
     var body: some View {
         
-        VStack {
-            Text("information")
-                .foregroundColor(.gray)
+        let InfoItems = InformationContent.Items
+        let isDarkMode = appEnvironment.isDark
+        
+        ZStack {
+            ComponentColor.background_dark.ignoresSafeArea()
+                .opacity(isDarkMode ? 1 : 0)
+            ComponentColor.background_light.ignoresSafeArea()
+                .opacity(isDarkMode ? 0 : 1)
             VStack {
-                    List {
-                            ForEach(InfoItems, id: \.self) { InfoItem in
+                Text("information")
+                    .foregroundColor(isDarkMode ? .white : .black)
+                VStack {
+                        List {
+                                ForEach(InfoItems, id: \.self) { InfoItem in
 
-                                    HStack{
-                                        Button(action: {
-                                            switch InfoItem {
-                                                case "チュートリアル":
-                                                    appEnvironment.path.append(Route.walkthroughView)
-                                                case "プライバシーポリシー":
-                                                    appEnvironment.path.append(Route.privacyPolicyView)
-                                                case "利用規約":
-                                                    appEnvironment.path.append(Route.termsOfServiceView)
-                                                case "お問い合せ":
-                                                    if let url = URL(string: InformationContent.inquiryURL) {
-                                                        UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
-//                                                            print(completed)
-                                                        })
-                                                    }
-                                                case "お知らせ":
-                                                    appEnvironment.path.append(Route.noticeView)
-                                                case "評価する":
-                                                    if let url = URL(string: system.reviewURL) {
-                                                        UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
-//                                                            print(completed)
-                                                        })
-                                                    }
-                                                default:
-                                                    appEnvironment.path.append(Route.walkthroughView)
+                                        HStack{
+                                            Button(action: {
+                                                switch InfoItem {
+                                                    case "チュートリアル":
+                                                        appEnvironment.path.append(Route.walkthroughView)
+                                                    case "プライバシーポリシー":
+                                                        appEnvironment.path.append(Route.privacyPolicyView)
+                                                    case "利用規約":
+                                                        appEnvironment.path.append(Route.termsOfServiceView)
+                                                    case "お問い合せ":
+                                                        if let url = URL(string: InformationContent.inquiryURL) {
+                                                            UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
+    //                                                            print(completed)
+                                                            })
+                                                        }
+                                                    case "お知らせ":
+                                                        appEnvironment.path.append(Route.noticeView)
+                                                    case "評価する":
+                                                        if let url = URL(string: system.reviewURL) {
+                                                            UIApplication.shared.open(url, options: [.universalLinksOnly: false], completionHandler: {completed in
+    //                                                            print(completed)
+                                                            })
+                                                        }
+                                                    default:
+                                                        appEnvironment.path.append(Route.walkthroughView)
+                                                }
+                                            }){
+                                                VStack {
+                                                    Text("\(InfoItem)")
+                                                        .foregroundColor(isDarkMode ? .white : .black)
+                                                }
                                             }
-                                        }){
-                                            VStack {
-                                                Text("\(InfoItem)")
-                                                    .foregroundColor(.gray)
-                                                    .listRowBackground(Color.orange)
+                                            .navigationDestination(for: Route.self) { route in
+                                                coordinator(route)
                                             }
+                                            .frame(height: 30)
+                                            Spacer()
+                                            Image(systemName: "chevron.forward")
+                                                .foregroundColor(isDarkMode ? .white : .black)
                                         }
-                                        .navigationDestination(for: Route.self) { route in
-                                            coordinator(route)
-                                        }
-                                        .frame(height: 30)
-                                        Spacer()
-                                        Image(systemName: "chevron.forward")
-                                            .foregroundColor(.gray)
+                                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                                     }
+                                    .listRowSeparatorTint(isDarkMode ? .white : .gray)
+                                    Spacer(minLength: 10)
+                                        .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                                    }
+                                    .scrollDisabled(false)
+                                    .scrollContentBackground(.hidden)
+                                    .padding(.horizontal)
+                                    .padding(.bottom)
+                                HStack{
+                                    Text("StepDraft バージョン " + system.version)
+                                        .font(.caption2)
+                                        .foregroundColor(isDarkMode ? .white : .black)
                                 }
-                            }
-                            HStack{
-                                Text("StepDraft バージョン " + system.version)
-                                    .font(.caption2)
-                            }
-                }
-                .listStyle(.insetGrouped)
+                    }
+                    .listStyle(.insetGrouped)
             }
+        }
         }
     }
 
