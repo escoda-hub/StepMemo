@@ -54,33 +54,25 @@ struct StepListView_Condition: View {
                                     Button(action: {
                                         appEnvironment.path.append(Route.stepView(step))
                                     }){
-                                        VStack {
-                                            HStack{
+                                        HStack {
                                                 Text("\(step.title)")
                                                     .foregroundColor(isDarkMode ? .white : .black)
                                                     .font(.title2)
                                                 Spacer()
-                                            }
-                                            HStack{
-                                                Spacer()
-                                                Text("\(step.stepDetails.count)move")
+                                                Text("\(step.stepDetails.count)")
                                                     .foregroundColor(.gray)
                                                     .font(.subheadline)
-                                            }
+                                                Image(systemName: "chevron.forward")
+                                                    .foregroundColor(isDarkMode ? .white : .black)
                                         }
                                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                             Button(role: .destructive) {
                                                 deleteStep(step_id: step.id)
-//                                                            appEnvironment.reload = true
                                             } label: {
                                                 Image(systemName: "trash.fill")
                                             }
                                         }
-                                        .padding()
                                     }
-                                    Spacer()
-                                    Image(systemName: "chevron.forward")
-                                        .foregroundColor(isDarkMode ? .white : .black)
                                 }
                                 .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                                 .frame(height: 40)

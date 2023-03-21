@@ -185,12 +185,9 @@ struct StepView: View{
                 Button(action: {
                 }){
                     HStack {
-                        HStack {
-                            Image(systemName: "rectangle.3.group")
-                            Text("Group")
-                        }
-                        .foregroundColor(isDarkMode ? .white : .black)
-                        .padding()
+                        Text("Group")
+                            .foregroundColor(isDarkMode ? .white : .black)
+                            .padding()
                         Spacer()
                         HStack {
                             Text(groupName)

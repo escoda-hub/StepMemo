@@ -136,6 +136,7 @@ struct SmallScrollVIew: View {
                         )
                     }
                 }
+                .padding(.horizontal)
             }
         }
     }

@@ -29,13 +29,17 @@ struct PickerView: View {
                 VStack {
                     Picker("",selection: isR ? $mode_R : $mode_L) {
                         Text("toes").tag(1)
-                            .foregroundColor(isDarkMode ? .white : .black)
+                            .foregroundColor(isDarkMode ? .white : .white)
+                            .bold()
                         Text("normal").tag(2)
-                            .foregroundColor(isDarkMode ? .white : .black)
+                            .foregroundColor(isDarkMode ? .white : .white)
+                            .bold()
                         Text("heals").tag(3)
-                            .foregroundColor(isDarkMode ? .white : .black)
+                            .foregroundColor(isDarkMode ? .white : .white)
+                            .bold()
                         Text("float").tag(4)
-                            .foregroundColor(isDarkMode ? .white : .black)
+                            .foregroundColor(isDarkMode ? .white : .white)
+                            .bold()
                     }
                     .pickerStyle(.wheel)
                     .frame(height: 100)

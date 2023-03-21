@@ -4,14 +4,13 @@ import RealmSwift
 
 struct StepListView: View {
 
-    @State var group: Group
     @EnvironmentObject var appEnvironment: AppEnvironment
+    @State var group: Group
     @State var step: Step
     @State var isStepDataActive = false
     @State var isPresented = false
     @State  private var isDarkMode = true
     
-
     init(group: Group,step:Step = Step()) {
         self.group = group
         self.step = step
@@ -42,38 +41,37 @@ struct StepListView: View {
                     } else {
                         List {
                             ForEach(getStepLists(mode:.groupID,groupID: group.id).freeze(), id: \.id) { step in
-                                HStack {
+                                HStack{
                                     Button(action: {
                                         appEnvironment.path.append(Route.stepView(step))
                                     }){
-                                        VStack {
-                                            HStack{
+                                        HStack{
                                                 Text("\(step.title)")
                                                     .font(.title2)
                                                     .foregroundColor(isDarkMode ? .white : .black)
-                                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                                        Button(role: .destructive) {
-                                                            deleteStep(step_id: step.id)
-//                                                            appEnvironment.reload = true
-                                                        } label: {
-                                                            Image(systemName: "trash.fill")
-                                                        }
-                                                    }
+                                                Spacer()
+                                                Text("\(step.stepDetails.count)")
+                                                    .foregroundColor(.gray)
+                                                    .font(.subheadline)
+                                                Image(systemName: "chevron.forward")
+                                                    .foregroundColor(isDarkMode ? .white : .black)
                                             }
-                                        }
-                                        .padding()
-                                }
-                                Spacer()
-                                Image(systemName: "chevron.forward")
-                                    .foregroundColor(isDarkMode ? .white : .black)
+                                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                Button(role: .destructive) {
+                                                    deleteStep(step_id: step.id)
+                                                } label: {
+                                                    Image(systemName: "trash.fill")
+                                                }
+                                            }
+                                    }
                                 }
                             }
                             .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                             .frame(height: 40)
                         }
-                            .listRowSeparatorTint(isDarkMode ? .white : .gray)
-                            Spacer(minLength: 10)
-                                .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                        .listRowSeparatorTint(isDarkMode ? .white : .gray)
+                        Spacer(minLength: 10)
+                            .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                     }
                 }
                 .scrollDisabled(false)
@@ -90,8 +88,7 @@ struct StepListView: View {
                         let newStep = addStepFromId(groupID: group.id, deviceWidth: deviceWidth, height: height)
                         appEnvironment.path.append(Route.stepView(newStep))
                     }){
-                        BtnCreate(isDarkMode: isDarkMode, size: 30)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0.0, trailing: 30.0))
+                        BtnCreate(size: 30)
                     }
                 }
             }

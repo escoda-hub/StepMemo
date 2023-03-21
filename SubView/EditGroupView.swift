@@ -32,7 +32,7 @@ struct EditGroupView: View {
                     Button(action: {
                         showGroupAddView = false
                     }){
-                        BtnCancel(isDarkMode: isDarkMode,size: 15)
+                        BtnCancel(size: 15)
                             .padding()
                     }
                     Spacer()
@@ -55,7 +55,7 @@ struct EditGroupView: View {
                             alertText = AlertData.Alert_1002.rawValue
                         }
                     }){
-                        BtnComplete(isDarkMode: isDarkMode, size: 15)
+                        BtnComplete(size: 15)
                             .padding()
                     }
                     .alert(isPresented: ($showingAlert)) {
@@ -64,11 +64,12 @@ struct EditGroupView: View {
                 }
                     Spacer()
                     TextField("グループ名", text: self.$text)
+                        .foregroundColor(isDarkMode ? .white : .black)
+                        .background(isDarkMode ? ComponentColor_StepView.group_dark : ComponentColor_StepView.group_light)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                         .font(.title)
                         .keyboardType(.asciiCapable)
-                        .foregroundColor(isDarkMode ? .black : .white)
                         .focused(self.$focus)
                         .onAppear(){
                             self.focus = true

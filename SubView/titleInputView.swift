@@ -30,7 +30,7 @@ struct titleInputView: View {
                         Button(action: {
                             showTitleView = false
                         }){
-                            BtnCancel(isDarkMode: isDarkMode,size: 15)
+                            BtnCancel(size: 15)
                                 .padding()
                         }
                         Spacer()
@@ -38,7 +38,7 @@ struct titleInputView: View {
                             stepData = upDateTitle(step_id: stepData.id, title: title)
                             showTitleView = false
                         }){
-                            BtnComplete(isDarkMode: isDarkMode, size: 15)
+                            BtnComplete(size: 15)
                                 .padding()
                         }
                     }

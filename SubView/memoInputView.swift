@@ -31,7 +31,7 @@ struct memoInputView: View {
                     Button(action: {
                         showMemoView = false
                     }){
-                        BtnCancel(isDarkMode: isDarkMode,size: 15)
+                        BtnCancel(size: 15)
                             .padding()
                     }
                     Spacer()
@@ -41,7 +41,7 @@ struct memoInputView: View {
                         }
                         showMemoView = false
                     }){
-                        BtnComplete(isDarkMode: isDarkMode, size: 15)
+                        BtnComplete(size: 15)
                             .padding()
                     }
                 }

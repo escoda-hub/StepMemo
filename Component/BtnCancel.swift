@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct BtnCancel: View {
-    @State var isDarkMode = true
+    
+    @EnvironmentObject var appEnvironment: AppEnvironment
     @State var size = 30
     
     var body: some View {
+        
+        let isDark = appEnvironment.isDark
+        
         VStack {
             Image(systemName: "xmark.circle")
-                .foregroundColor(isDarkMode ? .black : .white)
+                .foregroundColor(isDark ? .black : .white)
                 .font(.system(size: CGFloat(size)))
         }
         .frame(width: CGFloat(size) * 2, height: CGFloat(size) * 2)
@@ -24,11 +28,10 @@ struct BtnCancel: View {
 }
 
 struct BtnCancel_Previews: PreviewProvider {
-    @State static var isDarkMode = true
     @State static var size = 20
     
     static var previews: some View {
-        BtnCancel(isDarkMode: isDarkMode,size: size)
+        BtnCancel(size: size)
     }
 }
 
