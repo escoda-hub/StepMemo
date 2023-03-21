@@ -61,7 +61,6 @@ struct memoInputView: View {
                             self.isFocused = true
                             memo = stepData.stepDetails[index - 1].memo
                         }
-
                 }
                 Spacer()
             }

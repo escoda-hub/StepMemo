@@ -1,23 +1,20 @@
 
 import SwiftUI
+import RealmSwift
 
 struct StepListView: View {
 
     @State var group: Group
-    @ObservedObject var steps: StepListViewModel
     @EnvironmentObject var appEnvironment: AppEnvironment
     @State var step: Step
     @State var isStepDataActive = false
     @State var isPresented = false
     @State  private var isDarkMode = true
+    
 
     init(group: Group,step:Step = Step()) {
         self.group = group
-        self.steps = StepListViewModel(groupName:group.name,groupId: group.id)
         self.step = step
-        steps.groupName = group.name
-        steps.groupId = group.id
-        steps.fetchSteps()
     }
 
     var body: some View {
@@ -35,7 +32,7 @@ struct StepListView: View {
                 Text(group.name)
                     .foregroundColor(isDarkMode ? .white : .black)
                 VStack {
-                    if steps.stepList.isEmpty {
+                    if getStepLists(mode:.groupID,groupID: group.id).isEmpty {
                         VStack{
                             Spacer()
                             Text("No steps found ...")
@@ -44,7 +41,7 @@ struct StepListView: View {
                         }
                     } else {
                         List {
-                            ForEach(steps.stepList) { step in
+                            ForEach(getStepLists(mode:.groupID,groupID: group.id).freeze(), id: \.id) { step in
                                 HStack {
                                     Button(action: {
                                         appEnvironment.path.append(Route.stepView(step))
@@ -52,37 +49,37 @@ struct StepListView: View {
                                         VStack {
                                             HStack{
                                                 Text("\(step.title)")
-                                                    .foregroundColor(isDarkMode ? .white : .black)
                                                     .font(.title2)
-                                                Spacer()
-                                            }
-                                            HStack{
-                                                Spacer()
-                                                Text("\(step.stepDetails.count)move")
-                                                    .foregroundColor(.gray)
-                                                    .font(.subheadline)
+                                                    .foregroundColor(isDarkMode ? .white : .black)
+                                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                        Button(role: .destructive) {
+                                                            deleteStep(step_id: step.id)
+//                                                            appEnvironment.reload = true
+                                                        } label: {
+                                                            Image(systemName: "trash.fill")
+                                                        }
+                                                    }
                                             }
                                         }
                                         .padding()
-                                    }
-                                    Spacer()
-                                    Image(systemName: "chevron.forward")
-                                        .foregroundColor(isDarkMode ? .white : .black)
                                 }
-                                .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
-                                .frame(height: 40)
+                                Spacer()
+                                Image(systemName: "chevron.forward")
+                                    .foregroundColor(isDarkMode ? .white : .black)
+                                }
                             }
+                            .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
+                            .frame(height: 40)
+                        }
                             .listRowSeparatorTint(isDarkMode ? .white : .gray)
                             Spacer(minLength: 10)
                                 .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
-                        }
-                        .scrollDisabled(false)
-                        .scrollContentBackground(.hidden)
-                        .padding(.horizontal)
-                        .padding(.bottom)
                     }
                 }
-                
+                .scrollDisabled(false)
+                .scrollContentBackground(.hidden)
+                .padding(.horizontal)
+                .padding(.bottom)
             }
             .navigationBarTitleDisplayMode(.inline)
             VStack {
@@ -90,8 +87,7 @@ struct StepListView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        let newStep = addStep(name: steps.groupName, deviceWidth: deviceWidth, height: height)
-                        steps.fetchSteps()//refrexh
+                        let newStep = addStepFromId(groupID: group.id, deviceWidth: deviceWidth, height: height)
                         appEnvironment.path.append(Route.stepView(newStep))
                     }){
                         BtnCreate(isDarkMode: isDarkMode, size: 30)
@@ -112,24 +108,5 @@ struct StepListView: View {
                 }
             }
         }
-        .onAppear(){
-            steps.groupName = group.name
-            steps.fetchSteps()
-        }
-    }
-}
-
-class StepListViewModel: ObservableObject {
-    @Published var stepList = [Step]()
-    @Published var groupName: String
-    @Published var groupId: String
-
-    init(groupName: String,groupId: String) {
-        self.groupName = groupName
-        self.groupId = groupId
-    }
-
-    func fetchSteps() {
-        stepList = getStepList(mode:.groupID,group_id: groupId)
     }
 }

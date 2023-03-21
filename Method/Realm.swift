@@ -9,28 +9,25 @@ import Foundation
 import RealmSwift
 import SwiftUI
 
-func getStepList(mode:filterMode,group_id: String) -> [Step] {
-    
+func getStepLists(mode: filterMode, groupID: String) -> Results<Step> {
+    let realm = try! Realm()
     switch mode {
-        case .all:
-            let realm = try! Realm()
-            let steps = realm.objects(Step.self)
-            return Array(steps)
-        case .rescent:
-            let sortProperties = [SortDescriptor(keyPath: "updated_at", ascending: false)]
-            let realm = try! Realm()
-            let steps = realm.objects(Step.self).sorted(by: sortProperties)
-            return Array(steps)
-        case .favorite:
-            let realm = try! Realm()
-            let favoriteSteps = realm.objects(Step.self).filter("favorite == true")
-            return Array(favoriteSteps)
-        case .groupID:
-            let realm = try! Realm()
-            guard let group = realm.objects(Group.self).filter("id == %@", group_id).first else {
-                return []
-            }
-            return Array(group.steps)
+    case .all:
+        let results: Results<Step> = realm.objects(Step.self)
+        return results
+    case .rescent:
+        let sortProperties = [SortDescriptor(keyPath: "updated_at", ascending: false)]
+        let results: Results<Step> = realm.objects(Step.self).sorted(by: sortProperties)
+        return results
+    case .favorite:
+        let results: Results<Step> = realm.objects(Step.self).filter("favorite == true")
+        return results
+    case .groupID:
+        guard let group = realm.objects(Group.self).filter("id == %@", groupID).first else {
+            fatalError("Group not found")
+        }
+        let results: Results<Step> = realm.objects(Step.self).filter("group_id == %@", group.id)
+        return results
     }
 }
 
@@ -215,6 +212,18 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
 
 }
 
+func deleteStep(step_id: String) {
+    let realm = try! Realm()
+    guard let step = realm.object(ofType: Step.self, forPrimaryKey: step_id) else {
+        // idに対応するStepが存在しない場合の処理
+        return
+    }
+    try! realm.write {
+        realm.delete(step)
+//        print("delete")
+    }
+}
+
 func deleteStepDetail(step_id:String,index:Int) {
 
     let realm = try! Realm()
@@ -249,7 +258,7 @@ func deleteStepDetail(step_id:String,index:Int) {
     
 }
 
-func getGroup() -> Results<Group>? {
+func getGroup() -> Results<Group> {
     let realm = try! Realm()
     let groups = realm.objects(Group.self)
     return groups
@@ -266,11 +275,12 @@ func deleteGroup(groupName:String){
     // Realmのインスタンスを取得する
     let realm = try! Realm()
     // 指定された名前でGroupを検索する
-    let groupToDelete = realm.objects(Group.self).filter("name == %@", groupName).first
-    // もしGroupが存在したら、それをRealmから削除する
-    if let group = groupToDelete {
-        try! realm.write {
-            realm.delete(group)
+    let groupsToDelete = realm.objects(Group.self).filter("name == %@", groupName)
+    
+    if groupsToDelete.count > 0 {
+        // 全てのGroupオブジェクトを削除する
+        try? realm.write {
+            realm.delete(groupsToDelete)
         }
     }
 }
@@ -300,6 +310,44 @@ func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
         }
     }
 }
+
+func addStepFromId(groupID:String,deviceWidth:Double,height:Double) -> Step{
+
+    let newStep = Step()
+    newStep.title = "untitled"
+    newStep.created_at = Date()
+    newStep.updated_at = Date()
+    newStep.favorite = false
+    newStep.group_id = groupID
+
+    let stepDetail_default = StepDetail()
+    stepDetail_default.step_id = newStep.id
+    stepDetail_default.memo = ""
+    stepDetail_default.L_x = deviceWidth/2 - 40
+    stepDetail_default.L_y = height/2
+    stepDetail_default.L_angle = 340
+    stepDetail_default.L_mode = 2
+    stepDetail_default.R_x = deviceWidth/2 + 40.0
+    stepDetail_default.R_y = height/2
+    stepDetail_default.R_angle = 20
+    stepDetail_default.R_mode = 2
+    stepDetail_default.Order = 1
+    
+    newStep.stepDetails.append(stepDetail_default)
+    
+    let realm = try! Realm()
+    if let group = realm.objects(Group.self).filter("id == %@", groupID).first {
+        // Realmのトランザクション内で、グループに新しいステップを追加する
+        try! realm.write {
+            group.steps.append(newStep)
+        }
+    } else {
+        // `group`オブジェクトがnilの場合の処理
+    }
+
+    return newStep
+}
+
 
 func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
 
@@ -348,7 +396,7 @@ func checkGroup(groupname:String)->Bool{
 
 func addGroup(groupname:String)->Bool {
     
-    var isError :Bool
+    var isError = false
     let realm = try! Realm()
     var groupList: [String] = []
     let groupData = realm.objects(Group.self)//.value(forKey: "name")
@@ -362,7 +410,6 @@ func addGroup(groupname:String)->Bool {
     }else{
         isError = false
         do{
-            
           try realm.write{
               let group = Group()
               group.name = groupname
@@ -374,6 +421,27 @@ func addGroup(groupname:String)->Bool {
     }
     
     return isError
+}
+
+
+func addNewGroupIfNeeded(groupName: String)->Bool {
+    
+    let realm = try! Realm()
+    let existingGroup = realm.objects(Group.self).filter("name = %@", groupName).first
+
+    if existingGroup == nil {
+        let newGroup = Group()
+        newGroup.name = groupName
+        try! realm.write {
+            realm.add(newGroup)
+        }
+
+        return false
+    }else{
+        return true
+    }
+    
+     return false
 }
 
 //グループ名の取得

@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct StepListView_Condition: View {
     
     @EnvironmentObject var appEnvironment: AppEnvironment
-    @State var steps=[Step]()
+    @State var steps: Results<Step> = try! Realm().objects(Step.self)
     @State var title:String
     @State var title_jp = ""
     @State  private var isDarkMode = true
@@ -48,7 +49,7 @@ struct StepListView_Condition: View {
                         }
                     } else {
                         List {
-                            ForEach(steps, id: \.id) { step in
+                            ForEach(steps.freeze(), id: \.id) { step in
                                 HStack {
                                     Button(action: {
                                         appEnvironment.path.append(Route.stepView(step))
@@ -65,6 +66,14 @@ struct StepListView_Condition: View {
                                                 Text("\(step.stepDetails.count)move")
                                                     .foregroundColor(.gray)
                                                     .font(.subheadline)
+                                            }
+                                        }
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                            Button(role: .destructive) {
+                                                deleteStep(step_id: step.id)
+//                                                            appEnvironment.reload = true
+                                            } label: {
+                                                Image(systemName: "trash.fill")
                                             }
                                         }
                                         .padding()
@@ -104,16 +113,16 @@ struct StepListView_Condition: View {
         .onAppear(){
             switch title {
             case "all":
-                steps = getStepList(mode: .all, group_id: "")
+                steps = getStepLists(mode: .all, groupID: "")
                 title_jp = "全て"
             case "rescent":
-                steps = getStepList(mode: .rescent, group_id: "")
+                steps = getStepLists(mode: .rescent, groupID: "")
                 title_jp = "最近"
             case "favorite":
-                steps = getStepList(mode: .favorite, group_id: "")
+                steps = getStepLists(mode: .favorite, groupID: "")
                 title_jp = "好き"
             default:
-                steps = getStepList(mode: .all, group_id: "")
+                steps = getStepLists(mode: .all, groupID: "")
                 title_jp = "全て"
             }
         }

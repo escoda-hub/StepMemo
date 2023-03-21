@@ -30,7 +30,7 @@ struct SeleclGroupView: View {
                     .listRowBackground(isDarkMode ? ComponentColor.list_dark : ComponentColor.list_light)
                     .foregroundColor(isDarkMode ? .white : .black)
                     .frame(height: 20)
-                    ForEach(getGroup()!, id: \.self) { groups in
+                    ForEach(getGroup(), id: \.self) { groups in
                         HStack {
                             Text("\(groups.name)")
                                 .padding(.horizontal)

@@ -6,8 +6,8 @@ import RealmSwift
 struct EditGroupView: View {
 
     @EnvironmentObject var appEnvironment: AppEnvironment
-    @Environment(\.dismiss) var dismiss
     @FocusState var focus:Bool
+    @Binding var showGroupAddView : Bool
     @State var isHidden: Bool = true
     @State var text = ""
     @State private var showingAlert_exist = false
@@ -30,7 +30,7 @@ struct EditGroupView: View {
             VStack {
                 HStack{
                     Button(action: {
-                        dismiss()
+                        showGroupAddView = false
                     }){
                         BtnCancel(isDarkMode: isDarkMode,size: 15)
                             .padding()
@@ -43,12 +43,12 @@ struct EditGroupView: View {
                     Spacer()
                     Button(action: {
                         if text.count > 0 {
-                            if addGroup(groupname: text) {
+                            if addNewGroupIfNeeded(groupName: text) {
                                 self.showingAlert = true
                                 alertText = AlertData.Alert_1001.rawValue
                             }else{
-                                appEnvironment.path.removeAll()//after transitioning, MainList doesn't update. So,I added this line.
-                                dismiss()
+                                appEnvironment.reload = true//after transitioning, MainList doesn't update. So,I added this line.
+                                showGroupAddView = false
                             }
                         }else{
                             self.showingAlert = true

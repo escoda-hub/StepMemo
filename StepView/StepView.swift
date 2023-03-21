@@ -147,7 +147,6 @@ struct StepView: View{
                         }, label: {
                             Image(systemName: "plus.circle")
                                 .resizable()
-//                                .foregroundColor(.blue.opacity(0.8))
                                 .foregroundColor(isDarkMode ? .white : .black)
                                 .frame(width:30,height:30)
                                 .padding(.trailing)
@@ -232,7 +231,7 @@ struct StepView: View{
                         }
                     }
                 }
-        }
+            }
         }
     }//body
 }//VIEW

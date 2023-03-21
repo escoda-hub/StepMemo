@@ -28,11 +28,11 @@ import RealmSwift
 }
 
 struct ContentView: View {
-//    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     @EnvironmentObject var appEnvironment: AppEnvironment
-    @State private var showingModal = false
     @State var searchText = ""
     @State  private var isDarkMode = true
+    @State var showGroupAddView = false
     
     let deviceWidth = DisplayData.deviceWidth
     let height = DisplayData.height
@@ -129,8 +129,8 @@ struct ContentView: View {
                                     }
                             )
                             {
-                                if let groups = getGroup() {
-                                    ForEach(groups, id: \.id) { group in
+                                if let groups = getGroup() { //Results<Group>
+                                    ForEach(groups.freeze(), id: \.id) { group in
                                         HStack{
                                             Button(action: {
                                                 appEnvironment.path.append(Route.stepListView(group))
@@ -142,7 +142,7 @@ struct ContentView: View {
                                                     }else{
                                                         Text(group.name)
                                                             .foregroundColor(isDarkMode ? .white : .black)
-                                                            .swipeActions(edge: .trailing) {
+                                                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                                                 Button(role: .destructive) {
                                                                     deleteGroup(groupName: group.name)
                                                                 } label: {
@@ -205,7 +205,6 @@ struct ContentView: View {
                                         .foregroundColor(isDarkMode ? .white : .black)
                                 }
                             }
-                            //.preferredColorScheme(isDarkMode ? .dark : .light)
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
@@ -217,20 +216,18 @@ struct ContentView: View {
                                 }
                             }
                         }
-
                         ToolbarItem(placement: ToolbarItemPlacement.bottomBar) {
-                            Button(action: {
-                                self.showingModal.toggle()
-                            }) {
-                                HStack{
-                                    Image(systemName: "plus.circle")
-                                    Text("add group")
-                                }
-                                .foregroundColor(isDarkMode ? .white : .black)
-                            }.sheet(isPresented: $showingModal,onDismiss: {
-                                //                                genre = getGroup()
-                            }) {
-                                EditGroupView()
+                            HStack{
+                                Image(systemName: "plus.circle")
+                                Text("グループを追加")
+                            }
+                            .foregroundColor(isDarkMode ? .white : .black)
+                            .onTapGesture {
+                                showGroupAddView = true
+                            }
+                            .sheet(isPresented: $showGroupAddView) {
+                                EditGroupView(showGroupAddView: $showGroupAddView)
+                                    .presentationDetents([.medium])
                             }
                         }
                         ToolbarItem(placement: .bottomBar) {
@@ -260,7 +257,7 @@ struct ContentView: View {
         .onAppear(){
             let defaultGroup = DBsetting.defautlGrouup
             if !checkGroup(groupname: defaultGroup) {
-                addGroup(groupname: defaultGroup)
+                addNewGroupIfNeeded(groupName: defaultGroup)
             }
             appEnvironment.isDark = isDarkMode
         }
