@@ -9,6 +9,11 @@ import Foundation
 import RealmSwift
 import SwiftUI
 
+/// ステップを取得する
+/// - Parameters:
+///   - mode: ステップの取得モード（全て、更新順、お気に入り、グループごと）
+///   - groupID: グループに紐づくステップを取得する際にキーとして使用する
+/// - Returns:  Results<Step> ：ステップ取得クエリを実行して得られた結果
 func getStepLists(mode: filterMode, groupID: String) -> Results<Step> {
     let realm = try! Realm()
     switch mode {
@@ -31,6 +36,9 @@ func getStepLists(mode: filterMode, groupID: String) -> Results<Step> {
     }
 }
 
+/// グループIDに紐づくグループ名を取得する
+/// - Parameter group_id: グループID
+/// - Returns: グループ名
 func getGroupName(group_id:String) -> (String) {
     let realm = try! Realm()
     
@@ -40,6 +48,9 @@ func getGroupName(group_id:String) -> (String) {
     return ""
 }
 
+/// グループ名に紐づくグループIDを取得する
+/// - Parameter groupName: グループ名
+/// - Returns: グループID
 func getGroupID(groupName:String) -> (String) {
     let realm = try! Realm()
     guard let group = realm.objects(Group.self).filter("name == %@", groupName).first else {
@@ -49,6 +60,9 @@ func getGroupID(groupName:String) -> (String) {
     return group.id
 }
 
+/// ステップIDからステップオブジェクトを取得する
+/// - Parameter step_id: ステップID
+/// - Returns: ステップオブジェクト
 func getStep(step_id: String) -> Step {
     
     let realm = try! Realm()
@@ -60,6 +74,14 @@ func getStep(step_id: String) -> Step {
     return stepData
 }
 
+/// ステップIDに紐づく、ステップの空間情報（位置、角度）を更新する
+/// - Parameters:
+///   - step_id: ステップID
+///   - index: ステップ詳細データのインデックス
+///   - isR: 右足か
+///   - location: 位置
+///   - angle: 角度
+/// - Returns: 更新されたステップオブジェクト
 func updateStepDetail(step_id:String,index:Int,isR:Bool,location:CGPoint,angle:Angle)->(Step) {
 
     let realm = try! Realm()
@@ -88,6 +110,13 @@ func updateStepDetail(step_id:String,index:Int,isR:Bool,location:CGPoint,angle:A
     return getStep(step_id: step_id)
 }
 
+/// ステップIDに紐づく足のモードを更新する
+/// - Parameters:
+///   - step_id: ステップID
+///   - index: ステップ詳細データのインデックス
+///   - isR: 右足か
+///   - mode: モード（つま先、平足、かかと、空中）
+/// - Returns: 更新されたステップオブジェクト
 func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
 
     let realm = try! Realm()
@@ -112,6 +141,12 @@ func updateMode(step_id:String,index:Int,isR:Bool,mode:Int)->(Step) {
     return getStep(step_id: step_id)
 }
 
+/// ステップIDとステップ詳細インデックスに紐づくメモを更新する
+/// - Parameters:
+///   - step_id: ステップID
+///   - index: ステップ詳細データのインデックス
+///   - memo: ステップ詳細データのインデックスに紐づくメモ
+/// - Returns: 更新されたステップオブジェクト
 func updateMemo(step_id:String,index:Int,memo:String) -> Step? {
     let realm = try! Realm()
     
@@ -137,6 +172,11 @@ func updateMemo(step_id:String,index:Int,memo:String) -> Step? {
     return getStep(step_id: step_id)
 }
 
+/// タイトルを更新する
+/// - Parameters:
+///   - step_id: ステップID
+///   - title: 更新したいタイトル
+/// - Returns: 更新されたステップオブジェクト
 func upDateTitle(step_id:String,title:String)->(Step) {
 
     let realm = try! Realm()
@@ -156,6 +196,9 @@ func upDateTitle(step_id:String,title:String)->(Step) {
     return getStep(step_id: step_id)
 }
 
+/// お気に入り情報を更新する
+/// - Parameter step_id: ステップID
+/// - Returns: 更新されたステップオブジェクト
 func upDateFavorite(step_id:String)->(Step) {
 
     let realm = try! Realm()
@@ -176,6 +219,12 @@ func upDateFavorite(step_id:String)->(Step) {
     return getStep(step_id: step_id)
 }
 
+/// ステップ詳細データを追加する
+/// - Parameters:
+///   - step_id:ステップ詳細データが属するステップのID
+///   - deviceWidth: デバイスの横幅
+///   - height: ステップ操作画面の高さ
+/// - Returns: ステップオブジェクトと追加された順番
 func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step, order:Int){
     
     let realm = try! Realm()
@@ -212,6 +261,8 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
 
 }
 
+/// ステップを削除する
+/// - Parameter step_id: ステップID
 func deleteStep(step_id: String) {
     let realm = try! Realm()
     guard let step = realm.object(ofType: Step.self, forPrimaryKey: step_id) else {
@@ -224,6 +275,10 @@ func deleteStep(step_id: String) {
     }
 }
 
+/// ステップ詳細データを削除する
+/// - Parameters:
+///   - step_id: 削除したいステップ詳細データが属するステップのID
+///   - index: 削除したいステップ詳細データのインデックス
 func deleteStepDetail(step_id:String,index:Int) {
 
     let realm = try! Realm()
@@ -258,19 +313,16 @@ func deleteStepDetail(step_id:String,index:Int) {
     
 }
 
+/// 全てのグループを取得する
+/// - Returns: グループオブジェクトリスト
 func getGroup() -> Results<Group> {
     let realm = try! Realm()
     let groups = realm.objects(Group.self)
     return groups
 }
 
-func getGroupById(group_id:String) -> Group? {
-    let realm = try! Realm()
-    let group = realm.objects(Group.self).filter("id == %@", group_id).first
-    return group
-}
-
-//グループの削除
+/// グループ名からグループを削除する
+/// - Parameter groupName: グループ名
 func deleteGroup(groupName:String){
     // Realmのインスタンスを取得する
     let realm = try! Realm()
@@ -285,6 +337,11 @@ func deleteGroup(groupName:String){
     }
 }
 
+/// ステップが所属するグループを変更する
+/// - Parameters:
+///   - oldGroupName: 所属しているグループ名
+///   - newGroupName: 移動さきのグループ名
+///   - step_id: 移動させたいステップのステップID
 func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
     
     if oldGroupName != newGroupName{
@@ -311,6 +368,12 @@ func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
     }
 }
 
+/// グループIDをもとにステップデータを追加する
+/// - Parameters:
+///   - groupID: グループID
+///   - deviceWidth: デバイスの横幅
+///   - height: ステップ操作画面の高さ
+/// - Returns: ステップデータが追加されたステップオブジェクト
 func addStepFromId(groupID:String,deviceWidth:Double,height:Double) -> Step{
 
     let newStep = Step()
@@ -348,7 +411,12 @@ func addStepFromId(groupID:String,deviceWidth:Double,height:Double) -> Step{
     return newStep
 }
 
-
+/// ステップデータを追加する
+/// - Parameters:
+///   - name: 追加するグループ名
+///   - deviceWidth: デバイスの横幅
+///   - height: ステップ操作画面の高さ
+/// - Returns: ステップデータが追加されたステップオブジェクト
 func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
 
     let newStep = Step()
@@ -386,6 +454,9 @@ func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
     return newStep
 }
 
+/// グループの存在を確認する
+/// - Parameter groupname: 存在を確認したいグループ名
+/// - Returns: グループが既に存在する(t)
 func checkGroup(groupname:String)->Bool{
     let realm = try! Realm()
     if let group = realm.objects(Group.self).filter("name == %@", groupname).first {
@@ -394,36 +465,9 @@ func checkGroup(groupname:String)->Bool{
     return false
 }
 
-func addGroup(groupname:String)->Bool {
-    
-    var isError = false
-    let realm = try! Realm()
-    var groupList: [String] = []
-    let groupData = realm.objects(Group.self)//.value(forKey: "name")
-    
-    for i in 0 ..< groupData.count {
-        groupList.append(groupData[i].name)
-    }
-    
-    if groupList.firstIndex(of: groupname)  != nil {
-        isError = true
-    }else{
-        isError = false
-        do{
-          try realm.write{
-              let group = Group()
-              group.name = groupname
-              realm.add(group)
-          }
-        }catch {
-          print("Error \(error)")
-        }
-    }
-    
-    return isError
-}
-
-
+/// グループ追加
+/// - Parameter groupName: 追加したいグループ名
+/// - Returns: グループが既に存在する（t）
 func addNewGroupIfNeeded(groupName: String)->Bool {
     
     let realm = try! Realm()
@@ -444,7 +488,7 @@ func addNewGroupIfNeeded(groupName: String)->Bool {
      return false
 }
 
-//グループ名の取得
+//デバッグ用：DBデータ全削除
 func deleteAll() {
 
     let realm = try! Realm()
@@ -453,6 +497,7 @@ func deleteAll() {
     }
 }
 
+/// デバッグ用：シーダー
 func setStepData() {
     
     let base = "abcdefghijklmnopqrstuvwxyz1234567890/:*=~^|¥<,>.?/"
