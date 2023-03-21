@@ -40,8 +40,8 @@ struct ComponentColor_StepView{
 
 
 struct FootColor{
-    static let right = Color(0x69af86, alpha: 1.0)
-    static let left = Color(0xE5BD47, alpha: 1.0)
+    static let right = Color(0xDCAE1D, alpha: 1.0)
+    static let left = Color(0x076f8a, alpha: 1.0)
     static let dragging = Color(0x2E94B9, alpha: 1.0)
 }
 
