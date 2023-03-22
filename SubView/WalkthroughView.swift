@@ -34,34 +34,39 @@ struct WalkthroughView: View {
                     .padding()
                 
                 HStack {
-                    Button("Back") {
+                    
+                    Button(action: {
                         if currentStep > 0 {
                             currentStep -= 1
                         }
-                    }
+                    }, label: {
+                        ArrowVIew(size: 15,isR: false)
+                    })
                     .disabled(currentStep == 0)
                     
                     Spacer()
                     
-                    Button("Next") {
+                    Button(action: {
                         if currentStep < steps.count - 1 {
                             currentStep += 1
                         }
-                    }
+                    }, label: {
+                        ArrowVIew(size: 15,isR: true)
+                    })
                     .disabled(currentStep == steps.count - 1)
+
                 }
                 .padding()
                 
                 Button(action: {
                     dismiss()
                 }, label: {
-                    Text("完了")
+                    BtnComplete(size: 20)
                 })
                 .opacity(currentStep != steps.count - 1 ? 0:1)
             }
         }
     }
-    
 }
 
 struct WalkthroughStep {
@@ -89,7 +94,6 @@ struct WalkthroughStepView: View {
                     .frame(height: 400)
             }
             .foregroundColor(.white)
-        
     }
 }
 

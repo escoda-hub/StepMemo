@@ -29,20 +29,20 @@ struct PickerView: View {
                 VStack {
                     Picker("",selection: isR ? $mode_R : $mode_L) {
                         Text("toes").tag(1)
-                            .foregroundColor(isDarkMode ? .white : .white)
+                            .foregroundColor(isDarkMode ? .white : .black)
                             .bold()
                         Text("normal").tag(2)
-                            .foregroundColor(isDarkMode ? .white : .white)
+                            .foregroundColor(isDarkMode ? .white : .black)
                             .bold()
                         Text("heals").tag(3)
-                            .foregroundColor(isDarkMode ? .white : .white)
+                            .foregroundColor(isDarkMode ? .white : .black)
                             .bold()
                         Text("float").tag(4)
-                            .foregroundColor(isDarkMode ? .white : .white)
+                            .foregroundColor(isDarkMode ? .white : .black)
                             .bold()
                     }
                     .pickerStyle(.wheel)
-                    .frame(height: 100)
+                    .frame(height: 90)
                 }
                 .onChange(of: isR ? mode_R : mode_L) { mode in
                     stepData = updateMode(step_id: stepData.id, index: index, isR: isR, mode: mode)

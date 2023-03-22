@@ -83,7 +83,7 @@ struct SmallScrollVIew: View {
                             }
                             .id(row)
                         Rectangle()
-                                .foregroundColor(isDarkMode ? ComponentColor_StepView.selectedLine_dark : ComponentColor_StepView.selectedLine_light)
+                            .foregroundColor(isDarkMode ? ComponentColor_StepView.selectedLine_dark : ComponentColor_StepView.selectedLine_light)
                             .frame(height: 3)
                             .opacity(stepData.stepDetails[row].Order == indexSmallView  ? 1 : 0)
                             .padding(.bottom,3)
@@ -93,7 +93,6 @@ struct SmallScrollVIew: View {
                             .frame(width:10)
                             .foregroundColor(isDarkMode ? .white : .black)
                         }
-//                        .frame(height: 73)
                     }
                     .onChange(of: indexSmallView) { newValue in
                         let addIndex = newValue - 1
@@ -138,7 +137,7 @@ struct SmallScrollVIew: View {
                         )
                     }
                 }
-                .padding(.horizontal)
+//                .padding(.horizontal)
             }
         }
     }
