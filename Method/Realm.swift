@@ -167,7 +167,6 @@ func updateMemo(step_id:String,index:Int,memo:String) -> Step? {
         // エラーが発生した場合はnilを返す
         return nil
     }
-    
     // getStep関数で更新されたStepオブジェクトを取得して返す
     return getStep(step_id: step_id)
 }

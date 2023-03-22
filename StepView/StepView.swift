@@ -23,21 +23,43 @@ struct StepView: View{
     @State var groupName = ""
     @State private var isDarkMode = true
     
+    @State private var titleText = ""
+    @FocusState var isTitleInputActive: Bool
+    @State private var memoText = ""
+    @FocusState var isMemoInputActive: Bool
+    
     var body: some View {
         
         let deviceWidth = DisplayData.deviceWidth
         let height = DisplayData.height
         let isDarkMode = appEnvironment.isDark
         
+//        ScrollViewReader { scrollProxy in
             ZStack {
                 ComponentColor.background_dark.ignoresSafeArea()
                     .opacity(isDarkMode ? 1 : 0)
                 ComponentColor.background_light.ignoresSafeArea()
                     .opacity(isDarkMode ? 0 : 1)
                 ScrollView{
+
                 VStack {
                     HStack {
-                        titleView(stepData: $stepData)
+//                        titleView(stepData: $stepData)
+                        TextField("タイトル", text: $titleText)
+                            .focused($isTitleInputActive)
+                            .font(.title)
+                            .foregroundColor(isDarkMode ? .white : .black)
+                            .background(isDarkMode ? ComponentColor_StepView.title_dark : ComponentColor_StepView.title_light)
+                            .frame(width: deviceWidth - (deviceWidth/5))
+                            .frame(minHeight:40)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .cornerRadius(5)
+                            .contentShape(RoundedRectangle(cornerRadius: 20))
+                            .padding(.horizontal)
+                            .onAppear(){
+                                titleText = stepData.title
+                            }
                         FavoriteView(stepData: $stepData)
                         Spacer()
                     }
@@ -103,7 +125,8 @@ struct StepView: View{
                             mode_L: $mode_L,
                             mode_R: $mode_R,
                             indexSmallView: $indexSmallView,
-                            showingAlert: $showingAlert)
+                            showingAlert: $showingAlert,
+                            memoText:$memoText)
                         VStack{
                             Button(action: {
                                 let result = addStepDetail(step_id: stepData.id,deviceWidth: Double(deviceWidth),height: height)
@@ -130,22 +153,21 @@ struct StepView: View{
                         PickerView(isR: true,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
                         Spacer()
                     }
-                    Text("\(stepData.stepDetails[indexSmallView-1].memo)")
+//                    TextField("メモ", text: $memoText,axis: .vertical)
+                    TextField("メモ", text: $memoText)
+                        .focused($isMemoInputActive)
+//                        .ignoresSafeArea(.keyboard, edges: .bottom)
+                        .font(.caption)
                         .padding(.horizontal)
-                        .lineLimit(3...5)
+                        .lineLimit(2...3)
                         .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
                         .frame(minHeight:80)
                         .foregroundColor(isDarkMode ? .white : .black)
-                        .background(isDarkMode ? ComponentColor_StepView.memo_dark : ComponentColor_StepView.memo_light)
-                        .opacity(0.8)
                         .cornerRadius(5)
                         .contentShape(RoundedRectangle(cornerRadius: 20))
-                        .onTapGesture {
-                            showMemoView = true
-                        }
-                        .sheet(isPresented: $showMemoView) {
-                            memoInputView(stepData: $stepData, showMemoView: $showMemoView, index: indexSmallView)
-                                .presentationDetents([.medium])
+                        .background(isDarkMode ? ComponentColor_StepView.memo_dark : ComponentColor_StepView.memo_light)
+                        .onAppear(){
+                            memoText = stepData.stepDetails[indexSmallView - 1].memo
                         }
                     Button(action: {
                     }){
@@ -193,8 +215,48 @@ struct StepView: View{
                             }
                         }
                     }
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Button(action: {
+                            //キャンセル時
+                            if isTitleInputActive{
+                                //タイトルにフォーカスがある時
+                                titleText = stepData.title
+                                self.isTitleInputActive = false
+                            }
+                            if isMemoInputActive {
+                                //メモにフォーカスがある時
+                                memoText = stepData.stepDetails[indexSmallView-1].memo
+                                self.isMemoInputActive = false
+                            }
+                        }){
+                            BtnCancel(size: 15)
+                        }
+                        Button(action: {
+                            //完了時の処理
+                            if isTitleInputActive{
+                                //タイトルにフォーカスがある時
+                                stepData = upDateTitle(step_id: stepData.id, title: titleText)
+                                self.isTitleInputActive = false
+                            }
+                            if isMemoInputActive {
+                                //メモにフォーカスがある時
+                                if let updatedMemo = updateMemo(step_id: stepData.id, index: indexSmallView, memo: memoText) {
+                                    stepData = updatedMemo
+                                    print(stepData)
+                                }
+                                self.isMemoInputActive = false
+                            }
+                        }){
+                            BtnComplete(size: 15)
+                        }
+                    }
+                    
+                    
+                    
                 }
-            }
+//                .ignoresSafeArea(.keyboard, edges: .bottom)
+                }
+
         }
     }//body
 }//VIEW

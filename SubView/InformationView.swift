@@ -52,6 +52,8 @@ struct InformationView: View {
     //                                                            print(completed)
                                                             })
                                                         }
+                                                    case "debug":
+                                                        appEnvironment.path.append(Route.debugView)
                                                     default:
                                                         appEnvironment.path.append(Route.walkthroughView)
                                                 }

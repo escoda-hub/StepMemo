@@ -15,6 +15,7 @@ struct InformationContent{
         "お問い合せ",
         "お知らせ",
         "評価する",
+        "debug",
     ]
     static let inquiryURL = "https://docs.google.com/forms/d/e/1FAIpQLSeCHz6iSnSUZqpcm1JlRxibyYTU5cnBvvFr8Q2WzusuJg40Hw/viewform?usp=sf_link"
 }

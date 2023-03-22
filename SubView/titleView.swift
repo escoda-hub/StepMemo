@@ -34,14 +34,18 @@ struct titleView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Button(action: {
-                        titleText = stepData.title
-                        self.isTitleInputActive = false
+                        if isTitleInputActive{
+                            titleText = stepData.title
+                            self.isTitleInputActive = false
+                        }
                     }){
                         BtnCancel(size: 15)
                     }
                     Button(action: {
-                        stepData = upDateTitle(step_id: stepData.id, title: titleText)
-                        self.isTitleInputActive = false
+                        if isTitleInputActive{
+                            stepData = upDateTitle(step_id: stepData.id, title: titleText)
+                            self.isTitleInputActive = false
+                        }
                     }){
                         BtnComplete(size: 15)
                     }

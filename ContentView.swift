@@ -206,5 +206,7 @@ struct ContentView: View {
             PrivacyPolicyView()
         case let .noticeView:
             NoticeView()
+        case let .debugView:
+            DebugView()
     }
 }

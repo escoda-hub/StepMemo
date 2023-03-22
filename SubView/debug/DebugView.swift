@@ -1,14 +1,13 @@
 //
-//  onDelete.swift
+//  DebugView.swift
 //  StepLogger
 //
-//  Created by rei asahina on 2023/03/18.
+//  Created by rei asahina on 2023/03/22.
 //
 
 import SwiftUI
 
-struct onDelete: View {
-    
+struct DebugView: View {
     @State private var jumpTo = ""
     
     var body: some View {
@@ -35,11 +34,10 @@ struct onDelete: View {
             }
         }
     }
-    
 }
 
-struct onDelete_Previews: PreviewProvider {
+struct DebugView_Previews: PreviewProvider {
     static var previews: some View {
-        onDelete()
+        DebugView()
     }
 }

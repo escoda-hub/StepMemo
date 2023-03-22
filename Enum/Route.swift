@@ -18,4 +18,5 @@ enum Route:Hashable{
     case termsOfServiceView
     case privacyPolicyView
     case noticeView
+    case debugView
 }

@@ -21,6 +21,7 @@ struct SmallScrollVIew: View {
     @Binding var mode_R :Int
     @Binding var indexSmallView:Int
     @Binding var showingAlert:Bool
+    @Binding var memoText:String
     
     @State var proxy: ScrollViewProxy?
     
@@ -69,6 +70,7 @@ struct SmallScrollVIew: View {
                                         angle_R = Angle(degrees: stepData.stepDetails[row].R_angle)
                                         mode_L = stepData.stepDetails[row].L_mode
                                         mode_R = stepData.stepDetails[row].R_mode
+                                        memoText = stepData.stepDetails[indexSmallView - 1].memo
                                     }
                                     .onLongPressGesture {
                                         indexSmallView = stepData.stepDetails[row].Order
