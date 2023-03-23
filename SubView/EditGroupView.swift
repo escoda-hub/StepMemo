@@ -64,13 +64,13 @@ struct EditGroupView: View {
                 }
                     Spacer()
                     TextField("グループ名", text: self.$text)
+                        .focused(self.$focus)
+                        .font(.title)
                         .foregroundColor(isDarkMode ? .white : .black)
                         .background(isDarkMode ? ComponentColor_StepView.group_dark : ComponentColor_StepView.group_light)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+//                        .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
-                        .font(.title)
                         .keyboardType(.asciiCapable)
-                        .focused(self.$focus)
                         .onAppear(){
                             self.focus = true
                             isHidden = true

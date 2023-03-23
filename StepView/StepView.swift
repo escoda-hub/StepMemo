@@ -54,6 +54,7 @@ struct StepView: View{
                                 .cornerRadius(5)
                                 .contentShape(RoundedRectangle(cornerRadius: 20))
                                 .padding(.horizontal)
+                                .keyboardType(.asciiCapable)
                                 .onAppear(){
                                     titleText = stepData.title
                                 }
