@@ -17,9 +17,11 @@ struct PrivacyPolicyView: View {
         self.terms = initializePrivacyPolicy()
     }
     
+
     var body: some View {
         
         let isDarkMode = appEnvironment.isDark
+        let privacyPolicyData: [PrivacyPolicy] = load("PrivacyPolicy.json") 
         
         ZStack {
             ComponentColor.background_dark.ignoresSafeArea()
@@ -78,6 +80,9 @@ struct PrivacyPolicyView: View {
         }
         .scrollDisabled(false)
         .scrollContentBackground(.hidden)
+        .onAppear(){
+            print(privacyPolicyData)
+        }
     }
 }
 

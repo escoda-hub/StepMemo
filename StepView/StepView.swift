@@ -22,6 +22,7 @@ struct StepView: View{
     @State var showMemoView = false
     @State var groupName = ""
     @State private var isDarkMode = true
+    @State private var showingAlert_maxFrame = false
     
     @State private var titleText = ""
     @FocusState var isTitleInputActive: Bool
@@ -59,6 +60,7 @@ struct StepView: View{
                             FavoriteView(stepData: $stepData)
                         }
                         .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+                        .listRowSeparatorTint(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
                         GeometryReader { geometry in
                             ZStack {
                                 Rectangle()
@@ -112,6 +114,7 @@ struct StepView: View{
                         }
                         .frame(width: deviceWidth, height: CGFloat(height))
                         .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+                        .listRowSeparatorTint(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
                         HStack {
                             SmallScrollVIew(
                                 stepData: $stepData,
@@ -127,15 +130,25 @@ struct StepView: View{
                                 Button(action: {
                                     let result = addStepDetail(step_id: stepData.id,deviceWidth: Double(deviceWidth),height: height)
                                     stepData = result.step
-                                    indexSmallView = result.order
+                                    if result.order == -1{
+//                                        print("50以下で")
+                                        showingAlert_maxFrame = true
+                                    }else{
+                                        indexSmallView = result.order
+                                    }
+                                    
                                 }, label: {
                                     Image(systemName: "plus.circle")
                                         .resizable()
                                         .foregroundColor(isDarkMode ? .white : .black)
                                         .frame(width:30,height:30)
                                 })
+                                .alert(isPresented: ($showingAlert_maxFrame)) {
+                                    Alert(title: Text("登録可能なステップフレームは50枚までです。"))
+                                }
                         }//Small Window reagin
                         .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+                        .listRowSeparatorTint(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
                         HStack{
                             Spacer()
                             PickerView(isR: false,mode_L: $mode_L, mode_R: $mode_R,index:$indexSmallView,stepData: $stepData)
@@ -143,24 +156,25 @@ struct StepView: View{
                             Spacer()
                         }
                         .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
-                        HStack {
-                            Spacer()
-                            TextField("メモ", text: $memoText)
-                                        .focused($isMemoInputActive)
-                                        .font(.caption)
-                                        .lineLimit(2...3)
-                                        .frame(minHeight:50)
-                                        .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
-                                        .foregroundColor(isDarkMode ? .white : .black)
-                                        .cornerRadius(5)
-                                        .contentShape(RoundedRectangle(cornerRadius: 3))
-                                        .background(isDarkMode ? ComponentColor_StepView.memo_dark : ComponentColor_StepView.memo_light)
-                                        .onAppear(){
-                                            memoText = stepData.stepDetails[indexSmallView - 1].memo
-                                        }
-                            Spacer()
-                        }
-                        .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+                        .listRowSeparatorTint(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+//                        HStack {
+//                                TextField("一行メモ", text: $memoText)
+//                                //TextField("一行メモ", text: $memoText,axis:.vertical)
+//                                    .focused($isMemoInputActive)
+//                                    .font(.caption)
+//                                    .lineLimit(1)
+//                                    .frame(minHeight:50)
+//                                    .frame(width: deviceWidth - (deviceWidth/5),alignment: .leading)
+//                                    .foregroundColor(isDarkMode ? .white : .black)
+//                                    .cornerRadius(5)
+//                                    .contentShape(RoundedRectangle(cornerRadius: 3))
+//                                    .background(isDarkMode ? ComponentColor_StepView.memo_dark : ComponentColor_StepView.memo_light)
+//                                    .onAppear(){
+//                                        memoText = stepData.stepDetails[indexSmallView - 1].memo
+//                                    }
+//                            Spacer()
+//                        }
+//                        .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
                         Button(action: {
                         }){
                             HStack {
@@ -187,6 +201,7 @@ struct StepView: View{
                             }
                         }
                         .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+                        .listRowSeparatorTint(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
                         .frame(width: deviceWidth - (deviceWidth/5),height:35,alignment:.center)
                         .background(isDarkMode ? ComponentColor_StepView.group_dark : ComponentColor_StepView.group_light)
                         .foregroundColor(.black)
@@ -202,10 +217,10 @@ struct StepView: View{
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
-                                appEnvironment.path.append(Route.walkthroughView)
+                                appEnvironment.path.append(Route.informationView)
                             }){
                                 VStack {
-                                    Image(systemName: "questionmark.circle")
+                                    Image(systemName: "info.circle")
                                         .foregroundColor(isDarkMode ? .white : .black)
                                 }
                             }

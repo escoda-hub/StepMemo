@@ -93,10 +93,10 @@ struct StepListView_Condition: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    appEnvironment.path.append(Route.walkthroughView)
+                    appEnvironment.path.append(Route.informationView)
                 }){
                     VStack {
-                        Image(systemName: "questionmark.circle")
+                        Image(systemName: "info.circle")
                             .foregroundColor(isDarkMode ? .white : .black)
                     }
                 }

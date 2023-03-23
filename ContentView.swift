@@ -117,6 +117,7 @@ struct ContentView: View {
                             Button(action: {
                                 isDarkMode.toggle()
                                 appEnvironment.isDark = isDarkMode
+                                setIsDark(isDark: appEnvironment.isDark)
                             }){
                                 VStack {
                                     Image(systemName: isDarkMode ?  "sun.min":"moon")
@@ -174,11 +175,14 @@ struct ContentView: View {
         }//navigation stack
         .environmentObject(appEnvironment)
         .onAppear(){
+            appEnvironment.isDark = getIsDark()
+            isDarkMode = appEnvironment.isDark
+            
             let defaultGroup = DBsetting.defautlGrouup
             if !checkGroup(groupname: defaultGroup) {
                 addNewGroupIfNeeded(groupName: defaultGroup)
             }
-            appEnvironment.isDark = isDarkMode
+            
         }
     }//body
 }//content view

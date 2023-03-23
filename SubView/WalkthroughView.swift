@@ -11,19 +11,16 @@ struct WalkthroughView: View {
     
     @EnvironmentObject var appEnvironment: AppEnvironment
     @State private var currentStep = 0
+    @State private var isDark = false
     @Environment(\.dismiss) var dismiss
-    
-    let steps = [
-        WalkthroughStep(title: "\(system.appName)にようこそ", description: "ふと思いついたステップ。\n見とれたステップ。\nそんなステップを記録できるツール。\nそれがStepDraft。",image:"logo"),
-        WalkthroughStep(title: "管理", description: "グループごとにステップを管理",image:"main"),
-        WalkthroughStep(title: "記録", description: "ドラッグでステップを直感的に記録",image:"stepView")
-    ]
-    
+
     var body: some View {
         
-//        let isDark = appEnvironment.isDark
-        let isDark = true
-        
+        let steps = [
+            WalkthroughStep(title: "\(system.appName)にようこそ", description: "\(system.appName)は\nステップを直感的に記録できるツールです。",image:isDark ? "walkthrough_dark":"walkthrough_light"),
+            WalkthroughStep(title: "管理", description: "グループごとにステップを管理",image:isDark ? "StepList_dark":"StepList_light"),
+            WalkthroughStep(title: "記録", description: "ドラッグでステップを直感的に記録",image:isDark ? "Step_dark":"Step_light")
+        ]
         ZStack {
             ComponentColor.background_dark.ignoresSafeArea()
                 .opacity(isDark ? 1 : 0)
@@ -66,6 +63,9 @@ struct WalkthroughView: View {
                 .opacity(currentStep != steps.count - 1 ? 0:1)
             }
         }
+        .onAppear(){
+            isDark = appEnvironment.isDark
+        }
     }
 }
 
@@ -76,18 +76,25 @@ struct WalkthroughStep {
 }
 
 struct WalkthroughStepView: View {
+    
+    @EnvironmentObject var appEnvironment: AppEnvironment
     let step: WalkthroughStep
     
     var body: some View {
 
             VStack {
-                Text(step.title)
-                    .font(.title)
-                    .padding()
-                
-                Text(step.description)
-                    .padding()
-                    .multilineTextAlignment(.center)
+                VStack {
+                    Text(step.title)
+                        .foregroundColor( appEnvironment.isDark ? .white : .black)
+                        .font(.headline)
+                        .bold()
+                        .padding(.bottom)
+                    Text(step.description)
+                        .font(.subheadline)
+                        .foregroundColor( appEnvironment.isDark ? .white : .black)
+                        .multilineTextAlignment(.center)
+                }
+
                 Image(step.image)
                     .resizable()
                     .scaledToFit()

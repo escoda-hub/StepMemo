@@ -231,14 +231,18 @@ func addStepDetail(step_id:String,deviceWidth:Double,height:Double)->(step:Step,
         
         let stepDetail = realm.objects(StepDetail.self).filter("step_id == %@",step_id)
         
+        if Array(stepDetail).count >= system.maxStepFrame {
+            return (getStep(step_id: step_id),-1)
+        }
+                
         let stepDetail_default = StepDetail()
         stepDetail_default.step_id = step_id
         stepDetail_default.memo = ""
-        stepDetail_default.L_x = deviceWidth/2 - 40
+        stepDetail_default.L_x = deviceWidth/2 - deviceWidth/10
         stepDetail_default.L_y = height/2
         stepDetail_default.L_angle = 340
         stepDetail_default.L_mode = 2
-        stepDetail_default.R_x = deviceWidth/2 + 40.0
+        stepDetail_default.R_x = deviceWidth/2 + deviceWidth/10
         stepDetail_default.R_y = height/2
         stepDetail_default.R_angle = 20
         stepDetail_default.R_mode = 2
@@ -385,11 +389,11 @@ func addStepFromId(groupID:String,deviceWidth:Double,height:Double) -> Step{
     let stepDetail_default = StepDetail()
     stepDetail_default.step_id = newStep.id
     stepDetail_default.memo = ""
-    stepDetail_default.L_x = deviceWidth/2 - 40
+    stepDetail_default.L_x = deviceWidth/2 - deviceWidth/10
     stepDetail_default.L_y = height/2
     stepDetail_default.L_angle = 340
     stepDetail_default.L_mode = 2
-    stepDetail_default.R_x = deviceWidth/2 + 40.0
+    stepDetail_default.R_x = deviceWidth/2 + deviceWidth/10
     stepDetail_default.R_y = height/2
     stepDetail_default.R_angle = 20
     stepDetail_default.R_mode = 2
@@ -428,11 +432,11 @@ func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
     let stepDetail_default = StepDetail()
     stepDetail_default.step_id = newStep.id
     stepDetail_default.memo = ""
-    stepDetail_default.L_x = deviceWidth/2 - 40
+    stepDetail_default.L_x = deviceWidth/2 - deviceWidth/10
     stepDetail_default.L_y = height/2
     stepDetail_default.L_angle = 340
     stepDetail_default.L_mode = 2
-    stepDetail_default.R_x = deviceWidth/2 + 40.0
+    stepDetail_default.R_x = deviceWidth/2 + deviceWidth/10
     stepDetail_default.R_y = height/2
     stepDetail_default.R_angle = 20
     stepDetail_default.R_mode = 2
@@ -486,6 +490,103 @@ func addNewGroupIfNeeded(groupName: String)->Bool {
     
      return false
 }
+
+
+func getIsDark()->Bool {
+    let realm = try! Realm()
+    if let systemSetting = realm.objects(SystemSetting.self).first{
+        return systemSetting.isDark
+    }
+    return false
+}
+
+func getIsFirst()->Bool {
+    let realm = try! Realm()
+    if let systemSetting = realm.objects(SystemSetting.self).first{
+        return systemSetting.isFirst
+    }
+    return false
+}
+
+func setIsDark(isDark:Bool) {
+    let realm = try! Realm()
+    if let systemSetting = realm.objects(SystemSetting.self).first{
+        //update
+        try! realm.write() {
+            systemSetting.isDark = isDark
+            realm.add(systemSetting)
+        }
+    }else{
+        //create
+        let systemSetting = SystemSetting()
+        try! realm.write {
+            systemSetting.isDark = isDark
+            realm.add(systemSetting)
+        }
+    }
+}
+
+func setIsFirst(isFirst:Bool) {
+    let realm = try! Realm()
+    if let systemSetting = realm.objects(SystemSetting.self).first{
+        //update
+        try! realm.write() {
+            systemSetting.isFirst = isFirst
+            realm.add(systemSetting)
+        }
+    }else{
+        //create
+        let systemSetting = SystemSetting()
+        try! realm.write {
+            systemSetting.isFirst = isFirst
+            realm.add(systemSetting)
+        }
+    }
+}
+
+func seedDB() {
+    
+    let group_noName = Group()
+    group_noName.name = "-"
+    
+    let group = Group()
+    group.name = "HipHop"
+
+    let step = Step()
+    step.title = "step_A"
+    step.group_id = group.id
+    step.created_at = Date()
+    step.updated_at = Date()
+    step.favorite = true
+
+    let stepDetail_default = StepDetail()
+    stepDetail_default.step_id = step.id
+    stepDetail_default.memo = ""
+    stepDetail_default.L_x = DisplayData.deviceWidth/2 - DisplayData.deviceWidth/10
+    stepDetail_default.L_y = DisplayData.height/2
+    stepDetail_default.L_angle = 340
+    stepDetail_default.L_mode = 2
+    stepDetail_default.R_x = DisplayData.deviceWidth/2 + DisplayData.deviceWidth/10
+    stepDetail_default.R_y = DisplayData.height/2
+    stepDetail_default.R_angle = 20
+    stepDetail_default.R_mode = 2
+    stepDetail_default.Order = 1
+
+    step.stepDetails.append(stepDetail_default)
+    group.steps.append(step)
+
+    let realm = try! Realm()
+
+    do{
+      try realm.write{
+          realm.add(group)
+          realm.add(group_noName)
+      }
+    }catch {
+      print("Error \(error)")
+    }
+}
+
 
 //デバッグ用：DBデータ全削除
 func deleteAll() {
@@ -568,3 +669,5 @@ func setStepData() {
       print("Error \(error)")
     }
 }
+
+

@@ -13,6 +13,5 @@ class AppEnvironment: ObservableObject {
     @Published var path: [Route] = []
     @Published var isDark: Bool = false
     @Published var reload: Bool = false
-    
 }
 

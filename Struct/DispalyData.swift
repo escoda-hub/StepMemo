@@ -10,5 +10,5 @@ import SwiftUI
 
 struct DisplayData{
     static let deviceWidth = UIScreen.main.bounds.width
-    static let height = 300.0
+    static let height = deviceWidth * 0.76
 }
