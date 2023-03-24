@@ -2,10 +2,11 @@
 //  PrivacyPolicy.swift
 //  StepLogger
 //
-//  Created by rei asahina on 2023/03/23.
+//  Created by rei asahina on 2023/03/24.
 //
-import SwiftUI
+
 import Foundation
+import SwiftUI
 
 struct PrivacyPolicy:Hashable,Codable{
     var title :String

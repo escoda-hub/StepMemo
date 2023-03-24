@@ -11,16 +11,11 @@ struct NoticeView: View {
     
     @EnvironmentObject var appEnvironment: AppEnvironment
     @State private var isDarkMode = true
-    @State var terms : [Notice]
-    
-    
-    init(terms: [Notice] = [Notice]()) {
-        self.terms = initializeNotice()
-    }
     
     var body: some View {
         
         let isDarkMode = appEnvironment.isDark
+        let noticeData: [Notice] = load("Notice.json")
         
         ZStack {
             ComponentColor.background_dark.ignoresSafeArea()
@@ -35,10 +30,10 @@ struct NoticeView: View {
                     Spacer()
                 }
                 List {
-                    ForEach(0 ..< terms.count) { index in
+                    ForEach(0 ..< noticeData.count) { index in
                         VStack{
                             HStack{
-                                Text(terms[index].title)
+                                Text(noticeData[index].title)
                                     .foregroundColor(isDarkMode ? .white : .black)
                                     .font(.subheadline)
                                     .bold()
@@ -46,7 +41,7 @@ struct NoticeView: View {
                             }
                             Spacer()
                             HStack {
-                                Text(terms[index].content)
+                                Text(noticeData[index].content)
                                     .foregroundColor(isDarkMode ? .white : .black)
                                     .font(.footnote)
                                 Spacer()
@@ -55,7 +50,7 @@ struct NoticeView: View {
                             Spacer()
                             HStack{
                                 Spacer()
-                                Text(terms[index].date)
+                                Text(noticeData[index].date)
                                     .foregroundColor(isDarkMode ? .white : .black)
                                     .font(.footnote)
                                     .foregroundColor(.gray)
@@ -85,11 +80,4 @@ struct NoticeView_Previews: PreviewProvider {
     static var previews: some View {
         NoticeView()
     }
-}
-
-func initializeNotice()->[Notice]{
-    let terms : [Notice] = [
-        Notice(title :"リリースに関するお知らせ", content : "StepDraft 1.0.0をリリースしました。",date:"2023/3/29")
-    ]
-    return terms
 }

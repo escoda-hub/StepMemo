@@ -380,7 +380,7 @@ func changeGroup(oldGroupName: String, newGroupName: String, step_id: String) {
 func addStepFromId(groupID:String,deviceWidth:Double,height:Double) -> Step{
 
     let newStep = Step()
-    newStep.title = "untitled"
+    newStep.title = ""
     newStep.created_at = Date()
     newStep.updated_at = Date()
     newStep.favorite = false
@@ -423,7 +423,7 @@ func addStepFromId(groupID:String,deviceWidth:Double,height:Double) -> Step{
 func addStep(name:String,deviceWidth:Double,height:Double) -> Step{
 
     let newStep = Step()
-    newStep.title = "untitled"
+    newStep.title = ""
     newStep.created_at = Date()
     newStep.updated_at = Date()
     newStep.favorite = false

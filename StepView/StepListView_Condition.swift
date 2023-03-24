@@ -55,9 +55,9 @@ struct StepListView_Condition: View {
                                         appEnvironment.path.append(Route.stepView(step))
                                     }){
                                         HStack {
-                                                Text("\(step.title)")
-                                                    .foregroundColor(isDarkMode ? .white : .black)
+                                            Text(step.title.isEmpty ? "no name":"\(step.title)")
                                                     .font(.title2)
+                                                    .foregroundColor(step.title.isEmpty ? .gray :isDarkMode ? .white : .black)
                                                 Spacer()
                                                 Text("\(step.stepDetails.count)")
                                                     .foregroundColor(.gray)

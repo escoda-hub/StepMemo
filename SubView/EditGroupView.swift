@@ -68,7 +68,6 @@ struct EditGroupView: View {
                         .font(.title)
                         .foregroundColor(isDarkMode ? .white : .black)
                         .background(isDarkMode ? ComponentColor_StepView.group_dark : ComponentColor_StepView.group_light)
-//                        .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                         .keyboardType(.asciiCapable)
                         .onAppear(){

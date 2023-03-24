@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Notice{
+struct Notice:Hashable,Codable{
     var title:String
     var content:String
     var date:String

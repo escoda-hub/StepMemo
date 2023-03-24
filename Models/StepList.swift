@@ -23,6 +23,5 @@ struct StepModel:Hashable,Codable,Identifiable{
         var L_mode : Int
         var Order:Int
     }
-
 }
 
