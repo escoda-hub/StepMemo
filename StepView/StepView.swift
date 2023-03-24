@@ -209,6 +209,10 @@ struct StepView: View{
                         .cornerRadius(CGFloat(5))
                         .padding(.horizontal)
                     // }
+                AdMobBannerView()
+                    .frame(width:DisplayData.deviceWidth, height: 50)
+                    .listRowBackground(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
+                    .listRowSeparatorTint(isDarkMode ? ComponentColor.background_dark : ComponentColor.background_light)
             }//List
             .listStyle(.plain)
                            .navigationBarTitleDisplayMode(.inline)

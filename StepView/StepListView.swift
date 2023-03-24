@@ -91,6 +91,7 @@ struct StepListView: View {
                         BtnCreate(size: 30)
                     }
                 }
+                AdMobBannerView().frame(width:DisplayData.deviceWidth, height: 50)
             }
         }
         .toolbar {

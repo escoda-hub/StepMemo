@@ -87,6 +87,7 @@ struct StepListView_Condition: View {
                         .padding(.bottom)
                     }
                 }
+                AdMobBannerView().frame(width:DisplayData.deviceWidth, height: 50)
             }
             .navigationBarTitleDisplayMode(.inline)
         }

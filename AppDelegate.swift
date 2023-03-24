@@ -2,15 +2,15 @@ import Foundation
 import SwiftUI
 import RealmSwift
 import UIKit
+import GoogleMobileAds
 
-
-
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
       migration()
 //      print("アプリが起動したよ")
       print(Realm.Configuration.defaultConfiguration.fileURL!)
+      GADMobileAds.sharedInstance().start(completionHandler: nil)
       return true
   }
     

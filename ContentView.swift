@@ -1,6 +1,6 @@
 import SwiftUI
 import RealmSwift
-
+import AdSupport
 struct ContentView: View {
     
     @EnvironmentObject var appEnvironment: AppEnvironment
@@ -183,6 +183,10 @@ struct ContentView: View {
                 addNewGroupIfNeeded(groupName: defaultGroup)
             }
             
+    
+            print("------------------------------")
+            print(ASIdentifierManager().advertisingIdentifier)
+            print("------------------------------")
         }
     }//body
 }//content view
